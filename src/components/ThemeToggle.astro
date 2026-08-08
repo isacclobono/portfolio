@@ -30,6 +30,57 @@
   </button>
 </div>
 
+<style>
+  .theme-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 5px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .theme-btn svg {
+    width: 17px;
+    height: 17px;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease, filter 0.2s ease;
+    will-change: transform;
+  }
+
+  .theme-btn:hover, .theme-btn.active {
+    color: var(--text-primary);
+  }
+
+  /* Sun rotate ray animation */
+  #theme-light-btn:hover svg {
+    color: #eab308;
+    transform: rotate(45deg) scale(1.18);
+    filter: drop-shadow(0 0 6px rgba(234, 179, 8, 0.4));
+  }
+
+  /* Moon gentle rocking tilt animation */
+  #theme-dark-btn:hover svg {
+    color: #a855f7;
+    transform: rotate(-18deg) scale(1.18);
+    filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.4));
+  }
+
+  /* System monitor bounce */
+  #theme-system-btn:hover svg {
+    color: #38bdf8;
+    transform: scale(1.18) translateY(-1px);
+    filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.4));
+  }
+
+  .theme-btn.active svg {
+    transform: scale(1.05);
+  }
+</style>
+
 <script is:inline>
   function setupTheme() {
     const lightBtn = document.getElementById('theme-light-btn');

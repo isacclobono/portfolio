@@ -107,11 +107,12 @@ const navItems = [
     justify-content: center;
     letter-spacing: -0.5px;
     flex-shrink: 0;
-    transition: transform 0.15s ease;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
   }
 
   .brand-link:hover .brand-sk-badge {
-    transform: scale(1.05);
+    transform: scale(1.14) rotate(-6deg);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
   }
 
   /* Desktop vs Mobile Toggle */
@@ -202,6 +203,28 @@ const navItems = [
     transform: translateX(2px);
   }
 
+  .hamburger-icon {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .hamburger-icon line {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+    transform-origin: 12px 12px;
+  }
+
+  .mobile-toggle-btn.is-active .line-1 {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .mobile-toggle-btn.is-active .line-2 {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  .mobile-toggle-btn.is-active .line-3 {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
   @media (max-width: 640px) {
     .desktop-nav {
       display: none !important;
@@ -225,10 +248,12 @@ const navItems = [
         drawer.classList.remove('open');
         drawer.setAttribute('aria-hidden', 'true');
         toggleBtn.setAttribute('aria-expanded', 'false');
+        toggleBtn.classList.remove('is-active');
       } else {
         drawer.classList.add('open');
         drawer.setAttribute('aria-hidden', 'false');
         toggleBtn.setAttribute('aria-expanded', 'true');
+        toggleBtn.classList.add('is-active');
       }
     }
 
@@ -243,6 +268,7 @@ const navItems = [
         drawer.classList.remove('open');
         drawer.setAttribute('aria-hidden', 'true');
         toggleBtn.setAttribute('aria-expanded', 'false');
+        toggleBtn.classList.remove('is-active');
       }
     });
 
@@ -252,6 +278,7 @@ const navItems = [
         drawer.classList.remove('open');
         drawer.setAttribute('aria-hidden', 'true');
         toggleBtn.setAttribute('aria-expanded', 'false');
+        toggleBtn.classList.remove('is-active');
         toggleBtn.focus();
       }
     });
