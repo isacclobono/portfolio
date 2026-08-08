@@ -20,7 +20,12 @@ const formatDate = (date: Date) => {
 };
 ---
 
-<Layout title={project.data.title} description={project.data.description} currentPath="/projects">
+<Layout 
+  title={project.data.title} 
+  description={project.data.description} 
+  currentPath="/projects"
+  publishDate={project.data.date}
+>
   <!-- Breadcrumb Navigation -->
   <Breadcrumb items={[
     { label: 'projects', href: '/projects' },

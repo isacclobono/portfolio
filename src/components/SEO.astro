@@ -1,0 +1,108 @@
+---
+import { SITE } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  type?: 'website' | 'article' | 'profile';
+  publishDate?: Date;
+}
+
+const {
+  title,
+  description = SITE.DESCRIPTION,
+  image = '/favicon.svg',
+  noindex = false,
+  type = 'website',
+  publishDate
+} = Astro.props;
+
+const siteUrl = Astro.site ? Astro.site.toString().replace(/\/$/, '') : 'https://sunilkhobragade.dev';
+const pageTitle = title 
+  ? (title.includes(SITE.AUTHOR) ? title : `${title} | ${SITE.AUTHOR}`)
+  : `${SITE.AUTHOR} - Senior Full-Stack Developer & Cloud Architect`;
+
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+const imageUrl = image.startsWith('http') ? image : new URL(image, siteUrl).href;
+
+// Structured Data (Schema.org)
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      "url": siteUrl,
+      "name": SITE.TITLE,
+      "description": SITE.DESCRIPTION,
+      "publisher": {
+        "@id": `${siteUrl}/#person`
+      },
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}/#person`,
+      "name": SITE.AUTHOR,
+      "jobTitle": "Senior Full-Stack Developer & Solutions Architect",
+      "url": siteUrl,
+      "email": `mailto:${SITE.EMAIL}`,
+      "sameAs": [
+        SITE.GITHUB,
+        SITE.LINKEDIN
+      ],
+      "knowsAbout": [
+        "Full-Stack Web Development",
+        "Node.js", "TypeScript", "React", "Next.js", "Angular",
+        "PHP", "Laravel", "Python", "Django", "Microservices",
+        "System Design", "PostgreSQL", "MongoDB", "Redis",
+        "AWS", "Microsoft Azure", "Docker", "Kubernetes", "CI/CD",
+        "AI Solutions", "Google Cloud Vertex AI", "Payment Gateways (Stripe, Razorpay, PhonePe)"
+      ],
+      "offers": {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Freelance Full-Stack Development & Cloud Architecture",
+          "description": "Building scalable web platforms, high-performance APIs, SaaS MVPs, real-time architectures, and cloud deployments."
+        }
+      }
+    }
+  ]
+};
+---
+
+<!-- Primary Meta Tags -->
+<title>{pageTitle}</title>
+<meta name="title" content={pageTitle} />
+<meta name="description" content={description} />
+<meta name="author" content={SITE.AUTHOR} />
+<meta name="keywords" content="Sunil Khobragade, Freelance Full-Stack Developer, Hire Senior Developer, Node.js Expert, React Next.js Developer, Laravel Backend Architect, Python Django, Cloud AWS Azure, Microservices, System Design" />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalUrl} />
+
+<!-- Robots Indexing -->
+<meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
+
+<!-- Open Graph / Facebook / LinkedIn -->
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={SITE.TITLE} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:locale" content="en_US" />
+{publishDate && <meta property="article:published_time" content={publishDate.toISOString()} />}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalUrl} />
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageUrl} />
+
+<!-- Structured Data JSON-LD for Search Engines -->
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
