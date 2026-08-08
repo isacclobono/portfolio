@@ -1,0 +1,58 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Button from '../../components/Button.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.slug || post.id },
+    props: { post }
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(date);
+};
+---
+
+<Layout title={post.data.title} description={post.data.description} currentPath="/blog">
+  <!-- Breadcrumb Navigation -->
+  <Breadcrumb items={[
+    { label: 'blog', href: '/blog' },
+    { label: post.data.title }
+  ]} />
+
+  <!-- Back to Blog Button with hover slide effect -->
+  <Button href="/blog" variant="back" size="sm">
+    Back to blog
+  </Button>
+
+  <!-- Header & Meta -->
+  <div class="detail-header">
+    <div class="meta-line">
+      <span>{formatDate(post.data.date)}</span>
+      <span>&bull;</span>
+      <span>3 min read</span>
+    </div>
+
+    <h1 class="detail-title">{post.data.title}</h1>
+
+    {post.data.tags && post.data.tags.length > 0 && (
+      <div class="tags-list" style="margin-top: 0.75rem;">
+        {post.data.tags.map((tag) => (
+          <span class="tag-badge">{tag}</span>
+        ))}
+      </div>
+    )}
+  </div>
+
+  <!-- Markdown Content with Shiki Syntax Highlighting & Copy Button -->
+  <article class="prose-content" style="margin-top: 1.5rem;">
+    <Content />
+  </article>
+</Layout>

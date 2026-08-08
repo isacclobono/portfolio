@@ -1,0 +1,34 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const workEntries = (await getCollection('work'))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const renderedWork = await Promise.all(
+  workEntries.map(async (entry) => {
+    const { Content } = await render(entry);
+    return { entry, Content };
+  })
+);
+---
+
+<Layout title="Work Experience" description="Professional work experience of Sunil Khobragade." currentPath="/work">
+  <Breadcrumb items={[{ label: 'work' }]} />
+
+  <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 2rem;">Work</h1>
+
+  <div class="work-timeline">
+    {renderedWork.map(({ entry, Content }) => (
+      <div class="work-item">
+        <div class="work-period">{entry.data.dateStart} – {entry.data.dateEnd}</div>
+        <div class="work-company">{entry.data.company}</div>
+        <div class="work-role">{entry.data.role} {entry.data.location ? `• ${entry.data.location}` : ''}</div>
+        <div class="prose-content work-markdown-points">
+          <Content />
+        </div>
+      </div>
+    ))}
+  </div>
+</Layout>

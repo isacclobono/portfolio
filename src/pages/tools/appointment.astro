@@ -1,0 +1,410 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Button from '../../components/Button.astro';
+import { SITE } from '../../data/site';
+---
+
+<Layout 
+  title="Book 1:1 Consultation | Google Calendar" 
+  description="Schedule a direct 1:1 architecture discovery or technical consultation call with Sunil Khobragade connected with Google Calendar." 
+  currentPath="/tools"
+>
+  <Breadcrumb items={[
+    { label: 'Tools', href: '/tools' },
+    { label: 'Book Consultation' }
+  ]} />
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <Button href="/tools" variant="back" size="sm">
+      Back to tools
+    </Button>
+  </div>
+
+  <!-- Perfectly Balanced 2-Column Booking Widget (Form on Left, Calendar on Right) -->
+  <div class="cal-booking-card">
+    <!-- COLUMN 1 (LEFT): Meeting Overview & Booking Form in Empty Space -->
+    <div class="cal-col-info">
+      <div class="cal-author-badge">
+        <span class="cal-avatar">SK</span>
+        <span class="cal-author-name">{SITE.AUTHOR}</span>
+      </div>
+
+      <h1 class="cal-call-title">1:1 Architecture &amp; Discovery Call</h1>
+
+      <ul class="cal-agenda-list">
+        <li>Understand your product roadmap, scope, and technical bottlenecks.</li>
+        <li>Review recommended tech stack (Node.js, Next.js, Postgres, Redis, AWS).</li>
+        <li>Outline architectural roadmap, delivery timeline, and estimate.</li>
+        <li>Answer technical questions regarding microservices or database scaling.</li>
+      </ul>
+
+      <div class="cal-meta-list">
+        <div class="cal-meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span>30m &bull; Google Meet video call</span>
+        </div>
+        <div class="cal-meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="2" x2="22" y1="12" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          <span>Asia/Calcutta (IST)</span>
+        </div>
+      </div>
+
+      <!-- Booking Form Fill in Left Side Empty Space -->
+      <div class="cal-confirm-panel" id="cal-confirm-panel">
+        <div class="confirm-slot-badge">
+          <span>Selected Slot:</span>
+          <strong id="confirm-slot-time">Wed, Aug 12 at 11:00 AM</strong>
+        </div>
+
+        <div class="confirm-inputs-grid">
+          <input 
+            type="text" 
+            id="cal-client-name" 
+            placeholder="Your Name *" 
+            class="cal-input-field" 
+            required 
+          />
+          <input 
+            type="email" 
+            id="cal-client-email" 
+            placeholder="Your Email *" 
+            class="cal-input-field" 
+            required 
+          />
+        </div>
+
+        <textarea 
+          id="cal-client-notes" 
+          placeholder="Briefly describe what you'd like to discuss (e.g. SaaS MVP architecture, PostgreSQL scaling)..." 
+          rows="2" 
+          class="cal-input-field"
+        ></textarea>
+
+        <div class="confirm-actions-row">
+          <a id="cal-google-meet-btn" href="#" target="_blank" rel="noopener noreferrer" class="action-btn btn-primary btn-compact" style="flex: 1; justify-content: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+              <line x1="16" x2="16" y1="2" y2="6"/>
+              <line x1="8" x2="8" y1="2" y2="6"/>
+              <line x1="3" x2="21" y1="10" y2="10"/>
+            </svg>
+            Confirm on Google Calendar
+          </a>
+          <button type="button" id="cal-ics-btn" class="action-btn btn-secondary btn-compact">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" x2="12" y1="15" y2="3"/>
+            </svg>
+            .ICS
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLUMN 2 (RIGHT): Calendar on Top + Time Slots Below -->
+    <div class="cal-col-main">
+      <!-- Calendar Picker -->
+      <div class="cal-picker-section">
+        <div class="cal-header">
+          <div class="cal-month-title" id="cal-month-display">August 2026</div>
+          <div class="cal-nav-buttons">
+            <button type="button" id="prev-month-btn" class="cal-nav-btn" aria-label="Previous Month">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m15 18-6-6 6-6"/>
+              </svg>
+            </button>
+            <button type="button" id="next-month-btn" class="cal-nav-btn" aria-label="Next Month">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m9 18 6-6-6-6"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Weekdays Header -->
+        <div class="cal-weekdays">
+          <span>SUN</span>
+          <span>MON</span>
+          <span>TUE</span>
+          <span>WED</span>
+          <span>THU</span>
+          <span>FRI</span>
+          <span>SAT</span>
+        </div>
+
+        <!-- Dynamic Days Grid -->
+        <div class="cal-days-grid" id="cal-days-grid"></div>
+      </div>
+
+      <!-- Time Slots Section (Directly Below Calendar) -->
+      <div class="cal-slots-section-below">
+        <div class="cal-slots-header">
+          <div class="cal-selected-day-label">
+            <span>Available: </span>
+            <strong id="slots-selected-day">Wed 12</strong>
+          </div>
+          <div class="cal-time-toggle">
+            <button type="button" class="time-format-btn active" data-format="12h">12h</button>
+            <button type="button" class="time-format-btn" data-format="24h">24h</button>
+          </div>
+        </div>
+
+        <!-- Grid of Time Slot Pills below Calendar -->
+        <div class="cal-slots-grid-below" id="cal-slots-list"></div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script is:inline>
+  function setupLiveCalendly() {
+    const today = new Date();
+    let viewYear = today.getFullYear();
+    let viewMonth = today.getMonth();
+
+    let selectedDate = new Date();
+    selectedDate.setDate(selectedDate.getDate() + 1);
+
+    let is24h = false;
+    let selectedSlot = '11:00 AM';
+
+    const monthDisplay = document.getElementById('cal-month-display');
+    const daysGrid = document.getElementById('cal-days-grid');
+    const prevMonthBtn = document.getElementById('prev-month-btn');
+    const nextMonthBtn = document.getElementById('next-month-btn');
+
+    const slotsSelectedDay = document.getElementById('slots-selected-day');
+    const slotsList = document.getElementById('cal-slots-list');
+    const confirmSlotTime = document.getElementById('confirm-slot-time');
+    const googleMeetBtn = document.getElementById('cal-google-meet-btn');
+    const icsBtn = document.getElementById('cal-ics-btn');
+
+    const clientNameInput = document.getElementById('cal-client-name');
+    const clientEmailInput = document.getElementById('cal-client-email');
+    const clientNotesInput = document.getElementById('cal-client-notes');
+
+    const timeToggleButtons = document.querySelectorAll('.time-format-btn');
+
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    const dayNamesShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    const availableSlots12h = [
+      '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', 
+      '12:00 PM', '02:00 PM', '02:30 PM', '05:00 PM', '08:00 PM'
+    ];
+
+    const availableSlots24h = [
+      '10:00', '10:30', '11:00', '11:30', 
+      '12:00', '14:00', '14:30', '17:00', '20:00'
+    ];
+
+    function renderCalendar() {
+      if (!monthDisplay || !daysGrid) return;
+
+      monthDisplay.textContent = `${monthNames[viewMonth]} ${viewYear}`;
+      daysGrid.innerHTML = '';
+
+      const firstDayIndex = new Date(viewYear, viewMonth, 1).getDay();
+      const totalDays = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+      const currentDateOnly = new Date();
+      currentDateOnly.setHours(0, 0, 0, 0);
+
+      for (let i = 0; i < firstDayIndex; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'cal-day-cell empty';
+        daysGrid.appendChild(emptyCell);
+      }
+
+      for (let day = 1; day <= totalDays; day++) {
+        const cellDate = new Date(viewYear, viewMonth, day);
+        cellDate.setHours(0, 0, 0, 0);
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cal-day-cell';
+        btn.textContent = day;
+
+        const isPast = cellDate < currentDateOnly;
+        const isToday = cellDate.getTime() === currentDateOnly.getTime();
+        const isSelected = 
+          cellDate.getDate() === selectedDate.getDate() &&
+          cellDate.getMonth() === selectedDate.getMonth() &&
+          cellDate.getFullYear() === selectedDate.getFullYear();
+
+        if (isPast) {
+          btn.classList.add('disabled');
+        } else {
+          if (isToday) btn.classList.add('today');
+          if (isSelected) btn.classList.add('selected');
+
+          btn.addEventListener('click', () => {
+            selectedDate = new Date(viewYear, viewMonth, day);
+            renderCalendar();
+            renderSlots();
+          });
+        }
+
+        daysGrid.appendChild(btn);
+      }
+    }
+
+    function renderSlots() {
+      if (!slotsSelectedDay || !slotsList) return;
+
+      const dayName = dayNamesShort[selectedDate.getDay()];
+      const dayNum = selectedDate.getDate();
+      slotsSelectedDay.textContent = `${dayName} ${dayNum}`;
+
+      const slots = is24h ? availableSlots24h : availableSlots12h;
+      slotsList.innerHTML = '';
+
+      slots.forEach(slot => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cal-slot-btn';
+        btn.textContent = slot;
+
+        if (slot === selectedSlot) {
+          btn.classList.add('selected');
+        }
+
+        btn.addEventListener('click', () => {
+          selectedSlot = slot;
+          document.querySelectorAll('.cal-slot-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          updateConfirmation();
+        });
+
+        slotsList.appendChild(btn);
+      });
+
+      updateConfirmation();
+    }
+
+    function updateConfirmation() {
+      if (!confirmSlotTime) return;
+
+      const dateStr = selectedDate.toLocaleDateString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric'
+      });
+
+      confirmSlotTime.textContent = `${dateStr} at ${selectedSlot}`;
+      updateCalendarLinks();
+    }
+
+    function updateCalendarLinks() {
+      const clientName = clientNameInput?.value || 'Client';
+      const clientEmail = clientEmailInput?.value || '';
+      const notes = clientNotesInput?.value || '1:1 Architecture & Discovery Call';
+
+      const y = selectedDate.getFullYear();
+      const m = String(selectedDate.getMonth() + 1).padStart(2, '0');
+      const d = String(selectedDate.getDate()).padStart(2, '0');
+
+      const startDateTimeStr = `${y}${m}${d}T113000Z`;
+      const endDateTimeStr = `${y}${m}${d}T120000Z`;
+
+      const calTitle = encodeURIComponent(`1:1 Architecture Discovery - Sunil Khobragade & ${clientName}`);
+      const calDetails = encodeURIComponent(
+`1:1 Consultation with Sunil Khobragade
+Attendee: ${clientName} (${clientEmail})
+
+Agenda:
+${notes}
+
+Location: Google Meet
+Host: sunilkhobragade@proton.me`
+      );
+
+      const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${calTitle}&dates=${startDateTimeStr}/${endDateTimeStr}&details=${calDetails}&add=sunilkhobragade@proton.me&location=Google+Meet`;
+      if (googleMeetBtn) {
+        googleMeetBtn.setAttribute('href', googleCalUrl);
+      }
+    }
+
+    prevMonthBtn?.addEventListener('click', () => {
+      viewMonth--;
+      if (viewMonth < 0) {
+        viewMonth = 11;
+        viewYear--;
+      }
+      renderCalendar();
+    });
+
+    nextMonthBtn?.addEventListener('click', () => {
+      viewMonth++;
+      if (viewMonth > 11) {
+        viewMonth = 0;
+        viewYear++;
+      }
+      renderCalendar();
+    });
+
+    timeToggleButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        timeToggleButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        is24h = btn.getAttribute('data-format') === '24h';
+        renderSlots();
+      });
+    });
+
+    clientNameInput?.addEventListener('input', updateCalendarLinks);
+    clientEmailInput?.addEventListener('input', updateCalendarLinks);
+    clientNotesInput?.addEventListener('input', updateCalendarLinks);
+
+    icsBtn?.addEventListener('click', () => {
+      const clientName = clientNameInput?.value || 'Client';
+      const notes = clientNotesInput?.value || '1:1 Architecture Discovery Call';
+      const y = selectedDate.getFullYear();
+      const m = String(selectedDate.getMonth() + 1).padStart(2, '0');
+      const d = String(selectedDate.getDate()).padStart(2, '0');
+      const icsDate = `${y}${m}${d}`;
+
+      const icsContent = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//Sunil Khobragade//Consultation Booking//EN',
+        'BEGIN:VEVENT',
+        `SUMMARY:1:1 Architecture Discovery - Sunil Khobragade & ${clientName}`,
+        `DESCRIPTION:${notes}\\nHost: sunilkhobragade@proton.me`,
+        `DTSTART:${icsDate}T113000Z`,
+        `DTEND:${icsDate}T120000Z`,
+        'LOCATION:Google Meet',
+        'STATUS:CONFIRMED',
+        'END:VEVENT',
+        'END:VCALENDAR'
+      ].join('\r\n');
+
+      const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.setAttribute('download', 'architecture-call-sunil-khobragade.ics');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    renderCalendar();
+    renderSlots();
+  }
+
+  setupLiveCalendly();
+  document.addEventListener('astro:after-swap', setupLiveCalendly);
+</script>

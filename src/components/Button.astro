@@ -1,0 +1,206 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'back' | 'outline' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  class?: string;
+  target?: string;
+  rel?: string;
+  type?: 'button' | 'submit' | 'reset';
+  external?: boolean;
+  [key: string]: any;
+}
+
+const {
+  href,
+  variant = 'secondary',
+  size = 'md',
+  class: className = '',
+  target,
+  rel,
+  type = 'button',
+  external = false,
+  ...rest
+} = Astro.props;
+
+const isLink = Boolean(href);
+const Element = isLink ? 'a' : 'button';
+
+const resolvedTarget = external ? '_blank' : target;
+const resolvedRel = external ? (rel || 'noopener noreferrer') : rel;
+
+// Size classes
+const sizeClasses = {
+  sm: 'btn-sm',
+  md: 'btn-md',
+  lg: 'btn-lg'
+}[size];
+
+// Variant base styling
+const variantClasses = {
+  primary: 'btn-cool-primary',
+  secondary: 'btn-cool-secondary',
+  back: 'btn-cool-back',
+  outline: 'btn-cool-outline',
+  ghost: 'btn-cool-ghost'
+}[variant];
+---
+
+<Element
+  href={href}
+  type={isLink ? undefined : type}
+  target={resolvedTarget}
+  rel={resolvedRel}
+  class:list={[
+    'btn-cool group',
+    variantClasses,
+    sizeClasses,
+    className
+  ]}
+  {...rest}
+>
+  {variant === 'back' && (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      width="14" 
+      height="14" 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      stroke-width="2.2" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+      class="back-arrow-icon"
+      aria-hidden="true"
+    >
+      <path d="m15 18-6-6 6-6"/>
+    </svg>
+  )}
+
+  <span class="btn-text-content">
+    <slot />
+  </span>
+</Element>
+
+<style>
+  .btn-cool {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    font-weight: 500;
+    line-height: 1.4;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    font-family: inherit;
+  }
+
+  .btn-cool:active {
+    transform: scale(0.97);
+  }
+
+  /* Sizes */
+  .btn-sm {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+    border-radius: var(--radius-sm, 6px);
+  }
+
+  .btn-md {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    border-radius: var(--radius-md, 8px);
+  }
+
+  .btn-lg {
+    padding: 0.65rem 1.25rem;
+    font-size: 0.95rem;
+    border-radius: var(--radius-md, 8px);
+  }
+
+  /* Primary Button (Strict Monochrome) */
+  .btn-cool-primary {
+    background-color: var(--text-primary);
+    color: var(--bg-primary) !important;
+    border-color: var(--text-primary);
+  }
+
+  .btn-cool-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  /* Secondary Button */
+  .btn-cool-secondary {
+    background-color: var(--bg-card);
+    color: var(--text-primary) !important;
+    border-color: var(--border-card);
+  }
+
+  .btn-cool-secondary:hover {
+    background-color: var(--bg-card-hover);
+    border-color: var(--border-card-hover);
+    transform: translateY(-1px);
+  }
+
+  /* Back Button (Sleek Minimal Astro Nano Pill with Smooth Arrow Slide) */
+  .btn-cool-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background-color: var(--bg-card);
+    color: var(--text-secondary) !important;
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-full, 9999px);
+    padding: 0.35rem 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  .btn-cool-back:hover {
+    background-color: var(--bg-card-hover);
+    color: var(--text-primary) !important;
+    border-color: var(--border-card-hover);
+    transform: translateX(-3px);
+  }
+
+  .back-arrow-icon {
+    transition: transform 0.15s ease;
+    flex-shrink: 0;
+    color: var(--text-muted);
+  }
+
+  .btn-cool-back:hover .back-arrow-icon {
+    transform: translateX(-2px);
+    color: var(--text-primary);
+  }
+
+  /* Outline Button */
+  .btn-cool-outline {
+    background: transparent;
+    color: var(--text-primary) !important;
+    border-color: var(--border-card);
+  }
+
+  .btn-cool-outline:hover {
+    background-color: var(--bg-card-hover);
+    border-color: var(--border-card-hover);
+  }
+
+  /* Ghost Button */
+  .btn-cool-ghost {
+    background: transparent;
+    color: var(--text-secondary) !important;
+    border-color: transparent;
+  }
+
+  .btn-cool-ghost:hover {
+    background-color: var(--bg-pill);
+    color: var(--text-primary) !important;
+  }
+</style>

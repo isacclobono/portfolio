@@ -1,0 +1,61 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import { EDUCATION, TRAININGS } from '../../data/skills';
+---
+
+<Layout title="Education & Training" description="Academic background, degrees, and specialized cloud & AI certifications of Sunil Khobragade." currentPath="/education">
+  <Breadcrumb items={[{ label: 'education' }]} />
+
+  <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 2rem;">Education & Training</h1>
+
+  <!-- Degrees & Academic Qualifications -->
+  <section style="margin-bottom: 3rem;">
+    <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--text-primary);">
+      Academic Qualifications
+    </h2>
+
+    <div class="work-timeline">
+      {EDUCATION.map((edu) => (
+        <div class="work-item">
+          <div class="work-period">{edu.period}</div>
+          <div class="work-company">{edu.degree}</div>
+          <div class="work-role">{edu.institution}</div>
+          {edu.points && edu.points.length > 0 && (
+            <ul class="work-points">
+              {edu.points.map((pt) => (
+                <li>{pt}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Programs & Industry Training -->
+  <section style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--text-primary);">
+      Programs & Specialized Training
+    </h2>
+
+    <div class="work-timeline">
+      {TRAININGS.map((tr) => (
+        <div class="work-item">
+          <div class="work-period">{tr.issuer}</div>
+          <div class="work-company">{tr.title}</div>
+          <p style="font-size: 0.925rem; color: var(--text-secondary); line-height: 1.6; margin-top: 0.35rem; margin-bottom: 0.75rem;">
+            {tr.description}
+          </p>
+          {tr.points && tr.points.length > 0 && (
+            <ul class="work-points">
+              {tr.points.map((pt) => (
+                <li>{pt}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))}
+    </div>
+  </section>
+</Layout>

@@ -1,11 +1,152 @@
 ---
-import Welcome from '../components/Welcome.astro';
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import Card from '../components/Card.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+import { SITE } from '../data/site';
+import { TECHNICAL_SKILLS, EDUCATION } from '../data/skills';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// Fetch dynamic collections
+const projects = (await getCollection('projects', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const blogs = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const workEntries = (await getCollection('work'))
+  .sort((a, b) => a.data.order - b.data.order);
 ---
 
-<Layout>
-	<Welcome />
+<Layout title={SITE.AUTHOR} currentPath="/">
+  <!-- Introduction Hero Section -->
+  <section style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.025em;">
+      Hi, I'm Sunil Khobragade <span style="display: inline-block;">👋</span>
+    </h1>
+    <p style="font-size: 1.05rem; color: var(--text-primary); font-weight: 500; margin-bottom: 1rem;">
+      {SITE.ROLE} &bull; {SITE.LOCATION}
+    </p>
+    <p style="margin-bottom: 1.25rem;">
+      {SITE.BIO}
+    </p>
+
+    <!-- Sleek Social & Contact Badges -->
+    <SocialLinks />
+  </section>
+
+  <!-- Technical Skills Section -->
+  <section style="margin-bottom: 3rem;">
+    <h2>Technical Skills</h2>
+    <div class="skills-grid">
+      {TECHNICAL_SKILLS.map((cat) => (
+        <div class="skill-card">
+          <div class="skill-category-title">{cat.title}</div>
+          <div class="skill-pill-list">
+            {cat.skills.map((skill) => (
+              <span class="skill-pill">{skill}</span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Featured Projects Section (Dynamic) -->
+  <section style="margin-bottom: 3rem;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem;">
+      <h2>Recent Projects</h2>
+      <a href="/projects" class="see-all-link">See all projects &rarr;</a>
+    </div>
+    <div>
+      {projects.map((project) => (
+        <Card 
+          href={`/projects/${project.slug || project.id}`}
+          title={project.data.title}
+          description={project.data.description}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- Work Experience Section (Clean Preview: Title, Company, Timeline - No Bullets) -->
+  <section style="margin-bottom: 3rem;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem;">
+      <h2>Work Experience</h2>
+      <a href="/work" class="see-all-link">See all work &rarr;</a>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      {workEntries.map((entry) => (
+        <div class="work-item" style="margin-bottom: 0;">
+          <div class="work-period">{entry.data.dateStart} – {entry.data.dateEnd}</div>
+          <div class="work-company">{entry.data.role}</div>
+          <div class="work-role" style="margin-bottom: 0;">
+            {entry.data.company} {entry.data.location ? `• ${entry.data.location}` : ''}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Education & Training Section (Clean Preview) -->
+  <section style="margin-bottom: 3rem;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem;">
+      <h2>Education & Certifications</h2>
+      <a href="/education" class="see-all-link">View all education &rarr;</a>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      {EDUCATION.slice(0, 2).map((edu) => (
+        <div class="work-item" style="margin-bottom: 0;">
+          <div class="work-period">{edu.period}</div>
+          <div class="work-company">{edu.degree}</div>
+          <div class="work-role" style="margin-bottom: 0;">{edu.institution}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Recent Blog Posts Section (Dynamic) -->
+  <section style="margin-bottom: 3rem;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem;">
+      <h2>Recent Blog Posts</h2>
+      <a href="/blog" class="see-all-link">See all posts &rarr;</a>
+    </div>
+    <div>
+      {blogs.map((b) => (
+        <Card 
+          href={`/blog/${b.slug || b.id}`}
+          title={b.data.title}
+          description={b.data.description}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- Freelance Inquiries, Estimator & Consultation CTA -->
+  <section style="margin-bottom: 3rem;">
+    <div class="skill-card" style="padding: 1.4rem;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap;">
+        <div>
+          <div style="font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem;">
+            💼 Looking for a Freelance Senior Developer?
+          </div>
+          <p style="font-size: 0.875rem; color: var(--text-secondary); margin: 0; line-height: 1.5;">
+            Calculate your project's technical architecture, get a timeline estimate, or book a 1:1 consultation call on Google Calendar.
+          </p>
+        </div>
+        <a href="/tools" class="action-btn btn-primary" style="margin: 0; padding: 0.45rem 0.9rem; font-size: 0.825rem;">
+          Open Tools &amp; Booking &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Connect Section -->
+  <section style="margin-bottom: 1.5rem;">
+    <h2>Let's Connect</h2>
+    <p>
+      If you want to get in touch with me about a new project or just want to say hi, reach out via email at <a href={`mailto:${SITE.EMAIL}`}>{SITE.EMAIL}</a> or connect with me on <a href={SITE.LINKEDIN} target="_blank" rel="noopener noreferrer">LinkedIn</a> and <a href={SITE.GITHUB} target="_blank" rel="noopener noreferrer">GitHub</a>.
+    </p>
+  </section>
 </Layout>

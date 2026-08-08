@@ -1,0 +1,208 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Button from '../../components/Button.astro';
+---
+
+<Layout 
+  title="JWT Token Decoder & Inspector" 
+  description="Fast, client-side JSON Web Token (JWT) debugger and payload inspector for backend and full-stack developers." 
+  currentPath="/tools"
+>
+  <Breadcrumb items={[
+    { label: 'Tools', href: '/tools' },
+    { label: 'JWT Decoder' }
+  ]} />
+
+  <Button href="/tools" variant="back" size="sm">
+    Back to tools
+  </Button>
+
+  <div style="margin: 1.5rem 0 2rem;">
+    <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem;">
+      JWT Token Decoder &amp; Inspector
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+      Paste an encoded JWT below. Decoded 100% locally in your browser with zero network calls for complete data security.
+    </p>
+  </div>
+
+  <div class="estimator-card">
+    <div>
+      <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">
+        Encoded Token:
+      </label>
+      <textarea 
+        id="jwt-input" 
+        rows="4" 
+        class="text-input-field" 
+        style="font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.5;"
+        placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+      ></textarea>
+      <div style="display: flex; gap: 0.5rem; margin-top: 0.6rem;">
+        <button type="button" id="load-sample-jwt" class="action-btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">
+          Load Sample
+        </button>
+        <button type="button" id="clear-jwt" class="action-btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">
+          Clear
+        </button>
+      </div>
+    </div>
+
+    <!-- Decoded Output -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;" class="jwt-output-grid">
+      <!-- Header -->
+      <div class="blueprint-result-box">
+        <div class="blueprint-header">
+          <span class="blueprint-title">Header (Algorithm &amp; Type)</span>
+        </div>
+        <pre id="jwt-header-out" style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-primary); white-space: pre-wrap; margin: 0;"></pre>
+      </div>
+
+      <!-- Payload -->
+      <div class="blueprint-result-box">
+        <div class="blueprint-header">
+          <span class="blueprint-title">Payload (Claims &amp; Data)</span>
+          <span id="jwt-expiry-badge" style="font-size: 0.75rem; color: var(--text-muted);"></span>
+        </div>
+        <pre id="jwt-payload-out" style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-primary); white-space: pre-wrap; margin: 0;"></pre>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .estimator-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .text-input-field {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+
+  .text-input-field:focus {
+    border-color: var(--text-primary);
+  }
+
+  .blueprint-result-box {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    padding: 1.1rem;
+    min-height: 180px;
+  }
+
+  .blueprint-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 0.75rem;
+  }
+
+  .blueprint-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  @media (max-width: 640px) {
+    .jwt-output-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script is:inline>
+  function setupJwtDecoder() {
+    const input = document.getElementById('jwt-input');
+    const headerOut = document.getElementById('jwt-header-out');
+    const payloadOut = document.getElementById('jwt-payload-out');
+    const expiryBadge = document.getElementById('jwt-expiry-badge');
+    const loadSampleBtn = document.getElementById('load-sample-jwt');
+    const clearBtn = document.getElementById('clear-jwt');
+
+    const sampleToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyXzEyOTM4MSIsIm5hbWUiOiJTdW5pbCBLaG9icmFnYWRlIiwicm9sZSI6InNlbmlvcl9kZXZlbG9wZXIiLCJpYXQiOjE3MDgwODAwMDAsImV4cCI6MTc0OTY4MDAwMH0.signature';
+
+    function base64UrlDecode(str) {
+      let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+      while (base64.length % 4) {
+        base64 += '=';
+      }
+      return decodeURIComponent(escape(window.atob(base64)));
+    }
+
+    function decodeJwt() {
+      const token = input?.value.trim();
+      if (!token) {
+        if (headerOut) headerOut.textContent = '// Enter a token above';
+        if (payloadOut) payloadOut.textContent = '// Enter a token above';
+        if (expiryBadge) expiryBadge.textContent = '';
+        return;
+      }
+
+      const parts = token.split('.');
+      if (parts.length < 2) {
+        if (headerOut) headerOut.textContent = 'Invalid JWT format (must have 3 parts separated by dots)';
+        if (payloadOut) payloadOut.textContent = '';
+        return;
+      }
+
+      try {
+        const headerJson = JSON.parse(base64UrlDecode(parts[0]));
+        if (headerOut) headerOut.textContent = JSON.stringify(headerJson, null, 2);
+
+        const payloadJson = JSON.parse(base64UrlDecode(parts[1]));
+        if (payloadOut) payloadOut.textContent = JSON.stringify(payloadJson, null, 2);
+
+        if (payloadJson.exp && expiryBadge) {
+          const expDate = new Date(payloadJson.exp * 1000);
+          const isExpired = expDate < new Date();
+          expiryBadge.textContent = isExpired 
+            ? `Expired: ${expDate.toLocaleDateString()}` 
+            : `Expires: ${expDate.toLocaleDateString()}`;
+          expiryBadge.style.color = isExpired ? '#ef4444' : '#22c55e';
+        } else if (expiryBadge) {
+          expiryBadge.textContent = 'No expiry claim';
+          expiryBadge.style.color = 'var(--text-muted)';
+        }
+      } catch (err) {
+        if (headerOut) headerOut.textContent = 'Error parsing JWT base64 payload';
+        if (payloadOut) payloadOut.textContent = String(err.message);
+      }
+    }
+
+    input?.addEventListener('input', decodeJwt);
+    loadSampleBtn?.addEventListener('click', () => {
+      if (input) {
+        input.value = sampleToken;
+        decodeJwt();
+      }
+    });
+    clearBtn?.addEventListener('click', () => {
+      if (input) {
+        input.value = '';
+        decodeJwt();
+      }
+    });
+
+    decodeJwt();
+  }
+
+  setupJwtDecoder();
+  document.addEventListener('astro:after-swap', setupJwtDecoder);
+</script>

@@ -1,0 +1,214 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Button from '../../components/Button.astro';
+---
+
+<Layout 
+  title="SQL Formatter & Query Optimizer" 
+  description="Clean, fast SQL query formatter and indexing advisor for PostgreSQL, MySQL, and SQLite." 
+  currentPath="/tools"
+>
+  <Breadcrumb items={[
+    { label: 'Tools', href: '/tools' },
+    { label: 'SQL Formatter' }
+  ]} />
+
+  <Button href="/tools" variant="back" size="sm">
+    Back to tools
+  </Button>
+
+  <div style="margin: 1.5rem 0 2rem;">
+    <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem;">
+      SQL Formatter &amp; Query Optimizer
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+      Format raw SQL queries, capitalize standard ANSI keywords, and generate database index suggestions.
+    </p>
+  </div>
+
+  <div class="estimator-card">
+    <div>
+      <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">
+        Raw SQL Query:
+      </label>
+      <textarea 
+        id="sql-input" 
+        rows="5" 
+        class="text-input-field" 
+        style="font-family: var(--font-mono); font-size: 0.825rem; line-height: 1.5;"
+        placeholder="select u.id, u.email, count(o.id) as total_orders from users u left join orders o on o.user_id = u.id where u.created_at >= '2024-01-01' and u.status = 'active' group by u.id, u.email order by total_orders desc limit 50;"
+      ></textarea>
+      <div style="display: flex; gap: 0.5rem; margin-top: 0.6rem;">
+        <button type="button" id="format-sql-btn" class="action-btn btn-primary" style="padding: 0.4rem 0.9rem; font-size: 0.8rem;">
+          Format SQL
+        </button>
+        <button type="button" id="load-sample-sql" class="action-btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+          Load Sample
+        </button>
+      </div>
+    </div>
+
+    <!-- Formatted Result -->
+    <div class="blueprint-result-box">
+      <div class="blueprint-header">
+        <span class="blueprint-title">Formatted SQL</span>
+        <button type="button" id="copy-sql-btn" class="action-btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.725rem;">
+          <span id="copy-sql-text">Copy</span>
+        </button>
+      </div>
+      <pre id="sql-output" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-primary); white-space: pre-wrap; margin: 0; line-height: 1.6;"></pre>
+    </div>
+
+    <!-- Index Advice -->
+    <div class="blueprint-result-box" style="margin-top: -0.5rem;">
+      <div class="blueprint-header">
+        <span class="blueprint-title">⚡ Index &amp; Performance Insights</span>
+      </div>
+      <div id="sql-insights" style="font-size: 0.825rem; color: var(--text-secondary); line-height: 1.6;">
+        Enter a query to view detected WHERE clauses, JOIN conditions, and composite indexing suggestions.
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .estimator-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .text-input-field {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+
+  .text-input-field:focus {
+    border-color: var(--text-primary);
+  }
+
+  .blueprint-result-box {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    padding: 1.1rem;
+  }
+
+  .blueprint-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 0.75rem;
+  }
+
+  .blueprint-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+</style>
+
+<script is:inline>
+  function setupSqlFormatter() {
+    const input = document.getElementById('sql-input');
+    const output = document.getElementById('sql-output');
+    const insights = document.getElementById('sql-insights');
+    const formatBtn = document.getElementById('format-sql-btn');
+    const sampleBtn = document.getElementById('load-sample-sql');
+    const copyBtn = document.getElementById('copy-sql-btn');
+    const copyText = document.getElementById('copy-sql-text');
+
+    const sampleQuery = "select u.id, u.email, count(o.id) as total_orders from users u left join orders o on o.user_id = u.id where u.created_at >= '2024-01-01' and u.status = 'active' group by u.id, u.email order by total_orders desc limit 50;";
+
+    const KEYWORDS = [
+      'SELECT', 'FROM', 'WHERE', 'AND', 'OR', 'LEFT JOIN', 'RIGHT JOIN', 'INNER JOIN', 
+      'JOIN', 'ON', 'GROUP BY', 'ORDER BY', 'HAVING', 'LIMIT', 'OFFSET', 'INSERT INTO', 
+      'VALUES', 'UPDATE', 'SET', 'DELETE FROM', 'AS', 'IN', 'NOT IN', 'LIKE', 'BETWEEN', 
+      'IS NULL', 'IS NOT NULL', 'DESC', 'ASC', 'UNION ALL', 'UNION', 'CREATE TABLE', 'ALTER TABLE'
+    ];
+
+    function formatSql() {
+      let raw = input?.value.trim() || '';
+      if (!raw) {
+        if (output) output.textContent = '// Enter or paste a SQL query above';
+        if (insights) insights.textContent = 'No query provided.';
+        return;
+      }
+
+      // Keyword capitalization & line breaks
+      let formatted = raw;
+      KEYWORDS.forEach(kw => {
+        const regex = new RegExp(`\\b${kw}\\b`, 'gi');
+        formatted = formatted.replace(regex, kw);
+      });
+
+      // Split key clauses onto separate lines
+      const lineBreakKeywords = ['SELECT', 'FROM', 'LEFT JOIN', 'RIGHT JOIN', 'INNER JOIN', 'JOIN', 'WHERE', 'AND', 'OR', 'GROUP BY', 'HAVING', 'ORDER BY', 'LIMIT'];
+      lineBreakKeywords.forEach(kw => {
+        const r = new RegExp(`(\\s+)(${kw})\\b`, 'g');
+        formatted = formatted.replace(r, '\n$2');
+      });
+
+      if (output) output.textContent = formatted;
+
+      // Extract basic indexing suggestions
+      const whereMatch = formatted.match(/WHERE\s+(.+?)(GROUP BY|ORDER BY|LIMIT|$)/is);
+      const joinMatch = formatted.match(/(?:JOIN)\s+\w+(?:\s+\w+)?\s+ON\s+(.+?)(?:WHERE|GROUP|ORDER|LIMIT|JOIN|$)/is);
+      
+      let tips = [];
+      if (whereMatch) {
+        tips.push(`• Filter detected in WHERE clause: consider composite indexes on columns matched in '${whereMatch[1].trim()}' to prevent full table scans.`);
+      }
+      if (joinMatch) {
+        tips.push(`• Foreign Key JOIN detected: ensure joining keys in '${joinMatch[1].trim()}' are indexed.`);
+      }
+      if (formatted.includes('ORDER BY') && formatted.includes('LIMIT')) {
+        tips.push('• Sorting with LIMIT: ensure the ORDER BY column is indexed together with WHERE filters for zero-sort execution.');
+      }
+      if (tips.length === 0) {
+        tips.push('• Syntax clean. For large datasets (>1M rows), verify execution with EXPLAIN ANALYZE.');
+      }
+
+      if (insights) {
+        insights.innerHTML = tips.join('<br/>');
+      }
+    }
+
+    formatBtn?.addEventListener('click', formatSql);
+    input?.addEventListener('input', formatSql);
+    sampleBtn?.addEventListener('click', () => {
+      if (input) {
+        input.value = sampleQuery;
+        formatSql();
+      }
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      if (output?.textContent) {
+        await navigator.clipboard.writeText(output.textContent);
+        if (copyText) copyText.textContent = 'Copied!';
+        setTimeout(() => {
+          if (copyText) copyText.textContent = 'Copy';
+        }, 1800);
+      }
+    });
+
+    formatSql();
+  }
+
+  setupSqlFormatter();
+  document.addEventListener('astro:after-swap', setupSqlFormatter);
+</script>

@@ -1,0 +1,70 @@
+---
+import { SITE } from '../data/site';
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = Astro.url.pathname } = Astro.props;
+
+const isActive = (path: string) => {
+  if (path === '/') return currentPath === '/';
+  return currentPath.startsWith(path);
+};
+---
+
+<header class="site-header">
+  <a href="/" class="brand-link">
+    <span class="brand-sk-badge">SK</span>
+    <span>{SITE.AUTHOR}</span>
+  </a>
+  <nav class="nav-links" aria-label="Main Navigation">
+    <a href="/blog" class:list={["nav-link", { active: isActive('/blog') }]}>Blog</a>
+    <span class="nav-separator">/</span>
+    <a href="/work" class:list={["nav-link", { active: isActive('/work') }]}>Work</a>
+    <span class="nav-separator">/</span>
+    <a href="/projects" class:list={["nav-link", { active: isActive('/projects') }]}>Projects</a>
+    <span class="nav-separator">/</span>
+    <a href="/education" class:list={["nav-link", { active: isActive('/education') }]}>Education</a>
+    <span class="nav-separator">/</span>
+    <a href="/tools" class:list={["nav-link", { active: isActive('/tools') }]}>Tools</a>
+  </nav>
+</header>
+
+<style>
+  .brand-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    transition: color var(--transition-fast);
+  }
+
+  .brand-link:hover {
+    color: var(--text-highlight);
+  }
+
+  .brand-sk-badge {
+    width: 22px;
+    height: 22px;
+    border-radius: var(--radius-sm, 6px);
+    background-color: var(--text-primary);
+    color: var(--bg-primary);
+    font-size: 0.675rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: -0.5px;
+    flex-shrink: 0;
+    transition: transform 0.15s ease;
+  }
+
+  .brand-link:hover .brand-sk-badge {
+    transform: scale(1.05);
+  }
+</style>

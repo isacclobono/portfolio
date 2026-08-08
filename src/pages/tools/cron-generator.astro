@@ -1,0 +1,204 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Button from '../../components/Button.astro';
+---
+
+<Layout 
+  title="Cron Schedule Expression Builder" 
+  description="Visual Cron expression builder and human-readable schedule translator for backend developers and DevOps engineers." 
+  currentPath="/tools"
+>
+  <Breadcrumb items={[
+    { label: 'Tools', href: '/tools' },
+    { label: 'Cron Generator' }
+  ]} />
+
+  <Button href="/tools" variant="back" size="sm">
+    Back to tools
+  </Button>
+
+  <div style="margin: 1.5rem 0 2rem;">
+    <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem;">
+      Cron Schedule Generator &amp; Translator
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+      Construct standard 5-part cron schedules for Node.js worker queues, Laravel task schedulers, and Linux crontabs.
+    </p>
+  </div>
+
+  <div class="estimator-card">
+    <!-- Preset Schedules -->
+    <div>
+      <label style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.6rem;">
+        Quick Presets:
+      </label>
+      <div class="options-grid" id="cron-presets">
+        <button type="button" class="opt-pill active" data-cron="*/5 * * * *">Every 5 Minutes</button>
+        <button type="button" class="opt-pill" data-cron="0 * * * *">Every Hour</button>
+        <button type="button" class="opt-pill" data-cron="0 0 * * *">Daily at Midnight</button>
+        <button type="button" class="opt-pill" data-cron="0 9 * * 1-5">Weekdays at 9:00 AM</button>
+        <button type="button" class="opt-pill" data-cron="0 0 * * 0">Weekly on Sunday</button>
+        <button type="button" class="opt-pill" data-cron="0 0 1 * *">1st of Every Month</button>
+      </div>
+    </div>
+
+    <!-- Live Expression -->
+    <div class="blueprint-result-box">
+      <div class="blueprint-header">
+        <span class="blueprint-title">Cron Expression</span>
+        <button type="button" id="copy-cron-btn" class="action-btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.725rem;">
+          <span id="copy-cron-text">Copy</span>
+        </button>
+      </div>
+      <input 
+        type="text" 
+        id="cron-input" 
+        value="*/5 * * * *" 
+        class="text-input-field" 
+        style="font-family: var(--font-mono); font-size: 1.25rem; font-weight: 600; text-align: center; margin-bottom: 0.75rem;"
+      />
+      <div style="font-size: 0.875rem; color: var(--text-primary); text-align: center;" id="cron-readable">
+        “Runs every 5 minutes”
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .estimator-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+  }
+
+  .opt-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.65rem 0.85rem;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 0.825rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .opt-pill:hover {
+    background-color: var(--bg-card-hover);
+    color: var(--text-primary);
+  }
+
+  .opt-pill.active {
+    background-color: var(--text-primary);
+    border-color: var(--text-primary);
+    color: var(--bg-primary) !important;
+    font-weight: 600;
+  }
+
+  .text-input-field {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    outline: none;
+  }
+
+  .blueprint-result-box {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+  }
+
+  .blueprint-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 0.75rem;
+  }
+
+  .blueprint-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  @media (max-width: 640px) {
+    .options-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script is:inline>
+  function setupCronGenerator() {
+    const input = document.getElementById('cron-input');
+    const readable = document.getElementById('cron-readable');
+    const presetBtns = document.querySelectorAll('#cron-presets .opt-pill');
+    const copyBtn = document.getElementById('copy-cron-btn');
+    const copyText = document.getElementById('copy-cron-text');
+
+    const descriptions = {
+      '*/5 * * * *': 'Runs every 5 minutes',
+      '0 * * * *': 'Runs at minute 0 of every hour',
+      '0 0 * * *': 'Runs once daily at midnight (00:00 UTC)',
+      '0 9 * * 1-5': 'Runs at 09:00 AM on every weekday (Monday through Friday)',
+      '0 0 * * 0': 'Runs once weekly on Sunday at midnight',
+      '0 0 1 * *': 'Runs on the 1st day of every month at midnight'
+    };
+
+    function updateCron() {
+      const val = input?.value.trim() || '';
+      if (readable) {
+        readable.textContent = `“${descriptions[val] || 'Custom cron schedule: evaluates minute, hour, day of month, month, and day of week'}”`;
+      }
+    }
+
+    presetBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        presetBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const cron = btn.getAttribute('data-cron') || '*/5 * * * *';
+        if (input) {
+          input.value = cron;
+          updateCron();
+        }
+      });
+    });
+
+    input?.addEventListener('input', updateCron);
+
+    copyBtn?.addEventListener('click', async () => {
+      if (input?.value) {
+        await navigator.clipboard.writeText(input.value);
+        if (copyText) copyText.textContent = 'Copied!';
+        setTimeout(() => {
+          if (copyText) copyText.textContent = 'Copy';
+        }, 1800);
+      }
+    });
+
+    updateCron();
+  }
+
+  setupCronGenerator();
+  document.addEventListener('astro:after-swap', setupCronGenerator);
+</script>

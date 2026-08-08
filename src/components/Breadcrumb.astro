@@ -1,0 +1,164 @@
+---
+export interface BreadcrumbItem {
+  label: string;
+  href?: string;
+  icon?: boolean;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+  includeHome?: boolean;
+  class?: string;
+}
+
+const {
+  items = [],
+  includeHome = true,
+  class: className = ''
+} = Astro.props;
+
+// Capitalize first letter helper
+const capitalize = (str: string) => {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+const processedItems = items.map((item) => ({
+  ...item,
+  label: capitalize(item.label)
+}));
+
+const allItems: BreadcrumbItem[] = includeHome 
+  ? [{ label: 'Home', href: '/' }, ...processedItems]
+  : processedItems;
+
+// Schema.org BreadcrumbList for SEO
+const currentUrl = Astro.url.href;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": allItems.map((item, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "name": item.label,
+    "item": item.href ? new URL(item.href, Astro.url).href : currentUrl
+  }))
+};
+---
+
+<!-- SEO JSON-LD -->
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+<!-- Breadcrumb UI -->
+<nav aria-label="Breadcrumb" class:list={["breadcrumb-nav", className]}>
+  <ol class="breadcrumb-list">
+    {allItems.map((item, index) => {
+      const isLast = index === allItems.length - 1;
+      const isFirst = index === 0;
+
+      return (
+        <li class="breadcrumb-item">
+          {isFirst && (
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="13" 
+              height="13" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              stroke-width="2" 
+              stroke-linecap="round" 
+              stroke-linejoin="round"
+              class="home-icon mr-1 inline-block text-zinc-500"
+              aria-hidden="true"
+            >
+              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          )}
+
+          {isLast || !item.href ? (
+            <span class="breadcrumb-current" aria-current="page" title={item.label}>
+              {item.label}
+            </span>
+          ) : (
+            <a href={item.href} class="breadcrumb-link">
+              {item.label}
+            </a>
+          )}
+
+          {!isLast && (
+            <span class="breadcrumb-separator" aria-hidden="true">
+              /
+            </span>
+          )}
+        </li>
+      );
+    })}
+  </ol>
+</nav>
+
+<style>
+  .breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 0.825rem;
+    font-family: var(--font-sans);
+  }
+
+  .breadcrumb-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0;
+    margin: 0;
+  }
+
+  .breadcrumb-item {
+    display: inline-flex;
+    align-items: center;
+    color: var(--text-muted);
+  }
+
+  .breadcrumb-link {
+    color: var(--text-secondary);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 3px;
+    transition: color 0.15s ease, text-decoration-color 0.15s ease;
+  }
+
+  .breadcrumb-link:hover {
+    color: var(--text-primary);
+    text-decoration-color: var(--text-primary);
+  }
+
+  .breadcrumb-separator {
+    margin-left: 0.35rem;
+    margin-right: 0.1rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    user-select: none;
+    opacity: 0.7;
+  }
+
+  .breadcrumb-current {
+    color: var(--text-primary);
+    font-weight: 500;
+    max-width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: bottom;
+  }
+
+  @media (max-width: 640px) {
+    .breadcrumb-current {
+      max-width: 160px;
+    }
+  }
+</style>

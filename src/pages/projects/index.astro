@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Card from '../../components/Card.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const projects = (await getCollection('projects', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<Layout title="Projects" description="Explore full-stack and cloud projects built by Sunil Khobragade." currentPath="/projects">
+  <Breadcrumb items={[{ label: 'projects' }]} />
+
+  <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 2rem;">Projects</h1>
+
+  <div class="projects-list">
+    {projects.map((project) => (
+      <Card 
+        href={`/projects/${project.slug || project.id}`}
+        title={project.data.title}
+        description={project.data.description}
+      />
+    ))}
+  </div>
+</Layout>

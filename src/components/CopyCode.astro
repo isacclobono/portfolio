@@ -1,0 +1,88 @@
+---
+// CopyCode.astro - Interactive copy button for all code blocks
+---
+
+<script>
+  function setupCopyCodeButtons() {
+    const codeBlocks = document.querySelectorAll('pre');
+
+    codeBlocks.forEach((pre) => {
+      // Avoid duplicate wrappers if already processed
+      if (pre.parentElement?.classList.contains('code-wrapper')) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-wrapper relative group my-6 rounded-xl overflow-hidden border border-zinc-800 bg-[#16161a] transition-all hover:border-zinc-700';
+
+      // Identify language if available from code class
+      const codeEl = pre.querySelector('code');
+      const langMatch = pre.className.match(/language-(\w+)/) || codeEl?.className.match(/language-(\w+)/);
+      const language = langMatch ? langMatch[1] : '';
+
+      // Header bar
+      const header = document.createElement('div');
+      header.className = 'flex items-center justify-between px-4 py-2 bg-zinc-900/60 border-b border-zinc-800/80 text-xs font-mono text-zinc-400 select-none';
+      
+      const langSpan = document.createElement('span');
+      langSpan.className = 'uppercase tracking-wider font-semibold text-zinc-400';
+      langSpan.textContent = language || 'CODE';
+
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'copy-btn inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-zinc-800/70 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-all cursor-pointer border border-zinc-700/50';
+      copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
+      copyBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="copy-icon">
+          <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+          <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+        </svg>
+        <span class="copy-text">Copy</span>
+      `;
+
+      copyBtn.addEventListener('click', async () => {
+        const textToCopy = codeEl ? codeEl.innerText : pre.innerText;
+        try {
+          await navigator.clipboard.writeText(textToCopy);
+          copyBtn.classList.add('copied', 'bg-emerald-950/80', 'text-emerald-300', 'border-emerald-700/50');
+          copyBtn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-400">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span class="copy-text text-emerald-400 font-semibold">Copied!</span>
+          `;
+          setTimeout(() => {
+            copyBtn.classList.remove('copied', 'bg-emerald-950/80', 'text-emerald-300', 'border-emerald-700/50');
+            copyBtn.innerHTML = `
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="copy-icon">
+                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+              </svg>
+              <span class="copy-text">Copy</span>
+            `;
+          }, 2000);
+        } catch (err) {
+          console.error('Failed to copy code:', err);
+        }
+      });
+
+      header.appendChild(langSpan);
+      header.appendChild(copyBtn);
+
+      pre.parentNode?.insertBefore(wrapper, pre);
+      wrapper.appendChild(header);
+      wrapper.appendChild(pre);
+
+      pre.style.margin = '0';
+      pre.style.borderRadius = '0';
+      pre.style.border = 'none';
+      pre.style.padding = '1rem 1.25rem';
+    });
+  }
+
+  // Initialize on load and on Astro page transitions
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupCopyCodeButtons);
+  } else {
+    setupCopyCodeButtons();
+  }
+  document.addEventListener('astro:after-swap', setupCopyCodeButtons);
+  document.addEventListener('astro:page-load', setupCopyCodeButtons);
+</script>

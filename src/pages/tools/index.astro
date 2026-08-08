@@ -1,0 +1,65 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Card from '../../components/Card.astro';
+---
+
+<Layout 
+  title="Developer & Freelance Tools" 
+  description="Collection of interactive developer tools, architecture scope calculators, and consultation booking by Sunil Khobragade." 
+  currentPath="/tools"
+>
+  <Breadcrumb items={[{ label: 'Tools' }]} />
+
+  <div style="margin-bottom: 2.25rem;">
+    <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem;">
+      Developer &amp; Freelance Tools
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+      Interactive utilities for software engineers, startup founders, and technical clients.
+    </p>
+  </div>
+
+  <!-- Client & Project Planning Tools -->
+  <section style="margin-bottom: 2.5rem;">
+    <h2 style="font-size: 1.15rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary);">
+      Project Planning &amp; Consultation
+    </h2>
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+      <Card 
+        href="/tools/estimator"
+        title="Project Scope & Architecture Estimator"
+        description="Interactive calculator to plan your web app's architecture, choose tech stacks, estimate delivery timelines, and generate a freelance proposal."
+      />
+      <Card 
+        href="/tools/appointment"
+        title="Book 1:1 Consultation (Google Calendar)"
+        description="Schedule a 1:1 system design, architecture discovery, or code review video call with automatic Google Calendar integration."
+      />
+    </div>
+  </section>
+
+  <!-- Engineering & Utility Tools -->
+  <section style="margin-bottom: 2.5rem;">
+    <h2 style="font-size: 1.15rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary);">
+      Developer Utilities
+    </h2>
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+      <Card 
+        href="/tools/jwt-decoder"
+        title="JWT Token Decoder & Inspector"
+        description="Client-side JSON Web Token debugger and payload inspector with expiration verification and zero tracking."
+      />
+      <Card 
+        href="/tools/sql-formatter"
+        title="SQL Formatter & Query Optimizer"
+        description="Beautify and capitalize raw SQL queries with instant index and query performance recommendations."
+      />
+      <Card 
+        href="/tools/cron-generator"
+        title="Cron Schedule Generator & Translator"
+        description="Construct standard cron schedule expressions with human-readable explanations for background workers and schedulers."
+      />
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,1204 @@
+@import "tailwindcss";
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, monospace;
+
+  /* Default Dark Mode (Astro Nano Warm Charcoal Palette) */
+  --bg-primary: #121214;
+  --bg-secondary: #18181b;
+  --bg-card: #1c1c20;
+  --bg-card-hover: #242429;
+  --bg-code: #161619;
+  --bg-pill: rgba(255, 255, 255, 0.06);
+
+  --border-subtle: #27272a;
+  --border-card: #2e2e33;
+  --border-card-hover: #52525b;
+
+  --text-primary: #f4f4f5;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --text-highlight: #ffffff;
+  --link-color: #f4f4f5;
+
+  --accent-green: #22c55e;
+  --accent-blue: #38bdf8;
+  --accent-purple: #a855f7;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  --scrollbar-thumb: rgba(255, 255, 255, 0.45);
+  --scrollbar-thumb-hover: #ffffff;
+  --selection-bg: #000000;
+  --selection-text: #ffffff;
+
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --max-width: 680px;
+}
+
+[data-theme="light"] {
+  --bg-primary: #fafaf9;
+  --bg-secondary: #f4f4f5;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f5f5f7;
+  --bg-code: #f4f4f5;
+  --bg-pill: rgba(0, 0, 0, 0.05);
+
+  --border-subtle: #e4e4e7;
+  --border-card: #e4e4e7;
+  --border-card-hover: #a1a1aa;
+
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
+  --text-muted: #a1a1aa;
+  --text-highlight: #09090b;
+  --link-color: #18181b;
+
+  --scrollbar-thumb: rgba(0, 0, 0, 0.45);
+  --scrollbar-thumb-hover: #000000;
+  --selection-bg: #ffffff;
+  --selection-text: #000000;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Custom Text Selection: Black in Dark Mode, White in Light Mode */
+::selection {
+  background-color: var(--selection-bg);
+  color: var(--selection-text);
+  text-shadow: none;
+}
+
+::-moz-selection {
+  background-color: var(--selection-bg);
+  color: var(--selection-text);
+  text-shadow: none;
+}
+
+/* Slim Theme-Contrast Custom Scrollbar: White in Dark Mode, Black in Light Mode */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 9999px;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+html {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  min-height: 100%;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+  margin: 0;
+}
+
+.site-container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  animation: pageFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Lazy Scroll Reveal animation with smooth staggered transitions */
+.reveal-item {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: 
+    opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-item.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delays for smooth cascade */
+.reveal-item:nth-child(1) { transition-delay: 0.04s; }
+.reveal-item:nth-child(2) { transition-delay: 0.08s; }
+.reveal-item:nth-child(3) { transition-delay: 0.12s; }
+.reveal-item:nth-child(4) { transition-delay: 0.16s; }
+.reveal-item:nth-child(5) { transition-delay: 0.20s; }
+
+/* Image lazy loading blur-up effect */
+img[loading="lazy"] {
+  opacity: 0.85;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+img[loading="lazy"]:hover {
+  opacity: 1;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 1.375rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: 1.125rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+p {
+  color: var(--text-secondary);
+  margin-bottom: 1.25rem;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color var(--transition-fast), opacity var(--transition-fast);
+}
+
+a:hover {
+  color: var(--text-highlight);
+  opacity: 0.9;
+}
+
+/* Header */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3.5rem;
+}
+
+.brand-link {
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  transition: color var(--transition-fast);
+}
+
+.brand-link:hover {
+  color: var(--text-highlight);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.925rem;
+  color: var(--text-muted);
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+  font-weight: 450;
+}
+
+.nav-link:hover {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.nav-link.active {
+  color: var(--text-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.nav-separator {
+  color: var(--text-muted);
+  user-select: none;
+}
+
+/* Footer */
+.site-footer {
+  margin-top: auto;
+  padding-top: 3.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.footer-brand {
+  color: var(--text-muted);
+}
+
+.theme-toggle-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.theme-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition-fast);
+}
+
+.theme-btn:hover, .theme-btn.active {
+  color: var(--text-primary);
+}
+
+.theme-btn svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* Reusable List Card (Astro Nano style) */
+.card-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 1.4rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  color: var(--text-primary);
+  margin-bottom: 0.85rem;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  position: relative;
+}
+
+.card-link:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-card-hover);
+  transform: translateY(-1px);
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding-right: 1rem;
+}
+
+.card-title {
+  font-size: 1.025rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.card-description {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.card-arrow {
+  color: var(--text-muted);
+  font-size: 1.15rem;
+  transition: transform var(--transition-fast), color var(--transition-fast);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.card-link:hover .card-arrow {
+  transform: translateX(4px);
+  color: var(--text-primary);
+}
+
+/* Back Link Button */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  margin-bottom: 2rem;
+  transition: all var(--transition-fast);
+}
+
+.back-btn:hover {
+  background-color: var(--bg-card-hover);
+  color: var(--text-primary);
+  border-color: var(--border-card-hover);
+}
+
+/* Meta Line */
+.meta-line {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Detail Header */
+.detail-header {
+  margin-bottom: 2rem;
+}
+
+.detail-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.025em;
+}
+
+.detail-links {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+}
+
+/* Section Year Grouping */
+.year-heading {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 2rem;
+  margin-bottom: 0.85rem;
+}
+
+/* Work Timeline Item */
+.work-item {
+  margin-bottom: 2.25rem;
+}
+
+.work-period {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+}
+
+.work-company {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.15rem;
+}
+
+.work-role {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.85rem;
+}
+
+.work-points, .work-markdown-points ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding-left: 0;
+}
+
+.work-points li, .work-markdown-points li {
+  font-size: 0.925rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  position: relative;
+  padding-left: 1.1rem;
+}
+
+.work-points li::before, .work-markdown-points li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
+}
+
+/* Markdown Prose Content */
+.prose-content {
+  color: var(--text-primary);
+}
+
+.prose-content h2 {
+  font-size: 1.35rem;
+  margin-top: 2.25rem;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.prose-content h3 {
+  font-size: 1.15rem;
+  margin-top: 1.75rem;
+  margin-bottom: 0.6rem;
+}
+
+.prose-content ul:not(.work-points):not(.work-markdown-points ul) {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.prose-content ol {
+  list-style: decimal;
+  padding-left: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.prose-content li {
+  margin-bottom: 0.4rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* Shiki Syntax Highlighting & Code Blocks */
+pre.astro-code {
+  padding: 1.1rem !important;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  border-radius: var(--radius-md);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background-color: var(--bg-pill);
+  padding: 0.15em 0.35em;
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+}
+
+pre code {
+  background-color: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  color: inherit !important;
+}
+
+/* Markdown Tables */
+.table-container {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  margin: 1.25rem 0;
+}
+
+th {
+  text-align: left;
+  padding: 0.65rem 0.85rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-subtle);
+  font-weight: 600;
+}
+
+td {
+  padding: 0.65rem 0.85rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Features checklist */
+.feature-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 1rem 0 1.75rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.925rem;
+  color: var(--text-secondary);
+}
+
+.feature-check {
+  color: var(--accent-green);
+  flex-shrink: 0;
+  font-weight: bold;
+}
+
+/* Lighthouse Score Card */
+.lighthouse-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin: 1.5rem 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  text-align: center;
+}
+
+.lighthouse-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.score-circle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 3px solid var(--accent-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent-green);
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.2);
+}
+
+.score-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Badges & Tags */
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+}
+
+.tag-badge {
+  font-size: 0.775rem;
+  padding: 0.2rem 0.6rem;
+  background-color: var(--bg-pill);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+/* Action Buttons (Strict Monochrome Theme) */
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1.25rem 0 1.75rem;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn-primary {
+  background-color: var(--text-primary);
+  color: var(--bg-primary) !important;
+  border-color: var(--text-primary);
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-card-hover);
+  transform: translateY(-1px);
+}
+
+/* Banner gradient card for project hero */
+.project-hero-banner {
+  width: 100%;
+  height: 180px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4338ca 70%, #047857 100%);
+  border: 1px solid var(--border-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5rem 0 2rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.project-hero-content {
+  text-align: center;
+  z-index: 2;
+  color: #ffffff;
+  padding: 0 1rem;
+}
+
+.project-hero-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+}
+
+.project-hero-subtitle {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Skills grid */
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.skill-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-md);
+  padding: 1.1rem;
+}
+
+.skill-category-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.6rem;
+}
+
+.skill-pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.skill-pill {
+  font-size: 0.8rem;
+  background-color: var(--bg-pill);
+  border: 1px solid var(--border-subtle);
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+}
+
+/* Contact link rows */
+.social-links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.social-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.925rem;
+}
+
+.social-name {
+  color: var(--text-muted);
+  min-width: 75px;
+}
+
+.see-all-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-top: 0.75rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.see-all-link:hover {
+  color: var(--text-primary);
+}
+
+@media (max-width: 640px) {
+  .site-container {
+    padding: 1.75rem 1rem 3rem;
+  }
+  .lighthouse-card {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  h1 {
+    font-size: 1.6rem;
+  }
+  .detail-title {
+    font-size: 1.65rem;
+  }
+}
+
+/* ==========================================================================
+   CALENDLY / CAL.COM STYLE BOOKING WIDGET (STRICT MONOCHROME PALETTE, NO SHADOWS)
+   ========================================================================== */
+.cal-booking-card {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 2.5rem;
+  box-shadow: none !important;
+}
+
+.cal-col-info {
+  padding: 1.5rem;
+  border-right: 1px solid var(--border-card);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-card);
+  gap: 0.85rem;
+}
+
+.cal-author-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.cal-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background-color: var(--text-primary);
+  color: var(--bg-primary);
+  font-size: 0.725rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cal-author-name {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.cal-call-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.35;
+  margin-bottom: 0.25rem;
+}
+
+.cal-agenda-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cal-agenda-list li {
+  font-size: 0.775rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  position: relative;
+  padding-left: 0.85rem;
+}
+
+.cal-agenda-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
+}
+
+.cal-meta-list {
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.cal-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.cal-meta-item svg {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.cal-col-main {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-secondary);
+  padding: 1.5rem;
+  gap: 1rem;
+}
+
+/* Calendar Section on Top */
+.cal-picker-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.cal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.cal-month-title {
+  font-size: 0.925rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.cal-nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.cal-nav-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cal-nav-btn:hover {
+  background-color: var(--bg-card-hover);
+  color: var(--text-primary);
+}
+
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  text-align: center;
+  font-size: 0.675rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.4rem;
+}
+
+.cal-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.cal-day-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.cal-day-cell.empty {
+  cursor: default;
+  pointer-events: none;
+}
+
+.cal-day-cell.disabled {
+  color: var(--text-muted);
+  opacity: 0.25;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.cal-day-cell:not(.disabled):not(.empty):hover {
+  background-color: var(--bg-card);
+  border-color: var(--border-card);
+}
+
+.cal-day-cell.today {
+  border-color: var(--border-card-hover);
+}
+
+.cal-day-cell.selected {
+  background-color: var(--text-primary) !important;
+  color: var(--bg-primary) !important;
+  font-weight: 700 !important;
+  border-color: var(--text-primary) !important;
+}
+
+/* Time Slots Section Positioned Directly Below Calendar */
+.cal-slots-section-below {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 0.85rem;
+  gap: 0.6rem;
+}
+
+.cal-slots-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cal-selected-day-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.cal-selected-day-label strong {
+  color: var(--text-primary);
+}
+
+.cal-time-toggle {
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-full);
+  padding: 1px;
+}
+
+.time-format-btn {
+  border: none;
+  background: transparent;
+  font-size: 0.675rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+}
+
+.time-format-btn.active {
+  background-color: var(--text-primary);
+  color: var(--bg-primary);
+  font-weight: 600;
+}
+
+.cal-slots-grid-below {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.cal-slot-btn {
+  width: 100%;
+  padding: 0.45rem 0.2rem;
+  text-align: center;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cal-slot-btn:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-card-hover);
+}
+
+.cal-slot-btn.selected {
+  background-color: var(--text-primary) !important;
+  color: var(--bg-primary) !important;
+  border-color: var(--text-primary) !important;
+  font-weight: 700 !important;
+}
+
+/* Confirmation Panel on Left Side */
+.cal-confirm-panel {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  box-shadow: none !important;
+}
+
+.confirm-slot-badge {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.confirm-slot-badge strong {
+  color: var(--text-primary);
+  margin-left: 0.2rem;
+}
+
+.confirm-inputs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.cal-input-field {
+  width: 100%;
+  padding: 0.45rem 0.65rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.775rem;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.15s ease;
+}
+
+.cal-input-field:focus {
+  border-color: var(--text-primary);
+}
+
+.confirm-actions-row {
+  display: flex;
+  gap: 0.45rem;
+  margin-top: 0.2rem;
+}
+
+.btn-compact {
+  padding: 0.45rem 0.65rem !important;
+  font-size: 0.75rem !important;
+  white-space: nowrap !important;
+  line-height: 1.2 !important;
+}
+
+@media (max-width: 680px) {
+  .cal-booking-card {
+    grid-template-columns: 1fr;
+  }
+  .cal-col-info {
+    border-right: none;
+    border-bottom: 1px solid var(--border-card);
+  }
+  .cal-slots-grid-below {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .confirm-inputs-grid {
+    grid-template-columns: 1fr;
+  }
+}

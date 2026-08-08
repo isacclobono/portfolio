@@ -1,23 +1,156 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CopyCode from '../components/CopyCode.astro';
+import ScrollToTop from '../components/ScrollToTop.astro';
+import ScrollProgress from '../components/ScrollProgress.astro';
+import '../styles/global.css';
+import { SITE } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  currentPath?: string;
+  image?: string;
+}
+
+const { 
+  title = SITE.AUTHOR, 
+  description = SITE.DESCRIPTION,
+  currentPath = Astro.url.pathname,
+  image = '/favicon.svg'
+} = Astro.props;
+
+const pageTitle = title === SITE.AUTHOR ? `${SITE.AUTHOR} - Senior Full-Stack Developer & Cloud Architect` : `${title} | ${SITE.AUTHOR}`;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site || 'https://sunilkhobragade.dev').href;
+
+// SEO Person & Professional Service Schema
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": SITE.AUTHOR,
+  "jobTitle": "Senior Full-Stack Developer & Solutions Architect",
+  "url": "https://sunilkhobragade.dev",
+  "email": `mailto:${SITE.EMAIL}`,
+  "sameAs": [
+    SITE.GITHUB,
+    SITE.LINKEDIN
+  ],
+  "knowsAbout": [
+    "Full-Stack Web Development",
+    "Node.js", "TypeScript", "React", "Next.js", "Angular",
+    "PHP", "Laravel", "Python", "Django", "Microservices",
+    "System Design", "PostgreSQL", "MongoDB", "Redis",
+    "AWS", "Microsoft Azure", "Docker", "Kubernetes", "CI/CD",
+    "AI Solutions", "Google Cloud Vertex AI", "Payment Gateways (Stripe, Razorpay, PhonePe)"
+  ],
+  "offers": {
+    "@type": "Offer",
+    "itemOffered": {
+      "@type": "Service",
+      "name": "Freelance Full-Stack Development & Cloud Architecture",
+      "description": "Building scalable web platforms, high-performance APIs, SaaS MVPs, real-time architectures, and cloud deployments."
+    }
+  }
+};
+---
+
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalUrl} />
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+    <!-- Google Fonts preload & stylesheet -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <!-- Primary Meta Tags -->
+    <title>{pageTitle}</title>
+    <meta name="title" content={pageTitle} />
+    <meta name="description" content={description} />
+    <meta name="author" content={SITE.AUTHOR} />
+    <meta name="keywords" content="Sunil Khobragade, Freelance Full-Stack Developer, Hire Senior Developer, Node.js Expert, React Next.js Developer, Laravel Backend Architect, Python Django, Cloud AWS Azure, Microservices, System Design" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, canonicalUrl).href} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalUrl} />
+    <meta property="twitter:title" content={pageTitle} />
+    <meta property="twitter:description" content={description} />
+
+    <!-- Structured Data JSON-LD for Search Engines -->
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+
+    <script is:inline>
+      // Prevent theme flicker on load
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else if (savedTheme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      } else {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+      }
+    </script>
+  </head>
+  <body>
+    <!-- Top Reading Progress Indicator -->
+    <ScrollProgress />
+
+    <div class="site-container">
+      <Header currentPath={currentPath} />
+      <main id="main-content">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+
+    <!-- Floating Scroll To Top Button -->
+    <ScrollToTop />
+
+    <!-- Copy Code Handler -->
+    <CopyCode />
+
+    <!-- Scroll Reveal Observer -->
+    <script is:inline>
+      function setupScrollReveal() {
+        const targets = document.querySelectorAll('section, .card-link, .work-item, .skill-card, .table-container, .lighthouse-card');
+        
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('revealed');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.08,
+          rootMargin: '0px 0px -40px 0px'
+        });
+
+        targets.forEach((el) => {
+          el.classList.add('reveal-item');
+          observer.observe(el);
+        });
+      }
+
+      setupScrollReveal();
+      document.addEventListener('astro:after-swap', setupScrollReveal);
+    </script>
+  </body>
+</html>

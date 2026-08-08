@@ -1,0 +1,13 @@
+---
+import { SITE } from '../data/site';
+import ThemeToggle from './ThemeToggle.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="footer-brand">
+    &copy; {year} | {SITE.AUTHOR}
+  </div>
+  <ThemeToggle />
+</footer>

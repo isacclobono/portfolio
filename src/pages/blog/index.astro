@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Card from '../../components/Card.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Group posts by Year dynamically
+const postsByYear = posts.reduce<Record<string, typeof posts>>((acc, post) => {
+  const year = post.data.date.getFullYear().toString();
+  if (!acc[year]) acc[year] = [];
+  acc[year].push(post);
+  return acc;
+}, {});
+
+const years = Object.keys(postsByYear).sort((a, b) => b.localeCompare(a));
+---
+
+<Layout title="Blog" description="Technical articles and architecture notes by Sunil Khobragade." currentPath="/blog">
+  <Breadcrumb items={[{ label: 'blog' }]} />
+
+  <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 2rem;">Blog</h1>
+
+  {years.map((year) => (
+    <section style="margin-bottom: 2.25rem;">
+      <h2 class="year-heading">{year}</h2>
+      <div class="blog-list">
+        {postsByYear[year].map((post) => (
+          <Card 
+            href={`/blog/${post.slug || post.id}`}
+            title={post.data.title}
+            description={post.data.description}
+          />
+        ))}
+      </div>
+    </section>
+  ))}
+</Layout>

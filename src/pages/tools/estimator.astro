@@ -1,0 +1,573 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Button from '../../components/Button.astro';
+import { SITE } from '../../data/site';
+---
+
+<Layout 
+  title="Project Architecture & Scope Estimator" 
+  description="Interactive tool to estimate full-stack architecture requirements, project timeline, and generate a freelance proposal from Sunil Khobragade." 
+  currentPath="/tools"
+>
+  <Breadcrumb items={[
+    { label: 'Tools', href: '/tools' },
+    { label: 'Project Estimator' }
+  ]} />
+
+  <Button href="/tools" variant="back" size="sm">
+    Back to tools
+  </Button>
+
+  <div style="margin: 1.5rem 0 2rem;">
+    <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem;">
+      Project Architecture &amp; Scope Estimator
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+      Select your technical requirements to generate an architectural recommendation, estimated delivery timeline, and send a tailored proposal request.
+    </p>
+  </div>
+
+  <div class="estimator-card">
+    <!-- Step 1: Project Type -->
+    <div class="estimator-step">
+      <div class="step-label">
+        <span class="step-num">1</span>
+        <span>Select Project Type</span>
+      </div>
+      <div class="options-grid" id="project-type-group">
+        <button type="button" class="opt-pill active" data-type="saas" data-weeks="3-5">
+          <span class="opt-name">Full-Stack SaaS Platform</span>
+        </button>
+        <button type="button" class="opt-pill" data-type="mvp" data-weeks="2-3">
+          <span class="opt-name">Rapid Startup MVP</span>
+        </button>
+        <button type="button" class="opt-pill" data-type="ecommerce" data-weeks="3-4">
+          <span class="opt-name">High-Conversion E-Commerce</span>
+        </button>
+        <button type="button" class="opt-pill" data-type="ai-chat" data-weeks="3-5">
+          <span class="opt-name">Real-Time AI &amp; Chat App</span>
+        </button>
+        <button type="button" class="opt-pill" data-type="microservices" data-weeks="4-6">
+          <span class="opt-name">Microservices &amp; Cloud Infra</span>
+        </button>
+        <button type="button" class="opt-pill" data-type="api-db" data-weeks="2-3">
+          <span class="opt-name">API Design &amp; SQL Tuning</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: Core Capabilities -->
+    <div class="estimator-step">
+      <div class="step-label">
+        <span class="step-num">2</span>
+        <span>Select Required Capabilities</span>
+      </div>
+      <div class="features-check-grid" id="features-group">
+        <label class="feature-checkbox">
+          <input type="checkbox" name="feature" value="Multi-Role Auth & RBAC" checked />
+          <span class="checkbox-custom"></span>
+          <span class="feature-name">Auth &amp; RBAC Permissions</span>
+        </label>
+        <label class="feature-checkbox">
+          <input type="checkbox" name="feature" value="Payment Gateways (Stripe, Razorpay, PhonePe)" checked />
+          <span class="checkbox-custom"></span>
+          <span class="feature-name">Payment Gateway (Stripe/Razorpay)</span>
+        </label>
+        <label class="feature-checkbox">
+          <input type="checkbox" name="feature" value="Real-Time WebSockets & Live Events" checked />
+          <span class="checkbox-custom"></span>
+          <span class="feature-name">WebSockets &amp; Real-Time Sync</span>
+        </label>
+        <label class="feature-checkbox">
+          <input type="checkbox" name="feature" value="AI & LLM Integration (Vertex AI/OpenAI)" />
+          <span class="checkbox-custom"></span>
+          <span class="feature-name">AI &amp; LLM Automation</span>
+        </label>
+        <label class="feature-checkbox">
+          <input type="checkbox" name="feature" value="Admin Analytics Dashboard" checked />
+          <span class="checkbox-custom"></span>
+          <span class="feature-name">Admin &amp; Metrics Dashboard</span>
+        </label>
+        <label class="feature-checkbox">
+          <input type="checkbox" name="feature" value="Docker & Automated CI/CD Pipelines" checked />
+          <span class="checkbox-custom"></span>
+          <span class="feature-name">Docker &amp; CI/CD Automation</span>
+        </label>
+        <label class="feature-checkbox">
+          <input type="checkbox" name="feature" value="Redis High-Throughput Caching Layer" />
+          <span class="checkbox-custom"></span>
+          <span class="feature-name">High-Throughput Redis Caching</span>
+        </label>
+        <label class="feature-checkbox">
+          <input type="checkbox" name="feature" value="Multilingual Localization" />
+          <span class="checkbox-custom"></span>
+          <span class="feature-name">Multilingual Localization</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Step 3: Scalability Target -->
+    <div class="estimator-step">
+      <div class="step-label">
+        <span class="step-num">3</span>
+        <span>Target Concurrency &amp; Scale</span>
+      </div>
+      <div class="scale-selector-row">
+        <button type="button" class="scale-btn active" data-scale="mvp">
+          <span class="scale-title">MVP Launch</span>
+          <span class="scale-desc">&lt; 5k active users</span>
+        </button>
+        <button type="button" class="scale-btn" data-scale="growth">
+          <span class="scale-title">High Growth</span>
+          <span class="scale-desc">10k – 100k users</span>
+        </button>
+        <button type="button" class="scale-btn" data-scale="enterprise">
+          <span class="scale-title">Enterprise Scale</span>
+          <span class="scale-desc">100k+ users</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Live Calculated Blueprint Output -->
+    <div class="blueprint-result-box">
+      <div class="blueprint-header">
+        <div class="blueprint-title">
+          Architectural Blueprint &amp; Scope
+        </div>
+        <div class="blueprint-timeline" id="output-timeline">
+          Est. Delivery: <strong>3 – 5 Weeks</strong>
+        </div>
+      </div>
+
+      <div class="blueprint-body">
+        <div class="blueprint-row">
+          <span class="blueprint-lbl">Recommended Stack:</span>
+          <span class="blueprint-val" id="output-stack">
+            React / Next.js 14, Node.js (Fastify/Express), PostgreSQL, Redis, Docker, AWS / Cloudflare
+          </span>
+        </div>
+
+        <div class="blueprint-row">
+          <span class="blueprint-lbl">Selected Features:</span>
+          <span class="blueprint-val" id="output-features">
+            Auth &amp; RBAC, Payments, WebSockets, Admin Dashboard, CI/CD
+          </span>
+        </div>
+
+        <div class="blueprint-row">
+          <span class="blueprint-lbl">Infrastructure Plan:</span>
+          <span class="blueprint-val" id="output-infra">
+            Containerized microservices behind reverse proxy with Redis session management and automated zero-downtime CI/CD deployment.
+          </span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="blueprint-actions">
+        <a id="proposal-email-btn" href="#" class="action-btn btn-primary" style="flex: 1; justify-content: center;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+          </svg>
+          Send Proposal Request
+        </a>
+        <button type="button" id="copy-specs-btn" class="action-btn btn-secondary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+          </svg>
+          <span id="copy-specs-text">Copy Specs</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .estimator-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .step-label {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.85rem;
+  }
+
+  .step-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background-color: var(--bg-pill);
+    border: 1px solid var(--border-card);
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+  }
+
+  .opt-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 0.95rem;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .opt-pill:hover {
+    background-color: var(--bg-card-hover);
+    border-color: var(--border-card-hover);
+    color: var(--text-primary);
+  }
+
+  .opt-pill.active {
+    background-color: var(--text-primary);
+    border-color: var(--text-primary);
+    color: var(--bg-primary) !important;
+  }
+
+  .opt-pill.active .opt-name {
+    color: var(--bg-primary) !important;
+    font-weight: 600;
+  }
+
+  .features-check-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+  }
+
+  .feature-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.85rem;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-sm);
+    font-size: 0.825rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+  }
+
+  .feature-checkbox:hover {
+    color: var(--text-primary);
+    border-color: var(--border-card-hover);
+  }
+
+  .feature-checkbox input {
+    display: none;
+  }
+
+  .checkbox-custom {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 1px solid var(--border-card);
+    background-color: var(--bg-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+  }
+
+  .feature-checkbox input:checked + .checkbox-custom {
+    background-color: var(--text-primary);
+    border-color: var(--text-primary);
+  }
+
+  .feature-checkbox input:checked + .checkbox-custom::after {
+    content: "✔";
+    font-size: 10px;
+    color: var(--bg-primary);
+    font-weight: 700;
+  }
+
+  .scale-selector-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+  }
+
+  .scale-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.75rem 0.5rem;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .scale-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .scale-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .scale-btn:hover {
+    background-color: var(--bg-card-hover);
+    border-color: var(--border-card-hover);
+  }
+
+  .scale-btn.active {
+    background-color: var(--text-primary);
+    border-color: var(--text-primary);
+  }
+
+  .scale-btn.active .scale-title {
+    color: var(--bg-primary) !important;
+  }
+
+  .scale-btn.active .scale-desc {
+    color: var(--bg-primary) !important;
+    opacity: 0.8;
+  }
+
+  .blueprint-result-box {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+  }
+
+  .blueprint-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 1rem;
+  }
+
+  .blueprint-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .blueprint-timeline {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .blueprint-timeline strong {
+    color: var(--text-primary);
+  }
+
+  .blueprint-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .blueprint-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .blueprint-lbl {
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 0.775rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .blueprint-val {
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+
+  .blueprint-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-subtle);
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 640px) {
+    .options-grid, .features-check-grid, .scale-selector-row {
+      grid-template-columns: 1fr;
+    }
+    .blueprint-actions {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<script is:inline>
+  function setupEstimatorPage() {
+    const typeButtons = document.querySelectorAll('#project-type-group .opt-pill');
+    const scaleButtons = document.querySelectorAll('.scale-btn');
+    const featureCheckboxes = document.querySelectorAll('input[name="feature"]');
+    
+    const timelineEl = document.getElementById('output-timeline');
+    const stackEl = document.getElementById('output-stack');
+    const featuresEl = document.getElementById('output-features');
+    const infraEl = document.getElementById('output-infra');
+    const proposalBtn = document.getElementById('proposal-email-btn');
+    const copyBtn = document.getElementById('copy-specs-btn');
+    const copyText = document.getElementById('copy-specs-text');
+
+    let currentType = 'saas';
+    let currentTypeName = 'Full-Stack SaaS Platform';
+    let currentScale = 'MVP Launch (< 5k users)';
+
+    const stacks = {
+      saas: 'Next.js 14 / React, Node.js (Fastify/Express), PostgreSQL, Redis, Docker, AWS / Cloudflare',
+      mvp: 'Next.js / React, Node.js (Express), PostgreSQL / Supabase, Docker, Vercel / Railway',
+      ecommerce: 'Laravel / Node.js, React, MySQL 8.0, Redis Cache & Queues, Stripe & Razorpay Webhooks, AWS S3',
+      'ai-chat': 'React, Node.js, Socket.io / WebSockets, Redis Pub/Sub, MongoDB, Google Vertex AI / Gemini API',
+      microservices: 'Node.js (Fastify), Python (Django), Redis Distributed Locks, Docker, Kubernetes, GitLab CI, AWS ECS',
+      'api-db': 'Node.js / Laravel REST APIs, PostgreSQL / MySQL indexing, Redis Caching, Bruno / Postman automated testing'
+    };
+
+    const timelines = {
+      saas: '3 – 5 Weeks',
+      mvp: '2 – 3 Weeks',
+      ecommerce: '3 – 4 Weeks',
+      'ai-chat': '3 – 5 Weeks',
+      microservices: '4 – 6 Weeks',
+      'api-db': '2 – 3 Weeks'
+    };
+
+    function updateEstimator() {
+      const selectedFeatures = Array.from(featureCheckboxes)
+        .filter(cb => cb.checked)
+        .map(cb => cb.value);
+
+      const featuresSummary = selectedFeatures.length > 0 ? selectedFeatures.join(', ') : 'Custom Baseline Architecture';
+      const stack = stacks[currentType] || stacks.saas;
+      const timeline = timelines[currentType] || '3 – 4 Weeks';
+
+      if (timelineEl) timelineEl.innerHTML = `Est. Delivery: <strong>${timeline}</strong>`;
+      if (stackEl) stackEl.textContent = stack;
+      if (featuresEl) featuresEl.textContent = featuresSummary;
+
+      let infraDescription = `Containerized microservices behind reverse proxy with Redis caching, ${currentScale} load capacity, and automated CI/CD deployment.`;
+      if (infraEl) infraEl.textContent = infraDescription;
+
+      const emailSubject = encodeURIComponent(`Freelance Project Inquiry: ${currentTypeName}`);
+      const emailBody = encodeURIComponent(
+`Hi Sunil,
+
+I would like to discuss a freelance project proposal with the following specifications:
+
+- Project Type: ${currentTypeName}
+- Estimated Timeline: ${timeline}
+- Target Scale: ${currentScale}
+- Selected Capabilities:
+${selectedFeatures.map(f => `  • ${f}`).join('\n')}
+
+- Recommended Stack: ${stack}
+
+Could we schedule a discussion regarding availability and budget?
+
+Best regards,`
+      );
+
+      if (proposalBtn) {
+        proposalBtn.setAttribute('href', `mailto:sunilkhobragade@proton.me?subject=${emailSubject}&body=${emailBody}`);
+      }
+    }
+
+    typeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        typeButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentType = btn.getAttribute('data-type') || 'saas';
+        currentTypeName = btn.querySelector('.opt-name')?.textContent || 'Web App';
+        updateEstimator();
+      });
+    });
+
+    scaleButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        scaleButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentScale = `${btn.querySelector('.scale-title')?.textContent} (${btn.querySelector('.scale-desc')?.textContent})`;
+        updateEstimator();
+      });
+    });
+
+    featureCheckboxes.forEach(cb => {
+      cb.addEventListener('change', updateEstimator);
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      const selectedFeatures = Array.from(featureCheckboxes)
+        .filter(cb => cb.checked)
+        .map(cb => cb.value);
+
+      const textToCopy = 
+`PROJECT SPECIFICATIONS & ARCHITECTURE PROPOSAL
+---------------------------------------------
+Project Type: ${currentTypeName}
+Timeline Estimate: ${timelines[currentType]}
+Scale Target: ${currentScale}
+Recommended Stack: ${stacks[currentType]}
+Key Features:
+${selectedFeatures.map(f => `• ${f}`).join('\n')}
+
+Developer: Sunil Khobragade (sunilkhobragade@proton.me)`;
+
+      try {
+        await navigator.clipboard.writeText(textToCopy);
+        if (copyText) copyText.textContent = 'Copied!';
+        setTimeout(() => {
+          if (copyText) copyText.textContent = 'Copy Specs';
+        }, 2000);
+      } catch (e) {
+        console.error(e);
+      }
+    });
+
+    updateEstimator();
+  }
+
+  setupEstimatorPage();
+  document.addEventListener('astro:after-swap', setupEstimatorPage);
+</script>
