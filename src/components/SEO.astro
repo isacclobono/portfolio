@@ -19,7 +19,7 @@ const {
   publishDate
 } = Astro.props;
 
-const siteUrl = Astro.site ? Astro.site.toString().replace(/\/$/, '') : 'https://sunilkhobragade.dev';
+const siteUrl = (Astro.site ? Astro.site.toString() : (Astro.url.origin || 'https://sk-builds.vercel.app')).replace(/\/$/, '');
 const pageTitle = title 
   ? (title.includes(SITE.AUTHOR) ? title : `${title} | ${SITE.AUTHOR}`)
   : `${SITE.AUTHOR} - Senior Full-Stack Developer & Cloud Architect`;

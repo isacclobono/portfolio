@@ -1,8 +1,10 @@
 export const SITE = {
-  TITLE: "Sunil Khobragade",
-  DESCRIPTION: "Portfolio & Blog of Sunil Khobragade - Senior Full-Stack Developer with 6+ years of experience.",
+  TITLE: "SK Builds — Web Development & Digital Solutions",
+  DESCRIPTION: "SK Builds creates fast, modern and SEO-friendly websites and digital solutions by Sunil Khobragade, Senior Full-Stack Developer & Cloud Architect.",
   AUTHOR: "Sunil Khobragade",
-  ROLE: "Senior Full-Stack Developer",
+  BRAND: "SK Builds",
+  URL: "https://sk-builds.vercel.app",
+  ROLE: "Senior Full-Stack Developer & Solutions Architect",
   LOCATION: "Hyderabad, India",
   EMAIL: "sunilkhobragade@proton.me",
   GITHUB: "https://github.com/naman-mahi",
