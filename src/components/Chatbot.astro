@@ -1,0 +1,880 @@
+---
+import { CHATBOT_SYSTEM_PROMPT } from '../data/chatbotKnowledge';
+
+const defaultSystemPrompt = JSON.stringify(CHATBOT_SYSTEM_PROMPT);
+const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
+---
+
+<!-- Floating AI Chatbot Container -->
+<div id="sk-ai-chatbot" class="chatbot-wrapper" data-system-prompt={defaultSystemPrompt} data-env-key={envGroqKey}>
+  <!-- Floating Launcher Button -->
+  <button 
+    type="button" 
+    id="chatbot-trigger" 
+    class="chatbot-launcher-btn"
+    aria-label="Open AI Assistant"
+    title="Chat with Sunil's AI Assistant"
+  >
+    <div class="launcher-icon-wrap">
+      <!-- Sparkle Bot AI Icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="chat-icon-open">
+        <path d="M12 8V4H8"></path>
+        <rect width="16" height="12" x="4" y="8" rx="2"></rect>
+        <path d="M2 14h2"></path>
+        <path d="M20 14h2"></path>
+        <path d="M15 13v2"></path>
+        <path d="M9 13v2"></path>
+      </svg>
+      <!-- Close 'X' Icon (Shown when open) -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="chat-icon-close">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </div>
+    <span class="launcher-pulse-ring"></span>
+    <span class="launcher-badge">AI</span>
+  </button>
+
+  <!-- Chatbot Window Modal / Drawer -->
+  <div id="chatbot-panel" class="chatbot-window" aria-hidden="true">
+    <!-- Header -->
+    <div class="chatbot-header">
+      <div class="header-info">
+        <div class="bot-avatar">
+          <span class="avatar-emoji">🤖</span>
+          <span class="online-indicator" title="Online"></span>
+        </div>
+        <div>
+          <div class="bot-name">Sunil's AI Assistant</div>
+          <div class="bot-status">Powered by Groq • Llama 3.3</div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Clear Chat Button -->
+        <button type="button" id="chat-clear-btn" class="header-action-btn" title="Clear Conversation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 6h18"></path>
+            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+          </svg>
+        </button>
+
+        <!-- Close Button -->
+        <button type="button" id="chat-close-btn" class="header-action-btn" title="Close Chat">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Prompt Suggestions Bar -->
+    <div class="quick-prompts-bar">
+      <button type="button" class="prompt-chip" data-prompt="What is Sunil's educational background and degrees?">
+        🎓 Education
+      </button>
+      <button type="button" class="prompt-chip" data-prompt="What is Sunil's work experience and timeline?">
+        💼 Work History
+      </button>
+      <button type="button" class="prompt-chip" data-prompt="What are Sunil's top projects and live demos?">
+        🚀 Projects
+      </button>
+      <button type="button" class="prompt-chip" data-prompt="What are his core technical backend and cloud skills?">
+        💻 Skills &amp; Cloud
+      </button>
+      <button type="button" class="prompt-chip" data-prompt="How can I hire Sunil or book a consultation call?">
+        📅 Book / Hire
+      </button>
+    </div>
+
+    <!-- Chat Messages Stream -->
+    <div id="chat-messages-container" class="messages-container">
+      <!-- Welcome Message -->
+      <div class="msg-bubble msg-bot">
+        <div class="msg-content">
+          Hi there! 👋 I'm <strong>Sunil Khobragade's AI Assistant</strong>. Ask me anything about his <strong>education, work experience, projects, skills, blogs</strong>, or how to book a consultation!
+        </div>
+        <div class="msg-time">Just now</div>
+      </div>
+    </div>
+
+    <!-- Rate Limit / Spam Notification Bar (Hidden by default) -->
+    <div id="rate-limit-banner" class="rate-limit-banner" style="display: none;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span id="rate-limit-text">Please wait a moment before sending another message.</span>
+    </div>
+
+    <!-- Chat Input Area -->
+    <form id="chat-input-form" class="chat-input-box">
+      <input 
+        type="text" 
+        id="chat-user-input" 
+        class="chat-text-input" 
+        placeholder="Ask about skills, experience, projects..." 
+        maxlength="350"
+        required
+      />
+      <button type="submit" id="chat-send-btn" class="chat-send-btn" aria-label="Send Message">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="send-icon">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </form>
+    
+    <!-- Footer Credits & Usage indicator -->
+    <div class="chatbot-footer">
+      <span id="spam-credits-counter">Anti-spam protected (10 msgs / 10m)</span>
+      <span class="char-count" id="char-counter">0/350</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .chatbot-wrapper {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 100;
+    font-family: var(--font-sans, sans-serif);
+  }
+
+  /* Launcher Button */
+  .chatbot-launcher-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #18181b 0%, #09090b 100%);
+    color: #ffffff;
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(56, 189, 248, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .chatbot-launcher-btn:hover {
+    transform: scale(1.1) translateY(-2px);
+    border-color: #38bdf8;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5), 0 0 22px rgba(56, 189, 248, 0.45);
+  }
+
+  .launcher-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 24px;
+    height: 24px;
+  }
+
+  .chat-icon-open, .chat-icon-close {
+    position: absolute;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .chat-icon-open {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+
+  .chat-icon-close {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.6);
+  }
+
+  .chatbot-wrapper.open .chat-icon-open {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.6);
+  }
+
+  .chatbot-wrapper.open .chat-icon-close {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+
+  .launcher-badge {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    background: linear-gradient(135deg, #38bdf8, #a855f7);
+    color: #ffffff;
+    font-size: 0.625rem;
+    font-weight: 800;
+    padding: 1px 5px;
+    border-radius: 9999px;
+    border: 1.5px solid #121214;
+    letter-spacing: 0.5px;
+  }
+
+  .launcher-pulse-ring {
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 2px solid #38bdf8;
+    opacity: 0;
+    animation: launcherPulse 3s infinite;
+    pointer-events: none;
+  }
+
+  @keyframes launcherPulse {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.25); opacity: 0; }
+    100% { transform: scale(1.25); opacity: 0; }
+  }
+
+  /* Chatbot Window Panel */
+  .chatbot-window {
+    display: none;
+    position: absolute;
+    bottom: 65px;
+    right: 0;
+    width: 375px;
+    max-width: calc(100vw - 2rem);
+    height: 530px;
+    max-height: calc(100vh - 120px);
+    background-color: var(--bg-card, #1c1c20);
+    border: 1px solid var(--border-card, #2e2e33);
+    border-radius: 16px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+    flex-direction: column;
+    overflow: hidden;
+    animation: chatSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    backdrop-filter: blur(12px);
+  }
+
+  @keyframes chatSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .chatbot-wrapper.open .chatbot-window {
+    display: flex;
+  }
+
+  /* Header */
+  .chatbot-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1rem;
+    background-color: var(--bg-secondary, #18181b);
+    border-bottom: 1px solid var(--border-card, #2e2e33);
+  }
+
+  .header-info {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .bot-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    position: relative;
+  }
+
+  .online-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #22c55e;
+    border: 1.5px solid var(--bg-card);
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+
+  .bot-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+
+  .bot-status {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .header-action-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 5px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+  }
+
+  .header-action-btn:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-pill);
+  }
+
+  /* Quick Prompts Bar */
+  .quick-prompts-bar {
+    display: flex;
+    overflow-x: auto;
+    gap: 0.4rem;
+    padding: 0.5rem 0.75rem;
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border-subtle);
+    scrollbar-width: none;
+  }
+
+  .quick-prompts-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .prompt-chip {
+    white-space: nowrap;
+    background-color: var(--bg-pill);
+    border: 1px solid var(--border-subtle);
+    border-radius: 9999px;
+    color: var(--text-secondary);
+    font-size: 0.725rem;
+    padding: 0.25rem 0.6rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .prompt-chip:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-card-hover);
+    border-color: var(--border-card-hover);
+    transform: translateY(-1px);
+  }
+
+  /* Messages Container */
+  .messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    scroll-behavior: smooth;
+  }
+
+  .msg-bubble {
+    max-width: 85%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .msg-user {
+    align-self: flex-end;
+  }
+
+  .msg-bot {
+    align-self: flex-start;
+  }
+
+  .msg-user .msg-content {
+    background: linear-gradient(135deg, #27272a, #18181b);
+    color: var(--text-primary);
+    border: 1px solid var(--border-card);
+    border-radius: 12px 12px 2px 12px;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.85rem;
+    line-height: 1.45;
+  }
+
+  .msg-bot .msg-content {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-card);
+    border-radius: 12px 12px 12px 2px;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .msg-bot .msg-content a {
+    color: #38bdf8;
+    text-decoration: underline;
+    font-weight: 500;
+  }
+
+  .msg-bot .msg-content code {
+    background-color: var(--bg-pill);
+    padding: 0.1rem 0.3rem;
+    border-radius: 4px;
+    font-size: 0.8em;
+  }
+
+  .msg-bot .msg-content ul {
+    margin: 0.4rem 0;
+    padding-left: 1.1rem;
+  }
+
+  .msg-bot .msg-content li {
+    margin-bottom: 0.2rem;
+  }
+
+  .msg-time {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    align-self: flex-end;
+    padding: 0 0.2rem;
+  }
+
+  .msg-bot .msg-time {
+    align-self: flex-start;
+  }
+
+  /* Typing animation dots */
+  .typing-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .typing-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--text-muted);
+    animation: typingBounce 1.2s infinite ease-in-out both;
+  }
+
+  .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+  .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+  @keyframes typingBounce {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40% { transform: scale(1.1); opacity: 1; }
+  }
+
+  /* Rate Limit Banner */
+  .rate-limit-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: rgba(239, 68, 68, 0.15);
+    border-top: 1px solid rgba(239, 68, 68, 0.3);
+    color: #f87171;
+    font-size: 0.75rem;
+    padding: 0.4rem 0.75rem;
+  }
+
+  /* Input Form */
+  .chat-input-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 0.75rem;
+    background-color: var(--bg-secondary);
+    border-top: 1px solid var(--border-card);
+  }
+
+  .chat-text-input {
+    flex: 1;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 9999px;
+    padding: 0.5rem 0.85rem;
+    color: var(--text-primary);
+    font-size: 0.825rem;
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+
+  .chat-text-input:focus {
+    border-color: #38bdf8;
+  }
+
+  .chat-send-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #38bdf8, #3b82f6);
+    color: #ffffff;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    flex-shrink: 0;
+  }
+
+  .chat-send-btn:hover {
+    transform: scale(1.08);
+  }
+
+  .chat-send-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Footer Info */
+  .chatbot-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.3rem 0.75rem 0.5rem;
+    background-color: var(--bg-secondary);
+    font-size: 0.675rem;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 640px) {
+    .chatbot-wrapper {
+      bottom: 1.25rem;
+      right: 1.25rem;
+    }
+
+    .chatbot-window {
+      right: -0.5rem;
+      bottom: 60px;
+      width: calc(100vw - 1.5rem);
+      height: 480px;
+    }
+  }
+</style>
+
+<script is:inline>
+  function setupChatbot() {
+    const wrapper = document.getElementById('sk-ai-chatbot');
+    const trigger = document.getElementById('chatbot-trigger');
+    const closeBtn = document.getElementById('chat-close-btn');
+    const clearBtn = document.getElementById('chat-clear-btn');
+    
+    const form = document.getElementById('chat-input-form');
+    const userInput = document.getElementById('chat-user-input');
+    const sendBtn = document.getElementById('chat-send-btn');
+    const messagesContainer = document.getElementById('chat-messages-container');
+    const rateLimitBanner = document.getElementById('rate-limit-banner');
+    const rateLimitText = document.getElementById('rate-limit-text');
+    const charCounter = document.getElementById('char-counter');
+    const spamCreditsCounter = document.getElementById('spam-credits-counter');
+
+    if (!wrapper || !trigger || !form || !userInput) return;
+
+    const envKey = wrapper.getAttribute('data-env-key') || '';
+    let systemPrompt = '';
+    try {
+      systemPrompt = JSON.parse(wrapper.getAttribute('data-system-prompt') || '""');
+    } catch (e) {
+      systemPrompt = wrapper.getAttribute('data-system-prompt') || '';
+    }
+
+    // Toggle Chatbot
+    function toggleChat(openState) {
+      const isCurrentlyOpen = wrapper.classList.contains('open');
+      const shouldOpen = openState !== undefined ? openState : !isCurrentlyOpen;
+      
+      wrapper.classList.toggle('open', shouldOpen);
+      const panel = document.getElementById('chatbot-panel');
+      if (panel) panel.setAttribute('aria-hidden', (!shouldOpen).toString());
+      
+      if (shouldOpen) {
+        setTimeout(() => userInput.focus(), 150);
+        updateSpamStatus();
+      }
+    }
+
+    trigger.addEventListener('click', () => toggleChat());
+    closeBtn?.addEventListener('click', () => toggleChat(false));
+
+    // Clear Chat
+    clearBtn?.addEventListener('click', () => {
+      if (messagesContainer) {
+        messagesContainer.innerHTML = `
+          <div class="msg-bubble msg-bot">
+            <div class="msg-content">
+              Chat history cleared! 👋 Ask me anything about Sunil's <strong>education, work experience, projects, skills, blogs</strong>, or booking a consultation!
+            </div>
+            <div class="msg-time">Just now</div>
+          </div>
+        `;
+      }
+    });
+
+    // Quick Prompt Chips
+    document.querySelectorAll('.prompt-chip').forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const prompt = chip.getAttribute('data-prompt');
+        if (prompt) {
+          userInput.value = prompt;
+          form.dispatchEvent(new Event('submit', { cancelable: true }));
+        }
+      });
+    });
+
+    // Char Counter
+    userInput.addEventListener('input', () => {
+      const len = userInput.value.length;
+      if (charCounter) charCounter.textContent = `${len}/350`;
+    });
+
+    // =========================================================================
+    // Anti-Spam & Rate Limiting Engine (Cookies + LocalStorage)
+    // =========================================================================
+    const MAX_MESSAGES_PER_WINDOW = 10;
+    const WINDOW_DURATION_MS = 10 * 60 * 1000; // 10 minutes
+    const MIN_COOLDOWN_MS = 3000; // 3 seconds between requests
+
+    function getMessageHistory() {
+      try {
+        const raw = localStorage.getItem('sk_chat_history_timestamps');
+        return raw ? JSON.parse(raw) : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function recordMessageSent() {
+      const now = Date.now();
+      const history = getMessageHistory().filter((t) => now - t < WINDOW_DURATION_MS);
+      history.push(now);
+      localStorage.setItem('sk_chat_history_timestamps', JSON.stringify(history));
+
+      // Also set cookie for session verification
+      document.cookie = `sk_chat_last=${now}; path=/; max-age=600; SameSite=Lax`;
+    }
+
+    function checkRateLimit() {
+      const now = Date.now();
+      const history = getMessageHistory().filter((t) => now - t < WINDOW_DURATION_MS);
+
+      // Check rapid fire (< 3 seconds)
+      if (history.length > 0) {
+        const last = history[history.length - 1];
+        if (now - last < MIN_COOLDOWN_MS) {
+          const waitSecs = Math.ceil((MIN_COOLDOWN_MS - (now - last)) / 1000);
+          return { allowed: false, reason: `Please wait ${waitSecs}s before sending again.` };
+        }
+      }
+
+      // Check max messages per 10 minutes
+      if (history.length >= MAX_MESSAGES_PER_WINDOW) {
+        const oldest = history[0];
+        const resetSecs = Math.ceil((WINDOW_DURATION_MS - (now - oldest)) / 1000);
+        const resetMins = Math.ceil(resetSecs / 60);
+        return { 
+          allowed: false, 
+          reason: `Rate limit reached (${MAX_MESSAGES_PER_WINDOW}/10m). Resets in ${resetMins} min.` 
+        };
+      }
+
+      return { allowed: true, remaining: MAX_MESSAGES_PER_WINDOW - history.length };
+    }
+
+    function updateSpamStatus() {
+      const status = checkRateLimit();
+      if (spamCreditsCounter) {
+        const count = getMessageHistory().filter((t) => Date.now() - t < WINDOW_DURATION_MS).length;
+        spamCreditsCounter.textContent = `${count}/${MAX_MESSAGES_PER_WINDOW} msgs used (10m window)`;
+      }
+
+      if (!status.allowed && rateLimitBanner && rateLimitText) {
+        rateLimitText.textContent = status.reason;
+        rateLimitBanner.style.display = 'flex';
+        sendBtn.disabled = true;
+      } else if (rateLimitBanner) {
+        rateLimitBanner.style.display = 'none';
+        sendBtn.disabled = false;
+      }
+    }
+
+    // Markdown Parser Helper
+    function formatMarkdown(text) {
+      if (!text) return '';
+      let formatted = text
+        // Bold
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        // Links
+        .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+        // Inline code
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        // Line breaks
+        .replace(/\n/g, '<br/>');
+      return formatted;
+    }
+
+    // Append Message to UI
+    function appendMessage(role, text) {
+      const bubble = document.createElement('div');
+      bubble.className = `msg-bubble ${role === 'user' ? 'msg-user' : 'msg-bot'}`;
+
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'msg-content';
+      contentDiv.innerHTML = role === 'user' ? text.replace(/</g, '&lt;').replace(/>/g, '&gt;') : formatMarkdown(text);
+
+      const timeDiv = document.createElement('div');
+      timeDiv.className = 'msg-time';
+      const timeStr = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric' }).format(new Date());
+      timeDiv.textContent = timeStr;
+
+      bubble.appendChild(contentDiv);
+      bubble.appendChild(timeDiv);
+      messagesContainer.appendChild(bubble);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    // Add Typing Indicator
+    function showTyping() {
+      const bubble = document.createElement('div');
+      bubble.id = 'typing-bubble';
+      bubble.className = 'msg-bubble msg-bot';
+      bubble.innerHTML = `
+        <div class="msg-content">
+          <div class="typing-indicator">
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+          </div>
+        </div>
+      `;
+      messagesContainer.appendChild(bubble);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function hideTyping() {
+      const typing = document.getElementById('typing-bubble');
+      if (typing) typing.remove();
+    }
+
+    // Conversation state memory
+    let conversationHistory = [];
+
+    // =========================================================================
+    // Send Message Handler
+    // =========================================================================
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const message = userInput.value.trim();
+      if (!message) return;
+
+      // Rate limit / anti-spam validation
+      const check = checkRateLimit();
+      if (!check.allowed) {
+        updateSpamStatus();
+        return;
+      }
+
+      // Record message timestamp
+      recordMessageSent();
+      updateSpamStatus();
+
+      // UI update
+      appendMessage('user', message);
+      userInput.value = '';
+      if (charCounter) charCounter.textContent = '0/350';
+      showTyping();
+      sendBtn.disabled = true;
+
+      conversationHistory.push({ role: 'user', content: message });
+      if (conversationHistory.length > 8) {
+        conversationHistory = conversationHistory.slice(-8);
+      }
+
+      // Active Groq API Key resolution from environment
+      const activeKey = envKey;
+
+      if (!activeKey) {
+        // Fallback intelligent response if key is missing
+        hideTyping();
+        sendBtn.disabled = false;
+        
+        let fallbackReply = "Sunil Khobragade is a Senior Full-Stack Developer & Solutions Architect with 6+ years of experience in Node.js, Laravel, Python, React, Next.js, and AWS. Check his [Work Experience](/work), [Projects](/projects), [Blog Articles](/blog), or [Tools & Booking](/tools)!";
+        
+        const q = message.toLowerCase();
+        if (q.includes('education') || q.includes('degree') || q.includes('study')) {
+          fallbackReply = "🎓 **Sunil's Education & Certifications**:\n• **M.Sc. in Information Security** (IGNOU, 2025–Present)\n• **PG Diploma in Information Security** (IGNOU, 2024–2025)\n• **Advanced Diploma in IT & Cloud Computing** (NSTI Hyderabad / IBM aligned)\n• **Google Cloud Gen AI Academy APAC** certification.\n\nRead more on the [Education](/education) page!";
+        } else if (q.includes('work') || q.includes('experience') || q.includes('job') || q.includes('company')) {
+          fallbackReply = "💼 **Sunil's Career Timeline**:\n• **Full-Stack Developer** at Intencode India Pvt. Ltd. (Oct 2022 – Present)\n• **Freelance Solutions Architect** (Jan 2020 – Sep 2022, 15+ production systems)\n• **Full-Stack Developer Intern** at IBM India (Sep 2021 – Feb 2022).\n\nExplore his full timeline on the [Work](/work) page!";
+        } else if (q.includes('project') || q.includes('built') || q.includes('app')) {
+          fallbackReply = "🚀 **Featured Projects**:\n• **Pulse Chat**: Real-time customer support with AI knowledge-base automation.\n• **AI-Enabled LMS**: Full-scale education platform with live classes.\n• **E-Commerce Platform**: Multi-gateway payment engine with inventory control.\n\nView interactive cards on the [Projects](/projects) page!";
+        } else if (q.includes('hire') || q.includes('contact') || q.includes('book') || q.includes('call') || q.includes('email')) {
+          fallbackReply = "📅 **Let's Connect & Build**:\n• Email: [sunilkhobragade@proton.me](mailto:sunilkhobragade@proton.me)\n• Calculate project cost & timeline or schedule a 1:1 consultation at the [Tools & Booking](/tools) page!";
+        }
+
+        appendMessage('bot', fallbackReply);
+        return;
+      }
+
+      // Call Groq API endpoint
+      try {
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${activeKey}`
+          },
+          body: JSON.stringify({
+            model: 'llama-3.3-70b-versatile',
+            messages: [
+              { role: 'system', content: systemPrompt },
+              ...conversationHistory
+            ],
+            temperature: 0.6,
+            max_tokens: 450
+          })
+        });
+
+        hideTyping();
+        sendBtn.disabled = false;
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          console.error('Groq API Error:', errData);
+          appendMessage('bot', `⚠️ Groq API request error (${response.status}): ${errData.error?.message || 'Rate limit or service error'}.`);
+          return;
+        }
+
+        const data = await response.json();
+        const replyText = data.choices?.[0]?.message?.content || 'I could not generate a response. Please try again.';
+
+        conversationHistory.push({ role: 'assistant', content: replyText });
+        appendMessage('bot', replyText);
+      } catch (err) {
+        hideTyping();
+        sendBtn.disabled = false;
+        console.error('Chat error:', err);
+        appendMessage('bot', '⚠️ Network error communicating with Groq. Please check your internet connection.');
+      }
+    });
+  }
+
+  setupChatbot();
+  document.addEventListener('astro:after-swap', setupChatbot);
+  document.addEventListener('astro:page-load', setupChatbot);
+</script>
