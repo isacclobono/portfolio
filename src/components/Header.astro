@@ -11,6 +11,14 @@ const isActive = (path: string) => {
   if (path === '/') return currentPath === '/';
   return currentPath.startsWith(path);
 };
+
+const navItems = [
+  { label: 'Blog', href: '/blog' },
+  { label: 'Work', href: '/work' },
+  { label: 'Projects', href: '/projects' },
+  { label: 'Education', href: '/education' },
+  { label: 'Tools', href: '/tools' },
+];
 ---
 
 <header class="site-header">
@@ -18,20 +26,58 @@ const isActive = (path: string) => {
     <span class="brand-sk-badge">SK</span>
     <span>{SITE.AUTHOR}</span>
   </a>
-  <nav class="nav-links" aria-label="Main Navigation">
-    <a href="/blog" class:list={["nav-link", { active: isActive('/blog') }]}>Blog</a>
-    <span class="nav-separator">/</span>
-    <a href="/work" class:list={["nav-link", { active: isActive('/work') }]}>Work</a>
-    <span class="nav-separator">/</span>
-    <a href="/projects" class:list={["nav-link", { active: isActive('/projects') }]}>Projects</a>
-    <span class="nav-separator">/</span>
-    <a href="/education" class:list={["nav-link", { active: isActive('/education') }]}>Education</a>
-    <span class="nav-separator">/</span>
-    <a href="/tools" class:list={["nav-link", { active: isActive('/tools') }]}>Tools</a>
+
+  <!-- Desktop Navigation (Hidden on Mobile) -->
+  <nav class="nav-links desktop-nav" aria-label="Main Navigation">
+    {navItems.map((item, index) => (
+      <>
+        <a href={item.href} class:list={["nav-link", { active: isActive(item.href) }]}>
+          {item.label}
+        </a>
+        {index < navItems.length - 1 && <span class="nav-separator">/</span>}
+      </>
+    ))}
   </nav>
+
+  <!-- Mobile Hamburger Menu Button -->
+  <button 
+    type="button" 
+    id="mobile-menu-toggle" 
+    class="mobile-toggle-btn"
+    aria-label="Toggle navigation menu"
+    aria-expanded="false"
+    aria-controls="mobile-menu-drawer"
+  >
+    <svg class="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line class="line-1" x1="4" y1="6" x2="20" y2="6"></line>
+      <line class="line-2" x1="4" y1="12" x2="20" y2="12"></line>
+      <line class="line-3" x1="4" y1="18" x2="20" y2="18"></line>
+    </svg>
+  </button>
 </header>
 
+<!-- Mobile Navigation Drawer Dropdown -->
+<div id="mobile-menu-drawer" class="mobile-drawer" aria-hidden="true">
+  <nav class="mobile-nav-list" aria-label="Mobile Navigation">
+    {navItems.map((item) => (
+      <a 
+        href={item.href} 
+        class:list={["mobile-nav-link", { active: isActive(item.href) }]}
+      >
+        <span>{item.label}</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mobile-link-arrow">
+          <path d="m9 18 6-6-6-6"></path>
+        </svg>
+      </a>
+    ))}
+  </nav>
+</div>
+
 <style>
+  .site-header {
+    position: relative;
+  }
+
   .brand-link {
     display: inline-flex;
     align-items: center;
@@ -67,4 +113,150 @@ const isActive = (path: string) => {
   .brand-link:hover .brand-sk-badge {
     transform: scale(1.05);
   }
+
+  /* Desktop vs Mobile Toggle */
+  .mobile-toggle-btn {
+    display: none;
+    background: transparent;
+    border: 1px solid var(--border-card);
+    color: var(--text-primary);
+    padding: 0.4rem 0.5rem;
+    border-radius: var(--radius-md, 8px);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+  }
+
+  .mobile-toggle-btn:hover {
+    background-color: var(--bg-card-hover);
+    border-color: var(--border-card-hover);
+  }
+
+  .mobile-drawer {
+    display: none;
+    margin-top: -2rem;
+    margin-bottom: 2.5rem;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg, 12px);
+    padding: 0.6rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    animation: drawerSlideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes drawerSlideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .mobile-drawer.open {
+    display: block;
+  }
+
+  .mobile-nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .mobile-nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 0.9rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-md, 8px);
+    transition: all var(--transition-fast);
+  }
+
+  .mobile-nav-link:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-card-hover);
+    text-decoration: none;
+  }
+
+  .mobile-nav-link.active {
+    color: var(--text-primary);
+    font-weight: 600;
+    background-color: var(--bg-pill);
+    text-decoration: none;
+  }
+
+  .mobile-link-arrow {
+    color: var(--text-muted);
+    transition: transform var(--transition-fast);
+  }
+
+  .mobile-nav-link:hover .mobile-link-arrow {
+    color: var(--text-primary);
+    transform: translateX(2px);
+  }
+
+  @media (max-width: 640px) {
+    .desktop-nav {
+      display: none !important;
+    }
+
+    .mobile-toggle-btn {
+      display: inline-flex;
+    }
+  }
 </style>
+
+<script is:inline>
+  function setupMobileMenu() {
+    const toggleBtn = document.getElementById('mobile-menu-toggle');
+    const drawer = document.getElementById('mobile-menu-drawer');
+    if (!toggleBtn || !drawer) return;
+
+    function toggleMenu() {
+      const isOpen = drawer.classList.contains('open');
+      if (isOpen) {
+        drawer.classList.remove('open');
+        drawer.setAttribute('aria-hidden', 'true');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+      } else {
+        drawer.classList.add('open');
+        drawer.setAttribute('aria-hidden', 'false');
+        toggleBtn.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMenu();
+    });
+
+    // Close on clicking outside
+    document.addEventListener('click', (e) => {
+      if (drawer.classList.contains('open') && !drawer.contains(e.target) && !toggleBtn.contains(e.target)) {
+        drawer.classList.remove('open');
+        drawer.setAttribute('aria-hidden', 'true');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && drawer.classList.contains('open')) {
+        drawer.classList.remove('open');
+        drawer.setAttribute('aria-hidden', 'true');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        toggleBtn.focus();
+      }
+    });
+  }
+
+  setupMobileMenu();
+  document.addEventListener('astro:after-swap', setupMobileMenu);
+</script>
