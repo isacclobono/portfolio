@@ -6,21 +6,21 @@
   --font-sans: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', Consolas, Monaco, monospace;
 
-  /* Default Dark Mode (Astro Nano Warm Charcoal Palette) */
+  /* Default Dark Mode (Astro Nano Warm Charcoal Palette - WCAG AAA/AA Compliant) */
   --bg-primary: #121214;
   --bg-secondary: #18181b;
   --bg-card: #1c1c20;
   --bg-card-hover: #242429;
   --bg-code: #161619;
-  --bg-pill: rgba(255, 255, 255, 0.06);
+  --bg-pill: rgba(255, 255, 255, 0.08);
 
   --border-subtle: #27272a;
   --border-card: #2e2e33;
   --border-card-hover: #52525b;
 
-  --text-primary: #f4f4f5;
-  --text-secondary: #a1a1aa;
-  --text-muted: #71717a;
+  --text-primary: #fafafa;
+  --text-secondary: #d4d4d8;
+  --text-muted: #a1a1aa;
   --text-highlight: #ffffff;
   --link-color: #f4f4f5;
 
@@ -49,17 +49,17 @@
   --bg-card: #ffffff;
   --bg-card-hover: #f5f5f7;
   --bg-code: #f4f4f5;
-  --bg-pill: rgba(0, 0, 0, 0.05);
+  --bg-pill: rgba(0, 0, 0, 0.06);
 
   --border-subtle: #e4e4e7;
   --border-card: #e4e4e7;
   --border-card-hover: #a1a1aa;
 
-  --text-primary: #18181b;
-  --text-secondary: #52525b;
-  --text-muted: #a1a1aa;
+  --text-primary: #09090b;
+  --text-secondary: #3f3f46;
+  --text-muted: #52525b;
   --text-highlight: #09090b;
-  --link-color: #18181b;
+  --link-color: #09090b;
 
   --scrollbar-thumb: rgba(0, 0, 0, 0.45);
   --scrollbar-thumb-hover: #000000;
@@ -140,42 +140,22 @@ body {
   flex-direction: column;
 }
 
+@media (max-width: 640px) {
+  .site-container {
+    padding: 1.5rem 1rem 3rem;
+  }
+}
+
 main {
-  animation: pageFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  /* Instant rendering for optimal Speed Index and FCP */
+  width: 100%;
 }
 
-@keyframes pageFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Optimize rendering for below-the-fold content */
+section:not(:first-of-type) {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 250px;
 }
-
-/* Lazy Scroll Reveal animation with smooth staggered transitions */
-.reveal-item {
-  opacity: 0;
-  transform: translateY(18px);
-  transition: 
-    opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
-    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
-}
-
-.reveal-item.revealed {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Stagger delays for smooth cascade */
-.reveal-item:nth-child(1) { transition-delay: 0.04s; }
-.reveal-item:nth-child(2) { transition-delay: 0.08s; }
-.reveal-item:nth-child(3) { transition-delay: 0.12s; }
-.reveal-item:nth-child(4) { transition-delay: 0.16s; }
-.reveal-item:nth-child(5) { transition-delay: 0.20s; }
 
 /* Image lazy loading blur-up effect */
 img[loading="lazy"] {
@@ -263,9 +243,9 @@ a:hover {
 
 .nav-link {
   text-decoration: none;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   transition: color var(--transition-fast);
-  font-weight: 450;
+  font-weight: 500;
 }
 
 .nav-link:hover {
@@ -291,13 +271,14 @@ a:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.85rem;
-  color: var(--text-muted);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
   border-top: 1px solid var(--border-subtle);
 }
 
 .footer-brand {
-  color: var(--text-muted);
+  color: var(--text-secondary);
+  font-weight: 450;
 }
 
 .theme-toggle-group {

@@ -76,32 +76,5 @@ const {
 
     <!-- Copy Code Handler -->
     <CopyCode />
-
-    <!-- Scroll Reveal Observer -->
-    <script is:inline>
-      function setupScrollReveal() {
-        const targets = document.querySelectorAll('section, .card-link, .work-item, .skill-card, .table-container, .lighthouse-card');
-        
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('revealed');
-              observer.unobserve(entry.target);
-            }
-          });
-        }, {
-          threshold: 0.08,
-          rootMargin: '0px 0px -40px 0px'
-        });
-
-        targets.forEach((el) => {
-          el.classList.add('reveal-item');
-          observer.observe(el);
-        });
-      }
-
-      setupScrollReveal();
-      document.addEventListener('astro:after-swap', setupScrollReveal);
-    </script>
   </body>
 </html>
