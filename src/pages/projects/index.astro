@@ -16,7 +16,7 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft))
   <div class="projects-list">
     {projects.map((project) => (
       <Card 
-        href={`/projects/${project.slug || project.id}`}
+        href={`/projects/${project.id}`}
         title={project.data.title}
         description={project.data.description}
       />

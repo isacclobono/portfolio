@@ -7,7 +7,7 @@ import Breadcrumb from '../../components/Breadcrumb.astro';
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
   return posts.map((post) => ({
-    params: { slug: post.slug || post.id },
+    params: { slug: post.id },
     props: { post }
   }));
 }
@@ -23,7 +23,7 @@ const formatDate = (date: Date) => {
 <Layout 
   title={post.data.title} 
   description={post.data.description} 
-  currentPath={`/blog/${post.slug || post.id}`}
+  currentPath={`/blog/${post.id}`}
   type="article"
   publishDate={post.data.date}
   tags={post.data.tags}

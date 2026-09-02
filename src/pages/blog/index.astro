@@ -59,7 +59,7 @@ const formatDate = (date: Date) => {
 
           <div class="posts-list">
             {postsByYear[year].map((post) => (
-              <a href={`/blog/${post.slug || post.id}`} class="post-card">
+              <a href={`/blog/${post.id}`} class="post-card">
                 <div class="post-main-content">
                   <div class="post-meta-row">
                     <span class="post-date">{formatDate(post.data.date)}</span>

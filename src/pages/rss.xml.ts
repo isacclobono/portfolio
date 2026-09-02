@@ -8,7 +8,7 @@ export const GET: APIRoute = async ({ site }) => {
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
   const items = posts.map((post) => {
-    const postUrl = `${siteUrl}/blog/${post.slug || post.id}`;
+    const postUrl = `${siteUrl}/blog/${post.id}`;
     const pubDate = post.data.date.toUTCString();
     const tags = post.data.tags ? post.data.tags.map(t => `<category>${escapeXml(t)}</category>`).join('\n      ') : '';
 

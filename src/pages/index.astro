@@ -62,7 +62,7 @@ const workEntries = (await getCollection('work'))
     <div>
       {projects.map((project) => (
         <Card 
-          href={`/projects/${project.slug || project.id}`}
+          href={`/projects/${project.id}`}
           title={project.data.title}
           description={project.data.description}
         />
@@ -115,7 +115,7 @@ const workEntries = (await getCollection('work'))
     <div>
       {blogs.map((b) => (
         <Card 
-          href={`/blog/${b.slug || b.id}`}
+          href={`/blog/${b.id}`}
           title={b.data.title}
           description={b.data.description}
         />
