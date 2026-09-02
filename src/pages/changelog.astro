@@ -22,13 +22,14 @@ const releases: Release[] = [
   {
     version: "v2.8.0",
     date: "September 2026",
-    badge: "SK Agent & Live Voice Intelligence",
+    badge: "Global Search & Voice Intelligence",
     badgeType: "launch",
-    summary: "Complete redesign of SK Agent chatbot with left-docking, real-time live speech-to-text, transcript exports, and strict portfolio guardrails.",
+    summary: "Integrated site-wide Global Command Palette (Ctrl+K / Cmd+K), SK Agent voice transcription, transcript exports, and strict portfolio guardrails.",
     sections: [
       {
         type: "Added",
         items: [
+          "Built Global Search & Command Palette (Ctrl+K / Cmd+K / '/') indexing all navigation pages, featured projects, 14 blog articles, developer tools, and quick actions.",
           "Integrated Web Speech API for real-time live voice transcription directly into the message input field with recording pulse animations.",
           "Added instant 'Export Transcript' feature generating downloadable Markdown (.md) dialogues with timestamps and portfolio metadata.",
           "Implemented native Markdown table parser rendering responsive, horizontally scrollable GFM tables inside chat bubbles.",
@@ -38,6 +39,7 @@ const releases: Release[] = [
       {
         type: "Architecture",
         items: [
+          "Indexed 35+ canonical site resources with fuzzy keyword matching, category filtering tabs, and keyboard navigation.",
           "Enforced strict portfolio-only domain boundaries preventing off-topic drift and ensuring complete, targeted answers.",
           "Calibrated response generation prompts and token limits (450 tokens) to deliver exact answers without unsolicited filler.",
           "Docked chat launcher and modal window to the bottom-left corner with multi-directional drag resizing handles."
@@ -47,7 +49,7 @@ const releases: Release[] = [
         type: "Changed",
         items: [
           "Redesigned message UI with right-aligned user pill bubbles (20px radius) and left-aligned agent cards (18px radius).",
-          "Removed attachment, emoji, and GIF toolbar buttons in favor of a clean, voice-centric input bar."
+          "Added header search trigger button with platform-aware keyboard shortcut badges (⌘K / Ctrl K)."
         ]
       }
     ]

@@ -1,0 +1,1293 @@
+---
+// src/components/GlobalSearch.astro
+---
+
+<!-- Global Search Trigger Button Component (Can be placed in Header or anywhere) -->
+<button 
+  type="button" 
+  id="global-search-trigger" 
+  class="global-search-btn"
+  aria-label="Search website (Ctrl + K)"
+  title="Search pages, projects, blogs, tools, and actions (Ctrl + K)"
+>
+  <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="11" cy="11" r="8"></circle>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+  <span class="search-placeholder">Search...</span>
+  <span class="search-kbd-shortcut">
+    <kbd class="kbd-key" id="search-mod-key">Ctrl</kbd>
+    <kbd class="kbd-key">K</kbd>
+  </span>
+</button>
+
+<!-- Global Command Palette / Search Modal Dialog -->
+<div 
+  id="global-search-modal" 
+  class="search-modal-backdrop" 
+  aria-hidden="true" 
+  role="dialog" 
+  aria-modal="true"
+  aria-label="Global Search and Command Palette"
+>
+  <div class="search-modal-card">
+    
+    <!-- Search Bar Input Header -->
+    <div class="search-input-header">
+      <svg class="search-modal-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input 
+        type="text" 
+        id="global-search-input" 
+        class="search-text-input" 
+        placeholder="Type a command or search pages, projects, blogs..." 
+        autocomplete="off" 
+        spellcheck="false"
+      />
+      <button 
+        type="button" 
+        id="global-search-clear-btn" 
+        class="search-clear-btn" 
+        aria-label="Clear search"
+        style="display: none;"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <button 
+        type="button" 
+        id="global-search-close-btn" 
+        class="search-esc-badge" 
+        aria-label="Close search"
+        title="Close (Esc)"
+      >
+        ESC
+      </button>
+    </div>
+
+    <!-- Quick Filter Category Pills -->
+    <div class="search-filter-pills" id="search-filter-tabs">
+      <button type="button" class="filter-tab active" data-filter="all">All</button>
+      <button type="button" class="filter-tab" data-filter="Projects">Projects</button>
+      <button type="button" class="filter-tab" data-filter="Blog">Blog</button>
+      <button type="button" class="filter-tab" data-filter="Tools">Tools</button>
+      <button type="button" class="filter-tab" data-filter="Pages">Pages</button>
+      <button type="button" class="filter-tab" data-filter="Actions">Actions</button>
+    </div>
+
+    <!-- Search Results Container -->
+    <div id="global-search-results" class="search-results-list" role="listbox">
+      <!-- Injected via JavaScript -->
+    </div>
+
+    <!-- Modal Footer Controls Guide -->
+    <div class="search-modal-footer">
+      <div class="footer-hint">
+        <kbd class="footer-kbd">↑</kbd>
+        <kbd class="footer-kbd">↓</kbd>
+        <span>Navigate</span>
+      </div>
+      <div class="footer-hint">
+        <kbd class="footer-kbd">↵</kbd>
+        <span>Select</span>
+      </div>
+      <div class="footer-hint">
+        <kbd class="footer-kbd">ESC</kbd>
+        <span>Close</span>
+      </div>
+      <div class="footer-count" id="search-results-count">
+        All entries
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style is:global>
+  /* ==========================================================================
+     Global Search Trigger Button
+     ========================================================================== */
+  .global-search-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md, 8px);
+    padding: 0.35rem 0.65rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition-fast, 0.15s ease);
+    user-select: none;
+  }
+
+  .global-search-btn:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-card-hover);
+    color: var(--text-primary);
+  }
+
+  .global-search-btn .search-icon {
+    color: var(--text-muted);
+    transition: color 0.15s ease;
+  }
+
+  .global-search-btn:hover .search-icon {
+    color: #3b82f6;
+  }
+
+  .search-placeholder {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .search-kbd-shortcut {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: 0.25rem;
+  }
+
+  .kbd-key {
+    background: var(--bg-pill, rgba(255, 255, 255, 0.08));
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 1px 4px;
+    color: var(--text-secondary);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  }
+
+  /* ==========================================================================
+     Search Modal Backdrop & Card
+     ========================================================================== */
+  .search-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 4rem 1rem 1rem 1rem;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+  }
+
+  .search-modal-backdrop.is-active {
+    display: flex;
+    opacity: 1;
+  }
+
+  .search-modal-card {
+    width: 100%;
+    max-width: 620px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 14px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45), 0 0 0 1px var(--border-subtle);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+    animation: searchModalZoomIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes searchModalZoomIn {
+    from {
+      opacity: 0;
+      transform: scale(0.96) translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  /* Input Header */
+  .search-input-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.95rem 1.15rem;
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+  }
+
+  .search-modal-icon {
+    color: #3b82f6;
+    flex-shrink: 0;
+  }
+
+  .search-text-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    color: var(--text-primary);
+    font-family: inherit;
+  }
+
+  .search-text-input::placeholder {
+    color: var(--text-muted);
+    font-size: 0.925rem;
+  }
+
+  .search-clear-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s ease;
+  }
+
+  .search-clear-btn:hover {
+    color: var(--text-primary);
+  }
+
+  .search-esc-badge {
+    background: var(--bg-pill, rgba(255, 255, 255, 0.08));
+    border: 1px solid var(--border-subtle);
+    border-radius: 5px;
+    padding: 2px 6px;
+    font-size: 0.65rem;
+    font-family: var(--font-mono, monospace);
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .search-esc-badge:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+  }
+
+  /* Filter Tabs */
+  .search-filter-pills {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-subtle);
+    overflow-x: auto;
+  }
+
+  .filter-tab {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    padding: 3px 10px;
+    font-size: 0.725rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .filter-tab:hover {
+    color: var(--text-primary);
+    background: var(--bg-pill);
+  }
+
+  .filter-tab.active {
+    background: rgba(59, 130, 246, 0.12);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #3b82f6;
+  }
+
+  /* Results List */
+  .search-results-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.5rem;
+    max-height: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .search-category-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    padding: 0.5rem 0.65rem 0.25rem 0.65rem;
+    user-select: none;
+  }
+
+  .search-result-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text-primary);
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.12s ease;
+  }
+
+  .search-result-item:hover,
+  .search-result-item.is-selected {
+    background: var(--bg-card-hover);
+    border-color: var(--border-subtle);
+  }
+
+  .search-item-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+    transition: all 0.12s ease;
+  }
+
+  .search-result-item:hover .search-item-icon,
+  .search-result-item.is-selected .search-item-icon {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: #ffffff;
+  }
+
+  .search-item-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .search-item-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .search-item-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .search-item-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .search-item-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: var(--bg-pill);
+    color: var(--text-secondary);
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+  }
+
+  .search-item-enter {
+    color: var(--text-muted);
+    opacity: 0;
+    transition: opacity 0.12s ease;
+  }
+
+  .search-result-item:hover .search-item-enter,
+  .search-result-item.is-selected .search-item-enter {
+    opacity: 1;
+    color: #3b82f6;
+  }
+
+  /* Empty State */
+  .search-empty-state {
+    padding: 3rem 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .search-empty-icon {
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+  }
+
+  .search-empty-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .search-empty-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .search-empty-ai-btn {
+    margin-top: 0.75rem;
+    background: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: background 0.15s ease;
+  }
+
+  .search-empty-ai-btn:hover {
+    background: #1d4ed8;
+  }
+
+  /* Modal Footer */
+  .search-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 1.15rem;
+    background: var(--bg-primary);
+    border-top: 1px solid var(--border-subtle);
+    font-size: 0.725rem;
+    color: var(--text-muted);
+    user-select: none;
+  }
+
+  .footer-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .footer-kbd {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    padding: 1px 4px;
+    font-size: 0.65rem;
+    font-family: var(--font-mono, monospace);
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .footer-count {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.7rem;
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 640px) {
+    .search-placeholder,
+    .search-kbd-shortcut {
+      display: none;
+    }
+
+    .global-search-btn {
+      padding: 0.4rem 0.5rem;
+    }
+
+    .search-modal-backdrop {
+      padding: 1rem;
+    }
+
+    .search-modal-card {
+      max-height: 85vh;
+    }
+
+    .search-modal-footer .footer-hint:not(:last-child) {
+      display: none;
+    }
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    // ==========================================
+    // 🗂️ Global Search Database
+    // ==========================================
+    const searchData = [
+      // Navigation Pages
+      {
+        id: 'page-home',
+        title: 'Home',
+        category: 'Pages',
+        description: 'Sunil Khobragade — Senior Full-Stack Developer & AI Solutions Architect',
+        url: '/',
+        keywords: 'about sunil overview bio portfolio introduction lead engineer full-stack',
+        icon: 'home'
+      },
+      {
+        id: 'page-projects',
+        title: 'Featured Projects',
+        category: 'Pages',
+        description: 'Production applications, distributed microservices, and AI platforms',
+        url: '/projects',
+        keywords: 'projects pulse chat lms e-commerce booking platform applications work',
+        icon: 'folder'
+      },
+      {
+        id: 'page-work',
+        title: 'Work Experience',
+        category: 'Pages',
+        description: '6+ years engineering career at Intencode, Freelance & IBM India',
+        url: '/work',
+        keywords: 'experience history jobs intencode freelance ibm career timeline resume',
+        icon: 'briefcase'
+      },
+      {
+        id: 'page-tech-stack',
+        title: 'Tech Stack & Architecture',
+        category: 'Pages',
+        description: 'AI Agents, LLMs, Node.js, Python, React, Next.js, Cloud & Databases',
+        url: '/tech-stack',
+        keywords: 'tech stack technologies framework node python react fastify docker kubernetes redis postgresql',
+        icon: 'cpu'
+      },
+      {
+        id: 'page-blog',
+        title: 'Engineering Blog',
+        category: 'Pages',
+        description: '14 deep-dive architectural publications and system design writeups',
+        url: '/blog',
+        keywords: 'blog articles posts guides architecture tutorials writeups distributed systems',
+        icon: 'file-text'
+      },
+      {
+        id: 'page-tools',
+        title: 'Developer Tools',
+        category: 'Pages',
+        description: 'Project Estimator, Appointment Booking, SQL Formatter, JWT Decoder, Cron Generator',
+        url: '/tools',
+        keywords: 'tools utilities estimator calculator appointment sql jwt cron generator',
+        icon: 'tool'
+      },
+      {
+        id: 'page-changelog',
+        title: 'Product Changelog',
+        category: 'Pages',
+        description: '18 atomic engineering releases from v1.0.0 to v2.8.0',
+        url: '/changelog',
+        keywords: 'changelog updates releases history version v2.8.0 v2.7.0 v2.6.0 sdlc roadmap',
+        icon: 'git-commit'
+      },
+      {
+        id: 'page-education',
+        title: 'Education & Certifications',
+        category: 'Pages',
+        description: 'M.Sc. Information Security, NSTI IBM Diploma, Google Cloud GenAI',
+        url: '/education',
+        keywords: 'education degree msc ignou nsti ibm certifications qualifications training',
+        icon: 'award'
+      },
+      {
+        id: 'page-status',
+        title: 'System Status',
+        category: 'Pages',
+        description: 'Live edge uptime metrics, CDN response times, and 90-day incident reports',
+        url: '/status',
+        keywords: 'status uptime latency ping cloudflare edge health incidents metrics',
+        icon: 'activity'
+      },
+      {
+        id: 'page-uses',
+        title: 'Uses & Dev Setup',
+        category: 'Pages',
+        description: 'Hardware, software, coding editor, terminal, and AI engineering setup',
+        url: '/uses',
+        keywords: 'uses hardware setup workstation vscode tools monitor keyboard software',
+        icon: 'terminal'
+      },
+
+      // Featured Projects
+      {
+        id: 'proj-pulse-chat',
+        title: 'Pulse Chat',
+        category: 'Projects',
+        description: 'AI Customer Support & Shared Inboxes (LangChain, GPT-4o, WebSockets, Pinecone)',
+        url: '/projects/pulse-chat',
+        keywords: 'pulse chat ai agent support realtime websockets pinecone vector database rag',
+        icon: 'message-square'
+      },
+      {
+        id: 'proj-lms',
+        title: 'AI-Enabled LMS',
+        category: 'Projects',
+        description: 'Live Education Platform & AI Tutoring (Vertex AI, LangGraph, pgvector)',
+        url: '/projects/ai-enabled-lms',
+        keywords: 'lms learning education study tutor vertex ai langgraph pgvector gemini',
+        icon: 'book-open'
+      },
+      {
+        id: 'proj-ecommerce',
+        title: 'E-Commerce Platform',
+        category: 'Projects',
+        description: 'Multi-Gateway Payments Platform (Stripe, Razorpay, PhonePe Webhook Idempotency)',
+        url: '/projects/e-commerce-platform',
+        keywords: 'ecommerce store shop stripe razorpay phonepe payments cart orders inventory',
+        icon: 'shopping-bag'
+      },
+      {
+        id: 'proj-booking',
+        title: 'Real-Time Appointment Booking',
+        category: 'Projects',
+        description: 'Concurrency-Safe Scheduling with Redis Distributed Locks & Google Calendar',
+        url: '/projects/real-time-appointment-booking',
+        keywords: 'booking appointment calendar redis lock concurrency scheduling slots meet',
+        icon: 'calendar'
+      },
+
+      // Developer Tools
+      {
+        id: 'tool-estimator',
+        title: 'Project Estimator',
+        category: 'Tools',
+        description: 'Interactive cost, timeline, and architectural tier calculator',
+        url: '/tools/estimator',
+        keywords: 'estimator project cost calculator budget timeline quote architecture',
+        icon: 'calculator'
+      },
+      {
+        id: 'tool-appointment',
+        title: 'Book 1:1 Consultation',
+        category: 'Tools',
+        description: 'Schedule a Google Calendar & Google Meet discussion with Sunil',
+        url: '/tools/appointment',
+        keywords: 'appointment meeting call consultation calendar meet schedule book hire',
+        icon: 'calendar'
+      },
+      {
+        id: 'tool-sql',
+        title: 'SQL Formatter',
+        category: 'Tools',
+        description: 'Beautify, format, indent, and minify SQL queries in the browser',
+        url: '/tools/sql-formatter',
+        keywords: 'sql formatter beautifier database query postgresql mysql sqlite',
+        icon: 'database'
+      },
+      {
+        id: 'tool-jwt',
+        title: 'JWT Decoder',
+        category: 'Tools',
+        description: 'Inspect JWT headers, claims payload, expiration, and signature',
+        url: '/tools/jwt-decoder',
+        keywords: 'jwt decoder json web token auth token claims expire inspect verify',
+        icon: 'key'
+      },
+      {
+        id: 'tool-cron',
+        title: 'Cron Generator',
+        category: 'Tools',
+        description: 'Interactive visual cron schedule builder with natural language parsing',
+        url: '/tools/cron-generator',
+        keywords: 'cron generator scheduler cronjob syntax parser recurring timer',
+        icon: 'clock'
+      },
+
+      // 14 Engineering Blog Posts
+      {
+        id: 'blog-langgraph',
+        title: 'Autonomous Multi-Agent Orchestration with LangGraph',
+        category: 'Blog',
+        description: 'Designing stateful multi-agent systems with cyclic execution and memory',
+        url: '/blog/autonomous-multi-agent-orchestration-langgraph',
+        keywords: 'langgraph multi agent ai orchestration agents state graph rag memory',
+        icon: 'file-text'
+      },
+      {
+        id: 'blog-concurrency',
+        title: 'Architecting Concurrency-Safe Booking Systems',
+        category: 'Blog',
+        description: 'Distributed locking with Redis Redlock, transactional outbox & optimistic locking',
+        url: '/blog/architecting-concurrency-safe-booking-systems',
+        keywords: 'concurrency redis lock redlock booking race conditions transactions distributed',
+        icon: 'file-text'
+      },
+      {
+        id: 'blog-microservices',
+        title: 'High-Throughput Microservices with Node.js and Redis',
+        category: 'Blog',
+        description: 'Event-driven caching, connection pooling, and sub-millisecond response latency',
+        url: '/blog/building-high-throughput-microservices-with-nodejs-and-redis',
+        keywords: 'microservices nodejs redis throughput latency caching high scale',
+        icon: 'file-text'
+      },
+      {
+        id: 'blog-rabbitmq',
+        title: 'Designing Event-Driven Microservices with RabbitMQ',
+        category: 'Blog',
+        description: 'Message broker patterns, dead letter queues, and consumer backpressure',
+        url: '/blog/designing-event-driven-microservices-rabbitmq-nodejs',
+        keywords: 'rabbitmq event driven microservices pubsub queues dlq amqp nodejs',
+        icon: 'file-text'
+      },
+      {
+        id: 'blog-payments',
+        title: 'Multi-Gateway Payments with Clean Architecture',
+        category: 'Blog',
+        description: 'Strategy pattern for Stripe, Razorpay, and PhonePe webhook idempotency',
+        url: '/blog/integrating-multi-gateway-payments-clean-architecture',
+        keywords: 'payments clean architecture stripe razorpay phonepe webhooks idempotency',
+        icon: 'file-text'
+      },
+      {
+        id: 'blog-edge',
+        title: 'Low-Latency Edge Computing with Cloudflare & Astro 7',
+        category: 'Blog',
+        description: 'Sub-30ms global execution using Cloudflare Workers, KV, and Astro SSR',
+        url: '/blog/low-latency-edge-computing-cloudflare-astro',
+        keywords: 'edge computing cloudflare workers astro 7 vite 8 rust serverless latency',
+        icon: 'file-text'
+      },
+      {
+        id: 'blog-multitenant',
+        title: 'Multi-Tenant Database Isolation Architectures',
+        category: 'Blog',
+        description: 'Schema vs. Row-level security (RLS) in SaaS architectures',
+        url: '/blog/multi-tenant-database-isolation-architectures',
+        keywords: 'multitenant multi tenancy database rls postgresql saas isolation security',
+        icon: 'file-text'
+      },
+      {
+        id: 'blog-postgres',
+        title: 'Optimizing PostgreSQL Queries in High-Volume Systems',
+        category: 'Blog',
+        description: 'B-Tree, GIN, and BRIN indexes, EXPLAIN ANALYZE, and vacuum tuning',
+        url: '/blog/optimizing-postgresql-queries-high-volume-systems',
+        keywords: 'postgresql query optimization indexing explain analyze performance sql vacuum',
+        icon: 'file-text'
+      },
+      {
+        id: 'blog-outbox',
+        title: 'Outbox Pattern for Distributed Transaction Guarantees',
+        category: 'Blog',
+        description: 'Dual-write prevention and guaranteed at-least-once message delivery',
+        url: '/blog/outbox-pattern-distributed-transaction-guarantees',
+        keywords: 'outbox pattern distributed transactions dual write consistency cdc debezium',
+        icon: 'file-text'
+      },
+      {
+        id: 'blog-rag',
+        title: 'Production RAG Pipelines with pgvector & PostgreSQL',
+        category: 'Blog',
+        description: 'Hybrid search, HNSW indexing, and reranking strategies for LLM retrieval',
+        url: '/blog/production-rag-pipelines-pgvector-postgresql',
+        keywords: 'rag pgvector postgresql vector search hnsw embeddings hybrid retrieval',
+        icon: 'file-text'
+      },
+      {
+        id: 'blog-websockets',
+        title: 'Scaling WebSocket Infrastructure for High Concurrency',
+        category: 'Blog',
+        description: 'Redis adapter pub/sub, heartbeat timeouts, and zero-downtime clustering',
+        url: '/blog/scaling-websocket-infrastructure-high-concurrency',
+        keywords: 'websockets scaling realtime concurrency socketio redis pubsub cluster',
+        icon: 'file-text'
+      },
+      {
+        id: 'blog-groq',
+        title: 'Ultra-Fast LLM Inference with Groq LPU Streaming',
+        category: 'Blog',
+        description: '500+ tokens/sec LLM streaming with Llama 3 and Server-Sent Events',
+        url: '/blog/ultra-fast-llm-inference-groq-lpu-streaming',
+        keywords: 'groq lpu llm inference streaming llama3 sse tokens fast ai',
+        icon: 'file-text'
+      },
+      {
+        id: 'blog-docker',
+        title: 'Zero-Downtime Deployments with Docker & GitHub Actions',
+        category: 'Blog',
+        description: 'Blue-green release strategies, automated healthchecks, and Nginx proxying',
+        url: '/blog/zero-downtime-deployments-with-docker-and-github-actions',
+        keywords: 'docker github actions blue green cicd deployments zero downtime devops',
+        icon: 'file-text'
+      },
+      {
+        id: 'blog-zerojs',
+        title: 'Zero-JS Baseline Web Applications with Astro 7',
+        category: 'Blog',
+        description: 'Islands architecture, Sätteri Markdown engine, and 100/100 Core Web Vitals',
+        url: '/blog/zero-js-baseline-web-applications-astro-5',
+        keywords: 'zero js astro 7 vite 8 islands architecture web vitals performance html',
+        icon: 'file-text'
+      },
+
+      // Quick Actions
+      {
+        id: 'act-chatbot',
+        title: 'Open AI Assistant',
+        category: 'Actions',
+        description: 'Chat with SK Agent to ask about Sunil, skills, projects, or hire',
+        action: 'openChatbot',
+        keywords: 'ai assistant sk agent chatbot ask chat question bot contact',
+        icon: 'bot'
+      },
+      {
+        id: 'act-theme',
+        title: 'Toggle Theme (Dark / Light)',
+        category: 'Actions',
+        description: 'Switch application color theme between Dark and Light mode',
+        action: 'toggleTheme',
+        keywords: 'theme dark light mode toggle switch appearance color',
+        icon: 'sun-moon'
+      },
+      {
+        id: 'act-email',
+        title: 'Copy Email Address',
+        category: 'Actions',
+        description: 'Copy sunilkhobragade@proton.me to clipboard',
+        action: 'copyEmail',
+        keywords: 'email copy contact sunilkhobragade proton address mail',
+        icon: 'mail'
+      },
+      {
+        id: 'act-github',
+        title: 'Visit GitHub Profile',
+        category: 'Actions',
+        description: 'View open-source repositories and contributions @naman-mahi',
+        url: 'https://github.com/naman-mahi',
+        external: true,
+        keywords: 'github code repo opensource naman mahi profile git',
+        icon: 'github'
+      },
+      {
+        id: 'act-linkedin',
+        title: 'Visit LinkedIn Profile',
+        category: 'Actions',
+        description: 'Connect with Sunil Khobragade on LinkedIn',
+        url: 'https://linkedin.com/in/sunilkhobragade',
+        external: true,
+        keywords: 'linkedin connect network profile social career',
+        icon: 'linkedin'
+      }
+    ];
+
+    // Icon SVGs Lookup Map
+    function getIconSvg(iconName) {
+      switch(iconName) {
+        case 'home':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>`;
+        case 'folder':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>`;
+        case 'briefcase':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>`;
+        case 'cpu':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"></rect><rect width="6" height="6" x="9" y="9" rx="1"></rect><path d="M15 2v2"></path><path d="M15 20v2"></path><path d="M2 15h2"></path><path d="M2 9h2"></path><path d="M20 15h2"></path><path d="M20 9h2"></path><path d="M9 2v2"></path><path d="M9 20v2"></path></svg>`;
+        case 'file-text':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
+        case 'tool':
+        case 'calculator':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>`;
+        case 'git-commit':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><line x1="1.05" y1="12" x2="7" y2="12"></line><line x1="17.01" y1="12" x2="22.96" y2="12"></line></svg>`;
+        case 'award':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>`;
+        case 'activity':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>`;
+        case 'terminal':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>`;
+        case 'message-square':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>`;
+        case 'book-open':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>`;
+        case 'shopping-bag':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>`;
+        case 'calendar':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`;
+        case 'database':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>`;
+        case 'key':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 2-2 2m-1.5 1.5L14 9l-2-2-4 4-2-2-4 4 4 4 2-2 4 4 2-2 3.5 3.5 2-2 2 2 2-2"></path></svg>`;
+        case 'clock':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
+        case 'bot':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>`;
+        case 'sun-moon':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>`;
+        case 'mail':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>`;
+        case 'github':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>`;
+        case 'linkedin':
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>`;
+        default:
+          return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`;
+      }
+    }
+
+    // ==========================================
+    // 🔍 Search Controller & Modal State
+    // ==========================================
+    function initGlobalSearch() {
+      const triggerBtn = document.getElementById('global-search-trigger');
+      const modal = document.getElementById('global-search-modal');
+      const input = document.getElementById('global-search-input');
+      const clearBtn = document.getElementById('global-search-clear-btn');
+      const closeBtn = document.getElementById('global-search-close-btn');
+      const resultsContainer = document.getElementById('global-search-results');
+      const filterTabs = document.querySelectorAll('.filter-tab');
+      const countEl = document.getElementById('search-results-count');
+      const modKeyEl = document.getElementById('search-mod-key');
+
+      if (!modal || !input || !resultsContainer) return;
+
+      // Detect OS for ⌘ vs Ctrl
+      const isMac = typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+      if (modKeyEl) {
+        modKeyEl.textContent = isMac ? '⌘' : 'Ctrl';
+      }
+
+      let activeFilter = 'all';
+      let selectedIndex = 0;
+      let visibleItems = [];
+
+      // Open Modal
+      function openModal() {
+        modal.classList.add('is-active');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+          input.focus();
+          input.select();
+        }, 50);
+        renderResults();
+      }
+
+      // Close Modal
+      function closeModal() {
+        modal.classList.remove('is-active');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        input.value = '';
+        if (clearBtn) clearBtn.style.display = 'none';
+      }
+
+      if (triggerBtn) {
+        triggerBtn.addEventListener('click', openModal);
+      }
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+      }
+
+      // Close when clicking outside the card
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+
+      // Clear input
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          input.value = '';
+          input.focus();
+          clearBtn.style.display = 'none';
+          renderResults();
+        });
+      }
+
+      // Filter tabs
+      filterTabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          filterTabs.forEach((t) => t.classList.remove('active'));
+          tab.classList.add('active');
+          activeFilter = tab.getAttribute('data-filter') || 'all';
+          selectedIndex = 0;
+          renderResults();
+        });
+      });
+
+      // Filter & Match Logic
+      function getFilteredData() {
+        const query = input.value.trim().toLowerCase();
+        let items = searchData;
+
+        // Apply category filter
+        if (activeFilter !== 'all') {
+          items = items.filter((item) => item.category.toLowerCase() === activeFilter.toLowerCase());
+        }
+
+        if (!query) {
+          return items;
+        }
+
+        const words = query.split(/\s+/).filter(Boolean);
+
+        return items.filter((item) => {
+          const title = item.title.toLowerCase();
+          const desc = item.description.toLowerCase();
+          const cat = item.category.toLowerCase();
+          const kw = (item.keywords || '').toLowerCase();
+          const combined = `${title} ${desc} ${cat} ${kw}`;
+
+          return words.every((w) => combined.includes(w));
+        });
+      }
+
+      // Render search items
+      function renderResults() {
+        visibleItems = getFilteredData();
+        const query = input.value.trim();
+
+        if (clearBtn) {
+          clearBtn.style.display = query.length > 0 ? 'block' : 'none';
+        }
+
+        if (countEl) {
+          countEl.textContent = `${visibleItems.length} result${visibleItems.length === 1 ? '' : 's'}`;
+        }
+
+        if (visibleItems.length === 0) {
+          resultsContainer.innerHTML = `
+            <div class="search-empty-state">
+              <svg class="search-empty-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+              </svg>
+              <h3 class="search-empty-title">No results found for "${escapeHtml(query)}"</h3>
+              <p class="search-empty-desc">Try checking for typos or searching for projects, skills, or blog articles.</p>
+              <button type="button" class="search-empty-ai-btn" id="search-ask-ai-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path></svg>
+                Ask SK Agent instead &rarr;
+              </button>
+            </div>
+          `;
+
+          const askAiBtn = document.getElementById('search-ask-ai-btn');
+          if (askAiBtn) {
+            askAiBtn.addEventListener('click', () => {
+              closeModal();
+              const chatTrigger = document.getElementById('chatbot-trigger');
+              if (chatTrigger) chatTrigger.click();
+              const chatTextarea = document.getElementById('chat-textarea');
+              if (chatTextarea && query) {
+                setTimeout(() => {
+                  chatTextarea.value = query;
+                  chatTextarea.dispatchEvent(new Event('input'));
+                  chatTextarea.focus();
+                }, 200);
+              }
+            });
+          }
+          return;
+        }
+
+        // Clamp selected index
+        if (selectedIndex >= visibleItems.length) {
+          selectedIndex = Math.max(0, visibleItems.length - 1);
+        }
+
+        // Group results by category if 'all' filter is active
+        let html = '';
+        let currentCategory = '';
+
+        visibleItems.forEach((item, index) => {
+          if (activeFilter === 'all' && item.category !== currentCategory) {
+            currentCategory = item.category;
+            html += `<div class="search-category-title">${currentCategory}</div>`;
+          }
+
+          const isSelected = index === selectedIndex;
+          const href = item.url ? item.url : 'javascript:void(0);';
+          const target = item.external ? 'target="_blank" rel="noopener noreferrer"' : '';
+
+          html += `
+            <a 
+              href="${href}" 
+              class="search-result-item ${isSelected ? 'is-selected' : ''}" 
+              data-index="${index}"
+              data-item-id="${item.id}"
+              ${target}
+            >
+              <div class="search-item-icon">
+                ${getIconSvg(item.icon)}
+              </div>
+              <div class="search-item-info">
+                <div class="search-item-title-row">
+                  <span class="search-item-title">${escapeHtml(item.title)}</span>
+                  <span class="search-item-badge">${item.category}</span>
+                </div>
+                <span class="search-item-desc">${escapeHtml(item.description)}</span>
+              </div>
+              <div class="search-item-enter" title="Press Enter to open">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 10 4 15 9 20"></polyline>
+                  <path d="M20 4v7a4 4 0 0 1-4 4H4"></path>
+                </svg>
+              </div>
+            </a>
+          `;
+        });
+
+        resultsContainer.innerHTML = html;
+
+        // Attach click handlers to items
+        const itemEls = resultsContainer.querySelectorAll('.search-result-item');
+        itemEls.forEach((el) => {
+          el.addEventListener('click', (e) => {
+            const idx = parseInt(el.getAttribute('data-index') || '0', 10);
+            executeItem(visibleItems[idx], e);
+          });
+        });
+
+        // Ensure selected item is scrolled into view
+        const selectedEl = resultsContainer.querySelector('.search-result-item.is-selected');
+        if (selectedEl) {
+          selectedEl.scrollIntoView({ block: 'nearest' });
+        }
+      }
+
+      // Execute Action or Navigate
+      function executeItem(item, event) {
+        if (!item) return;
+
+        if (item.action) {
+          if (event) event.preventDefault();
+          closeModal();
+
+          if (item.action === 'openChatbot') {
+            const chatTrigger = document.getElementById('chatbot-trigger');
+            if (chatTrigger) chatTrigger.click();
+          } else if (item.action === 'toggleTheme') {
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if (themeToggleBtn) {
+              themeToggleBtn.click();
+            } else {
+              const current = document.documentElement.getAttribute('data-theme') || 'dark';
+              const next = current === 'dark' ? 'light' : 'dark';
+              document.documentElement.setAttribute('data-theme', next);
+              localStorage.setItem('theme', next);
+            }
+          } else if (item.action === 'copyEmail') {
+            navigator.clipboard.writeText('sunilkhobragade@proton.me').then(() => {
+              alert('Copied Sunil\'s email (sunilkhobragade@proton.me) to clipboard!');
+            });
+          }
+          return;
+        }
+
+        if (item.url && !item.external) {
+          closeModal();
+          window.location.href = item.url;
+        } else if (item.external) {
+          closeModal();
+          window.open(item.url, '_blank', 'noopener,noreferrer');
+        }
+      }
+
+      // Live search input handler
+      input.addEventListener('input', () => {
+        selectedIndex = 0;
+        renderResults();
+      });
+
+      // Keyboard Navigation (Arrows, Enter, Escape)
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (visibleItems.length > 0) {
+            selectedIndex = (selectedIndex + 1) % visibleItems.length;
+            renderResults();
+          }
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (visibleItems.length > 0) {
+            selectedIndex = (selectedIndex - 1 + visibleItems.length) % visibleItems.length;
+            renderResults();
+          }
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (visibleItems.length > 0) {
+            executeItem(visibleItems[selectedIndex]);
+          }
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          closeModal();
+        }
+      });
+
+      // Global Keyboard Shortcuts (Ctrl+K, Cmd+K, '/')
+      document.addEventListener('keydown', (e) => {
+        // Cmd+K or Ctrl+K
+        if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+          e.preventDefault();
+          if (modal.classList.contains('is-active')) {
+            closeModal();
+          } else {
+            openModal();
+          }
+        }
+
+        // '/' shortcut when not in active input/textarea
+        if (e.key === '/' && !modal.classList.contains('is-active')) {
+          const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+          if (activeTag !== 'input' && activeTag !== 'textarea' && !document.activeElement.isContentEditable) {
+            e.preventDefault();
+            openModal();
+          }
+        }
+
+        // Escape closes
+        if (e.key === 'Escape' && modal.classList.contains('is-active')) {
+          closeModal();
+        }
+      });
+
+      function escapeHtml(text) {
+        return (text || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+    }
+
+    // Initialize on DOM load and Astro page transitions
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initGlobalSearch);
+    } else {
+      initGlobalSearch();
+    }
+    document.addEventListener('astro:after-swap', initGlobalSearch);
+  })();
+</script>

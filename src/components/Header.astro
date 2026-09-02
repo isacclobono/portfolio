@@ -39,26 +39,57 @@ const navItems = [
     ))}
   </nav>
 
-  <!-- Mobile Hamburger Menu Button -->
-  <button 
-    type="button" 
-    id="mobile-menu-toggle" 
-    class="mobile-toggle-btn"
-    aria-label="Toggle navigation menu"
-    aria-expanded="false"
-    aria-controls="mobile-menu-drawer"
-  >
-    <svg class="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <line class="line-1" x1="4" y1="6" x2="20" y2="6"></line>
-      <line class="line-2" x1="4" y1="12" x2="20" y2="12"></line>
-      <line class="line-3" x1="4" y1="18" x2="20" y2="18"></line>
-    </svg>
-  </button>
+  <!-- Right Actions: Search Trigger & Mobile Toggle -->
+  <div class="header-right-actions">
+    <button 
+      type="button" 
+      class="header-search-trigger" 
+      aria-label="Search website (Ctrl + K)"
+      title="Search pages, projects, blogs, tools (Ctrl + K)"
+      onclick="document.getElementById('global-search-modal')?.classList.add('is-active'); document.getElementById('global-search-input')?.focus();"
+    >
+      <svg class="header-search-icon" xmlns="http://www.w3.org/2000/svg" width="13.5" height="13.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <span class="header-search-text">Search</span>
+      <kbd class="header-search-kbd" id="header-search-kbd">⌘K</kbd>
+    </button>
+
+    <!-- Mobile Hamburger Menu Button -->
+    <button 
+      type="button" 
+      id="mobile-menu-toggle" 
+      class="mobile-toggle-btn"
+      aria-label="Toggle navigation menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu-drawer"
+    >
+      <svg class="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line class="line-1" x1="4" y1="6" x2="20" y2="6"></line>
+        <line class="line-2" x1="4" y1="12" x2="20" y2="12"></line>
+        <line class="line-3" x1="4" y1="18" x2="20" y2="18"></line>
+      </svg>
+    </button>
+  </div>
 </header>
 
 <!-- Mobile Navigation Drawer Dropdown -->
 <div id="mobile-menu-drawer" class="mobile-drawer" aria-hidden="true">
   <nav class="mobile-nav-list" aria-label="Mobile Navigation">
+    <button 
+      type="button" 
+      class="mobile-nav-search-btn"
+      onclick="document.getElementById('global-search-modal')?.classList.add('is-active'); document.getElementById('global-search-input')?.focus(); document.getElementById('mobile-menu-drawer')?.classList.remove('is-open');"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <span>Search pages, tools, projects...</span>
+      <kbd class="header-search-kbd">Ctrl K</kbd>
+    </button>
+
     {navItems.map((item) => (
       <a 
         href={item.href} 
@@ -113,6 +144,77 @@ const navItems = [
   .brand-link:hover .brand-sk-badge {
     transform: scale(1.14) rotate(-6deg);
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
+  }
+
+  .header-right-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .header-search-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md, 8px);
+    padding: 0.32rem 0.6rem;
+    color: var(--text-muted);
+    font-size: 0.775rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition-fast, 0.15s ease);
+    user-select: none;
+  }
+
+  .header-search-trigger:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-card-hover);
+    color: var(--text-primary);
+  }
+
+  .header-search-trigger:hover .header-search-icon {
+    color: #3b82f6;
+  }
+
+  .header-search-text {
+    font-size: 0.775rem;
+    color: var(--text-muted);
+  }
+
+  .header-search-kbd {
+    background: var(--bg-pill, rgba(255, 255, 255, 0.08));
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 1px 4px;
+    color: var(--text-secondary);
+  }
+
+  .mobile-nav-search-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md, 8px);
+    padding: 0.6rem 0.85rem;
+    color: var(--text-secondary);
+    font-size: 0.825rem;
+    font-family: inherit;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .mobile-nav-search-btn:hover {
+    background: var(--bg-card-hover);
+    border-color: #3b82f6;
+    color: var(--text-primary);
   }
 
   /* Desktop vs Mobile Toggle */

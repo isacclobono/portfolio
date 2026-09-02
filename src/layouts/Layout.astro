@@ -5,6 +5,7 @@ import CopyCode from '../components/CopyCode.astro';
 import ScrollToTop from '../components/ScrollToTop.astro';
 import ScrollProgress from '../components/ScrollProgress.astro';
 import Chatbot from '../components/Chatbot.astro';
+import GlobalSearch from '../components/GlobalSearch.astro';
 import SEO from '../components/SEO.astro';
 import '../styles/global.css';
 import { SITE } from '../data/site';
@@ -111,5 +112,8 @@ const {
 
     <!-- AI Chatbot Assistant -->
     <Chatbot />
+
+    <!-- Global Search & Command Palette (Ctrl + K) -->
+    <GlobalSearch />
   </body>
 </html>
