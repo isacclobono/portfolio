@@ -64,43 +64,49 @@
       Sunil Khobragade
     </text>
     <text x="0" y="52" fill="url(#brandGrad)" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, sans-serif" font-size="28" font-weight="600" letter-spacing="-0.2">
-      Senior Full-Stack Developer &amp; Solutions Architect
+      Senior Full-Stack Developer &amp; AI Solutions Architect
     </text>
     <text x="0" y="96" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, sans-serif" font-size="19" font-weight="400">
-      Distributed Systems • High-Throughput Microservices • Cloud &amp; AI Architectures
+      Autonomous AI Agents • RAG Pipelines • Distributed Microservices • Cloud Architecture
     </text>
   </g>
 
   <!-- Tech Stack Pills -->
   <g transform="translate(80, 420)">
-    <!-- Pill 1: Node.js / TS -->
+    <!-- Pill 1: AI Agents & RAG -->
     <g transform="translate(0, 0)">
+      <rect width="180" height="42" rx="10" fill="#18181b" stroke="#3b82f6" stroke-width="1.2" />
+      <text x="18" y="26" fill="#60a5fa" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="700">🤖 AI Agents &amp; RAG</text>
+    </g>
+
+    <!-- Pill 2: Node.js / TS -->
+    <g transform="translate(195, 0)">
       <rect width="145" height="42" rx="10" fill="#18181b" stroke="#27272a" stroke-width="1" />
       <text x="20" y="26" fill="#e4e4e7" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="600">⚡ Node.js / TS</text>
     </g>
 
-    <!-- Pill 2: React / Next.js -->
-    <g transform="translate(160, 0)">
+    <!-- Pill 3: React / Next.js -->
+    <g transform="translate(355, 0)">
       <rect width="165" height="42" rx="10" fill="#18181b" stroke="#27272a" stroke-width="1" />
       <text x="20" y="26" fill="#e4e4e7" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="600">⚛️ React / Next.js</text>
     </g>
 
-    <!-- Pill 3: Laravel / Django -->
-    <g transform="translate(340, 0)">
-      <rect width="180" height="42" rx="10" fill="#18181b" stroke="#27272a" stroke-width="1" />
-      <text x="20" y="26" fill="#e4e4e7" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="600">🐘 Laravel &amp; Python</text>
+    <!-- Pill 4: Python & FastAPI -->
+    <g transform="translate(535, 0)">
+      <rect width="170" height="42" rx="10" fill="#18181b" stroke="#27272a" stroke-width="1" />
+      <text x="20" y="26" fill="#e4e4e7" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="600">🐍 Python &amp; FastAPI</text>
     </g>
 
-    <!-- Pill 4: AWS & Docker -->
-    <g transform="translate(535, 0)">
+    <!-- Pill 5: AWS & Docker -->
+    <g transform="translate(720, 0)">
       <rect width="160" height="42" rx="10" fill="#18181b" stroke="#27272a" stroke-width="1" />
       <text x="20" y="26" fill="#e4e4e7" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="600">☁️ AWS &amp; Docker</text>
     </g>
 
-    <!-- Pill 5: Microservices & Redis -->
-    <g transform="translate(710, 0)">
-      <rect width="210" height="42" rx="10" fill="#18181b" stroke="#27272a" stroke-width="1" />
-      <text x="20" y="26" fill="#e4e4e7" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="600">🚀 Microservices &amp; Redis</text>
+    <!-- Pill 6: pgvector & Redis -->
+    <g transform="translate(895, 0)">
+      <rect width="165" height="42" rx="10" fill="#18181b" stroke="#27272a" stroke-width="1" />
+      <text x="20" y="26" fill="#e4e4e7" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="600">🗄️ pgvector &amp; Redis</text>
     </g>
   </g>
 

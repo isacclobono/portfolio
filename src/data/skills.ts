@@ -5,24 +5,77 @@ export interface SkillCategory {
 
 export const TECHNICAL_SKILLS: SkillCategory[] = [
   {
-    title: "Backend & Systems",
-    skills: ["Node.js (Express, Fastify)", "PHP (Laravel, CodeIgniter)", "Python (Django, Flask)", "REST APIs", "Microservices", "System Design"]
+    title: "AI, Agents & Generative Systems",
+    skills: [
+      "AI Agents & Multi-Agent Workflows",
+      "Retrieval-Augmented Generation (RAG)",
+      "Vector Databases (Pinecone, Qdrant, pgvector)",
+      "LangChain & LlamaIndex",
+      "OpenAI, Claude & Gemini APIs",
+      "Groq Fast LPU Inference",
+      "Prompt Engineering & Context Chunking",
+      "Function Calling & Structured Outputs"
+    ]
   },
   {
-    title: "Frontend & UI",
-    skills: ["React", "Next.js", "Angular", "TypeScript", "JavaScript (ES6+)", "HTML5 / CSS3", "TailwindCSS", "Responsive UI"]
+    title: "Backend & Distributed Systems",
+    skills: [
+      "Node.js (Express, Fastify, Nest.js)",
+      "Python (FastAPI, Django, Flask)",
+      "PHP (Laravel, CodeIgniter)",
+      "TypeScript & JavaScript (ESNext)",
+      "Microservices & Event-Driven Architecture",
+      "RESTful APIs, GraphQL & gRPC",
+      "WebSockets & Real-Time Sync",
+      "System Design & High Concurrency"
+    ]
   },
   {
-    title: "Databases & Caching",
-    skills: ["PostgreSQL", "MySQL", "MongoDB", "Redis", "Query Optimization", "Database Indexing"]
+    title: "Frontend & Modern Web",
+    skills: [
+      "React & React Server Components",
+      "Next.js (App Router)",
+      "Astro (Static & SSR)",
+      "Angular & TypeScript",
+      "TailwindCSS (v4) & Modern CSS",
+      "State Management (Zustand, Redux)",
+      "Responsive UI & Core Web Vitals Optimization"
+    ]
   },
   {
-    title: "DevOps, Cloud & CI/CD",
-    skills: ["AWS", "Microsoft Azure", "IBM Cloud", "Docker", "Kubernetes", "Nginx", "GitHub Actions", "GitLab CI", "Jenkins", "Linux"]
+    title: "Databases, Caching & Message Queues",
+    skills: [
+      "PostgreSQL & pgvector",
+      "Redis (Caching, Pub/Sub, Distributed Locks)",
+      "MongoDB & Mongoose",
+      "MySQL",
+      "RabbitMQ & Apache Kafka",
+      "Query Optimization & Database Indexing"
+    ]
   },
   {
-    title: "Payments & Tools",
-    skills: ["Stripe", "Razorpay", "PhonePe", "Postman", "Bruno", "Git / GitHub / GitLab"]
+    title: "Cloud Infrastructure, DevOps & Security",
+    skills: [
+      "Amazon Web Services (AWS - ECS, Lambda, S3, RDS, CloudFront)",
+      "Microsoft Azure & Cloudflare (Workers, Pages)",
+      "IBM Cloud",
+      "Docker & Container Orchestration",
+      "Kubernetes",
+      "GitHub Actions CI/CD & GitLab CI",
+      "Nginx & Reverse Proxies",
+      "Linux Administration & Zero-Trust Security",
+      "OWASP Top 10 Web Security"
+    ]
+  },
+  {
+    title: "Payments, Integrations & Tooling",
+    skills: [
+      "Stripe, Razorpay & PhonePe (Webhook Idempotency)",
+      "OAuth2, JWT & RBAC Authentication",
+      "Postman, Bruno & Swagger/OpenAPI",
+      "Git, GitHub Enterprise & GitLab",
+      "Vite & Build Tooling"
+    ]
   }
 ];
 

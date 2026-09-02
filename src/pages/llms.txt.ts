@@ -21,11 +21,12 @@ export const GET: APIRoute = ({ site }) => {
 
 ## Technical Expertise
 
-- **Languages & Frameworks**: TypeScript, JavaScript (ESNext), Node.js, Express, Nest.js, Python, Django, FastAPI, PHP, Laravel, React, Next.js, Angular, Astro.
-- **Databases & Caching**: PostgreSQL, MySQL, MongoDB, Redis, Elasticsearch, DynamoDB.
-- **Cloud & DevOps**: AWS (ECS, Lambda, S3, RDS, CloudFront), Microsoft Azure, Docker, Kubernetes, Terraform, GitHub Actions CI/CD, Nginx.
-- **Architectures**: Microservices, Event-Driven Architecture, RESTful APIs, GraphQL, WebSockets, Message Queues (RabbitMQ, Kafka, AWS SQS).
-- **AI & Integrations**: LLM Integrations, Google Cloud Vertex AI, Payment Gateways (Stripe, Razorpay, PhonePe), OAuth2/JWT Auth.
+- **AI, Agents & Generative Systems**: AI Agents & Multi-Agent Workflows (LangGraph, CrewAI, AutoGen), Retrieval-Augmented Generation (RAG), Vector Databases (Pinecone, Qdrant, pgvector), LangChain & LlamaIndex, OpenAI/Claude/Gemini APIs, Groq Fast LPU Inference, Prompt Engineering, Semantic Search, Function Calling & Structured JSON.
+- **Languages & Frameworks**: TypeScript, JavaScript (ESNext), Node.js, Express, Fastify, Nest.js, Python, FastAPI, Django, PHP, Laravel, React, Next.js, Angular, Astro, TailwindCSS.
+- **Databases & Caching**: PostgreSQL & pgvector, Redis (Caching, Pub/Sub, Queues, Distributed Locks), MongoDB, MySQL, Elasticsearch, DynamoDB.
+- **Cloud & DevOps**: AWS (ECS, Lambda, S3, RDS, CloudFront), Microsoft Azure, Cloudflare Workers/Pages, Docker, Kubernetes, GitHub Actions CI/CD, Nginx, Linux.
+- **Architectures**: Microservices, Event-Driven Architecture, RESTful APIs, GraphQL, gRPC, WebSockets, Message Queues (RabbitMQ, Kafka, AWS SQS).
+- **Payments & Security**: Payment Gateways (Stripe, Razorpay, PhonePe with Webhook Idempotency), OAuth2/JWT Authentication, Zero-Trust Architecture, OWASP Top 10.
 
 ## Availability & Contact
 
