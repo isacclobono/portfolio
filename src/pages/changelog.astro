@@ -4,84 +4,189 @@ import Breadcrumb from '../components/Breadcrumb.astro';
 import Button from '../components/Button.astro';
 import { SITE } from '../data/site';
 
-const releases = [
+interface ReleaseSection {
+  type: 'Added' | 'Changed' | 'Performance' | 'Security' | 'Architecture';
+  items: string[];
+}
+
+interface Release {
+  version: string;
+  date: string;
+  badge: string;
+  badgeType: 'primary' | 'accent' | 'feature' | 'perf' | 'launch';
+  summary: string;
+  sections: ReleaseSection[];
+}
+
+const releases: Release[] = [
+  {
+    version: "v2.7.0",
+    date: "September 2026",
+    badge: "PWA & Offline Architecture",
+    badgeType: "primary",
+    summary: "Full Progressive Web App (PWA) installation, Service Worker caching strategies, and 4 quick launch app shortcuts.",
+    sections: [
+      {
+        type: "Added",
+        items: [
+          "Configured site.webmanifest and manifest.json with 192x192, 512x512, and adaptive maskable vector icons.",
+          "Registered Service Worker (/sw.js) with Network-First strategy for HTML navigation and Stale-While-Revalidate for static assets.",
+          "Added 4 desktop/mobile quick shortcuts: Featured Projects, Developer Tools, Book Consultation, and System Status."
+        ]
+      },
+      {
+        type: "Performance",
+        items: [
+          "Pre-cached critical application shell for offline navigation and sub-second cold starts.",
+          "Optimized theme tokens to eliminate layout shifts during dark/light theme initialization."
+        ]
+      }
+    ]
+  },
   {
     version: "v2.6.0",
     date: "September 2026",
-    badge: "Astro 6 → 7 Upgrade",
+    badge: "Astro 7 & Vite 8 Engine",
     badgeType: "launch",
-    summary: "Major framework upgrade from Astro 6 to Astro 7 (v7.2+) powered by Vite 8, Rust compiler, and Sätteri Markdown.",
-    items: [
-      "Upgraded core framework dependencies to Astro v7.2.0 and @astrojs/mdx v7.0.5 with Vite 8 bundler.",
-      "Migrated to Astro 7 Rust-based compiler for strict tag validation, faster builds, and zero legacy HTML restructuring.",
-      "Adopted native Sätteri Markdown rendering pipeline for high-performance GFM rendering across 14 technical blogs.",
-      "Migrated content collections to official Content Layer API (src/content.config.ts) with glob() loaders."
+    summary: "Framework migration from Astro 6 to Astro 7 (v7.2+) powered by Vite 8 and the native Rust compiler.",
+    sections: [
+      {
+        type: "Architecture",
+        items: [
+          "Migrated content architecture to official Astro 7 Content Layer API (src/content.config.ts) with glob() loaders.",
+          "Adopted Vite 8 build pipeline for sub-second hot module reloading and optimized static asset hashing.",
+          "Adopted native Sätteri Markdown rendering pipeline for high-performance GFM article compilation.",
+          "Enforced Rust compiler strict tag validation across all .astro layouts and components."
+        ]
+      },
+      {
+        type: "Changed",
+        items: [
+          "Updated technical publications and system blueprints across /tech-stack and /blog.",
+          "Streamlined Server-Sent Events (SSE) AI inference pipelines for ultra-fast response streaming."
+        ]
+      }
     ]
   },
   {
     version: "v2.5.0",
     date: "September 2026",
-    badge: "PWA & Architecture Suite",
-    badgeType: "primary",
-    summary: "Full Progressive Web App (PWA) offline installation, complete HTTP error page suite, and /tech-stack blueprint.",
-    items: [
-      "Implemented full Progressive Web App (PWA) with Service Worker (/sw.js), offline caching, and 4 quick launch shortcuts.",
-      "Launched dedicated /tech-stack blueprint detailing AI inference engines, cloud hosting, and database technologies.",
-      "Added complete HTTP diagnostic error suite: 401 Unauthorized, 403 Forbidden, 404 Not Found, 500 Server Error, and 503 Maintenance.",
-      "Removed default link underlines across the entire design system in favor of crisp hover state transitions."
+    badge: "Diagnostic Error Suite",
+    badgeType: "feature",
+    summary: "Complete HTTP error page suite with live edge diagnostic consoles and theme adaptability.",
+    sections: [
+      {
+        type: "Added",
+        items: [
+          "Built /401 Unauthorized page with authentication challenge logs and JWT token inspector link.",
+          "Built /403 Forbidden page with Zero-Trust enforcement logs and RBAC security telemetry.",
+          "Built /404 Not Found page featuring simulated edge route resolution trace and 6 canonical hub cards.",
+          "Built /500 Server Error and /503 Maintenance pages with automated recovery status indicators."
+        ]
+      },
+      {
+        type: "Changed",
+        items: [
+          "Removed default browser link underlines globally in favor of crisp hover state transitions.",
+          "Unified action button spacing with generous 1.25rem flex gaps across all error viewports."
+        ]
+      }
     ]
   },
   {
     version: "v2.4.0",
     date: "September 2026",
-    badge: "Major Feature Release",
+    badge: "Calendar & Legal Compliance",
     badgeType: "primary",
-    summary: "Google Calendar & Meet synchronization, Status monitor, Tech Stack (/tech-stack) page, and Privacy/Terms compliance.",
-    items: [
-      "Integrated live Google Calendar & Google Meet sync into /tools/appointment with dynamic UTC time calculations.",
-      "Added /status page with live infrastructure metrics, edge CDN latency, and uptime logs.",
-      "Published Google API User Data Policy compliant Privacy Policy and Terms of Service.",
-      "Updated domain to https://sunilkhobragade.pages.dev across canonical headers and sitemap."
+    summary: "Automated Google Calendar & Meet synchronization, live system status monitor, and legal disclosures.",
+    sections: [
+      {
+        type: "Added",
+        items: [
+          "Integrated zero-auth Google Calendar & Google Meet template URL generator into /tools/appointment.",
+          "Implemented automated RFC 5545 universal iCalendar (.ICS) generator for Apple Calendar and Outlook.",
+          "Launched /status page with live infrastructure metrics, edge CDN latency, and 90-day incident logs.",
+          "Published Google API User Data Policy compliant Privacy Policy and Terms of Service."
+        ]
+      },
+      {
+        type: "Security",
+        items: [
+          "Configured strict client-side data handling with zero retention of third-party Google credentials."
+        ]
+      }
     ]
   },
   {
     version: "v2.3.0",
     date: "September 2026",
-    badge: "AI & UI Upgrade",
+    badge: "AI Copilot Overhaul",
     badgeType: "accent",
-    summary: "SK Agent AI Copilot overhaul: WhatsApp messenger bubbles, compact 12.5px typography, and IndexedDB local storage.",
-    items: [
-      "Connected Groq LPU streaming inference (300+ tok/s) with dual-engine offline semantic fallback.",
-      "Implemented WhatsApp-style left/right bubble layout with local timestamps and delivery checkmarks.",
-      "Added persistent IndexedDB storage (SK_Portfolio_ChatDB) so chat history survives page reloads.",
-      "Added multi-edge drag resizing and 1-click expand/collapse modal controls with localStorage memory.",
-      "Enhanced system prompt into a developer copilot capable of writing Python, Node.js, and SQL snippets."
+    summary: "SK Agent AI Copilot overhaul: WhatsApp messenger bubbles, Groq LPU streaming (300+ tok/s), and IndexedDB local memory.",
+    sections: [
+      {
+        type: "Added",
+        items: [
+          "Connected Groq Cloud LPU API (openai/gpt-oss-120b & qwen/qwen3.8-27b) with sub-120ms TTFT.",
+          "Implemented WhatsApp-style left/right message bubble layout with compact typography and local timestamps.",
+          "Added browser-native IndexedDB storage (SK_Portfolio_ChatDB) for offline conversation persistence.",
+          "Built multi-edge modal drag resizing with expand/collapse states saved to localStorage.",
+          "Integrated Web Speech API for hands-free voice-to-text transcriptions."
+        ]
+      },
+      {
+        type: "Performance",
+        items: [
+          "Implemented dual-engine offline semantic routing fallback when Groq API keys are unconfigured."
+        ]
+      }
     ]
   },
   {
     version: "v2.2.0",
     date: "August 2026",
-    badge: "Developer Tools Suite",
+    badge: "Developer Utilities Suite",
     badgeType: "feature",
-    summary: "Launched in-browser client-side developer utility suite.",
-    items: [
-      "Launched interactive Project Cost & Timeline Estimator with live breakdown and printable PDF export.",
-      "Built client-side JWT Token Decoder with header/payload inspection and expiry timer.",
-      "Added instant SQL Formatter & Beautifier supporting PostgreSQL, MySQL, and SQLite dialects.",
-      "Added Cron Expression Generator with human-readable English schedule translation."
+    summary: "Launched in-browser client-side developer tools for architecture estimation and debugging.",
+    sections: [
+      {
+        type: "Added",
+        items: [
+          "Built Project Cost & Timeline Estimator with architectural recommendations and printable PDF export.",
+          "Built client-side JWT Token Decoder with header/payload inspection and token expiration timers.",
+          "Added instant SQL Formatter supporting PostgreSQL, MySQL, and SQLite dialects.",
+          "Added Cron Expression Generator with human-readable English schedule translation."
+        ]
+      },
+      {
+        type: "Security",
+        items: [
+          "All utilities execute 100% client-side inside the browser sandbox with zero server telemetry."
+        ]
+      }
     ]
   },
   {
     version: "v2.1.0",
     date: "August 2026",
-    badge: "SEO & 100/100 Core Web Vitals",
+    badge: "SEO & Web Vitals",
     badgeType: "perf",
-    summary: "Technical SEO overhaul, Schema.org Graph, and sub-second edge performance.",
-    items: [
-      "Implemented comprehensive Schema.org JSON-LD structured data (Person, WebSite, BlogPosting, Service).",
-      "Added dynamic /llms.txt endpoint for AI search crawlers and LLM indexing.",
-      "Optimized zero-runtime JavaScript overhead for 100/100 Lighthouse and Core Web Vitals score.",
-      "Added RSS 2.0 dynamic XML feed and automated XML sitemap generation."
+    summary: "Technical SEO overhaul, Schema.org Graph entities, and sub-second edge performance.",
+    sections: [
+      {
+        type: "Added",
+        items: [
+          "Implemented Schema.org JSON-LD structured data (Person, WebSite, BlogPosting, ProfessionalService).",
+          "Added dynamic /llms.txt endpoint formatted specifically for AI search engine crawlers.",
+          "Created dynamic RSS 2.0 XML feed (/rss.xml) and automated XML sitemap generation."
+        ]
+      },
+      {
+        type: "Performance",
+        items: [
+          "Optimized static asset bundling to achieve 100/100 Google Lighthouse Core Web Vitals score."
+        ]
+      }
     ]
   },
   {
@@ -90,62 +195,167 @@ const releases = [
     badge: "Astro 5 → 6 Upgrade",
     badgeType: "launch",
     summary: "Upgraded core portfolio architecture from Astro 5 to Astro 6 with enhanced Islands rendering.",
-    items: [
-      "Upgraded from Astro 5 to Astro 6 with unified server actions and static prerendering optimizations.",
-      "Implemented responsive vanilla CSS token design system with seamless Dark/Light theme switching.",
-      "Structured work experience timeline, featured engineering case studies, and technical blog."
+    sections: [
+      {
+        type: "Architecture",
+        items: [
+          "Upgraded framework from Astro 5 to Astro 6 with server action routing and static prerendering optimizations.",
+          "Implemented responsive vanilla CSS token design system with seamless Dark/Light theme switching.",
+          "Structured work experience timeline, featured engineering case studies, and technical blog."
+        ]
+      }
+    ]
+  },
+  {
+    version: "v1.8.0",
+    date: "May 2026",
+    badge: "Multi-Agent Systems",
+    badgeType: "feature",
+    summary: "Prototyped autonomous multi-agent state machines and cyclic evaluation graphs.",
+    sections: [
+      {
+        type: "Added",
+        items: [
+          "Architected stateful multi-agent workflows using LangGraph and CrewAI for automated code auditing.",
+          "Published technical deep-dive on cyclic feedback loops and router/critic agent patterns."
+        ]
+      }
+    ]
+  },
+  {
+    version: "v1.7.0",
+    date: "January 2026",
+    badge: "High-Velocity Inference",
+    badgeType: "perf",
+    summary: "Integrated Language Processing Unit (LPU) hardware acceleration for generative UI streams.",
+    sections: [
+      {
+        type: "Performance",
+        items: [
+          "Replaced traditional GPU inference endpoints with Groq LPUs, achieving 300+ tokens/second.",
+          "Published benchmark analysis comparing cloud GPU memory bandwidth vs LPU Tensor Stream Processors."
+        ]
+      }
     ]
   },
   {
     version: "v1.6.0",
-    date: "January 2025",
-    badge: "AI & Vector Search",
+    date: "October 2025",
+    badge: "Vector Search & RAG",
     badgeType: "feature",
-    summary: "Integrated pgvector embeddings and Retrieval-Augmented Generation (RAG).",
-    items: [
-      "Configured PostgreSQL pgvector HNSW indexing for instant semantic document retrieval.",
-      "Created technical articles on production RAG pipelines and vector database trade-offs."
+    summary: "Integrated PostgreSQL pgvector HNSW indexing for enterprise semantic search.",
+    sections: [
+      {
+        type: "Added",
+        items: [
+          "Configured PostgreSQL pgvector HNSW cosine distance indexing for sub-10ms semantic document retrieval.",
+          "Implemented Reciprocal Rank Fusion (RRF) combining BM25 full-text search with vector embeddings."
+        ]
+      }
+    ]
+  },
+  {
+    version: "v1.5.0",
+    date: "July 2025",
+    badge: "Edge Infrastructure",
+    badgeType: "perf",
+    summary: "Migrated hosting to Cloudflare Pages & global edge network for sub-25ms TTFB.",
+    sections: [
+      {
+        type: "Architecture",
+        items: [
+          "Deployed edge routing across 300+ Cloudflare global Points of Presence (PoPs).",
+          "Configured automated Git-triggered deployments with zero-downtime cache invalidation."
+        ]
+      }
     ]
   },
   {
     version: "v1.4.0",
-    date: "February 2024",
-    badge: "Real-Time Infrastructure",
-    badgeType: "perf",
-    summary: "WebSocket clustering and high-concurrency event stream scaling.",
-    items: [
-      "Architected distributed WebSocket clustering with Redis Pub/Sub for sub-10ms messaging.",
-      "Published research benchmarks on handling 100k concurrent client socket connections."
+    date: "October 2024",
+    badge: "Database Multi-Tenancy",
+    badgeType: "feature",
+    summary: "Architected PostgreSQL Row-Level Security (RLS) policies for SaaS tenant isolation.",
+    sections: [
+      {
+        type: "Security",
+        items: [
+          "Implemented engine-level PostgreSQL Row-Level Security policies with session context injection.",
+          "Published architectural comparison of shared schema RLS vs schema-per-tenant isolation."
+        ]
+      }
+    ]
+  },
+  {
+    version: "v1.3.0",
+    date: "June 2024",
+    badge: "Distributed Concurrency",
+    badgeType: "feature",
+    summary: "Built distributed reservation engine with Redlock mutexes and row-level locks.",
+    sections: [
+      {
+        type: "Added",
+        items: [
+          "Engineered three-tier reservation engine combining Redis Redlock mutexes and PostgreSQL SELECT FOR UPDATE locks.",
+          "Eliminated double-booking race conditions during high-concurrency reservation spikes."
+        ]
+      }
     ]
   },
   {
     version: "v1.2.0",
+    date: "February 2024",
+    badge: "Real-Time WebSocket Scale",
+    badgeType: "perf",
+    summary: "Scaled WebSocket messaging infrastructure to 100k concurrent client connections.",
+    sections: [
+      {
+        type: "Performance",
+        items: [
+          "Tuned Linux kernel socket file descriptors and TCP receive/transmit buffers.",
+          "Architected distributed WebSocket clustering with Redis Pub/Sub cross-node broadcasting."
+        ]
+      }
+    ]
+  },
+  {
+    version: "v1.1.0",
     date: "June 2023",
     badge: "CI/CD & DevOps Automation",
     badgeType: "launch",
-    summary: "Blue-green container deployment pipeline with GitHub Actions.",
-    items: [
-      "Automated zero-downtime containerized deployments on Docker and Nginx reverse proxies.",
-      "Published technical guides on Transactional Outbox patterns and high-throughput Node.js microservices."
+    summary: "Automated blue-green container deployment pipeline with GitHub Actions.",
+    sections: [
+      {
+        type: "Architecture",
+        items: [
+          "Automated zero-downtime blue-green Docker container swaps with active Nginx health checks.",
+          "Implemented Transactional Outbox Pattern to guarantee dual-write atomicity between SQL and message brokers."
+        ]
+      }
     ]
   },
   {
     version: "v1.0.0",
     date: "March 2022",
-    badge: "Initial Release",
+    badge: "Initial Platform Launch",
     badgeType: "launch",
-    summary: "Initial release of Sunil Khobragade's engineering portfolio and technical writing publication.",
-    items: [
-      "Launched initial engineering publication focusing on event-driven microservices, RabbitMQ, and PostgreSQL query tuning.",
-      "Established foundational clean architecture principles for full-stack web platforms."
+    summary: "Initial release of Sunil Khobragade's engineering portfolio and technical publication.",
+    sections: [
+      {
+        type: "Added",
+        items: [
+          "Launched initial engineering publication focusing on event-driven microservices and RabbitMQ.",
+          "Published clean architecture blueprints for multi-gateway payment integrations."
+        ]
+      }
     ]
   }
 ];
 ---
 
 <Layout 
-  title="Engineering Changelog & Release Notes | SK Builds" 
-  description="Chronological record of releases, framework migrations (Astro 5 to 6, 6 to 7), AI copilot upgrades, and engineering milestones from 2022 to 2026." 
+  title="Engineering Changelog & SDLC Release History | SK Builds" 
+  description="Chronological record of feature releases, architectural migrations (Astro 5 → 6 → 7), AI copilot upgrades, and SDLC milestones from 2022 to 2026." 
   currentPath="/changelog"
 >
   <Breadcrumb items={[
@@ -162,10 +372,12 @@ const releases = [
     <header class="changelog-header">
       <div class="changelog-badge-pill">
         <span class="badge-dot"></span>
-        PLATFORM &amp; ARCHITECTURE LOG &bull; 2022 – 2026
+        SDLC RELEASE HISTORY &bull; 2022 – 2026
       </div>
       <h1 class="changelog-title">Engineering Changelog</h1>
-      <p class="changelog-subtitle">A chronological record of architectural milestones, framework migrations (Astro 5 → 6 → 7), AI copilot upgrades, and platform optimizations.</p>
+      <p class="changelog-subtitle">
+        A structured, SDLC-categorized record of architectural milestones, framework migrations, AI copilot upgrades, and production performance optimizations.
+      </p>
     </header>
 
     <div class="timeline">
@@ -183,11 +395,21 @@ const releases = [
 
             <p class="release-summary">{rel.summary}</p>
 
-            <ul class="release-list">
-              {rel.items.map((item) => (
-                <li>{item}</li>
+            <!-- SDLC Categorized Sections -->
+            <div class="release-sections-wrap">
+              {rel.sections.map((sec) => (
+                <div class="sdlc-section">
+                  <div class="sdlc-tag-row">
+                    <span class={`sdlc-tag ${sec.type.toLowerCase()}`}>{sec.type}</span>
+                  </div>
+                  <ul class="release-list">
+                    {sec.items.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
       ))}
@@ -198,7 +420,7 @@ const releases = [
 <style>
   .changelog-container {
     max-width: 820px;
-    margin: 0 auto 4rem auto;
+    margin: 0 auto 5rem auto;
   }
 
   .changelog-header {
@@ -254,7 +476,7 @@ const releases = [
     padding-left: 1.75rem;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 2.25rem;
   }
 
   .timeline::before {
@@ -288,6 +510,9 @@ const releases = [
     border: 1px solid var(--border-card);
     border-radius: 0.85rem;
     padding: 1.35rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
     transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
   }
 
@@ -303,7 +528,6 @@ const releases = [
     justify-content: space-between;
     gap: 0.75rem;
     flex-wrap: wrap;
-    margin-bottom: 0.75rem;
   }
 
   .version-row {
@@ -362,17 +586,80 @@ const releases = [
     font-size: 0.9rem;
     color: var(--text-primary);
     font-weight: 500;
-    margin: 0 0 0.75rem 0;
+    margin: 0;
     line-height: 1.5;
   }
 
+  /* SDLC Categorized Sections */
+  .release-sections-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-top: 0.25rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed var(--border-card);
+  }
+
+  .sdlc-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .sdlc-tag-row {
+    display: flex;
+    align-items: center;
+  }
+
+  .sdlc-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 1px 7px;
+    border-radius: 4px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    color: var(--text-muted);
+  }
+
+  .sdlc-tag.added {
+    color: #10b981;
+    border-color: rgba(16, 185, 129, 0.25);
+    background: rgba(16, 185, 129, 0.08);
+  }
+
+  .sdlc-tag.changed {
+    color: #3b82f6;
+    border-color: rgba(59, 130, 246, 0.25);
+    background: rgba(59, 130, 246, 0.08);
+  }
+
+  .sdlc-tag.performance {
+    color: #f59e0b;
+    border-color: rgba(245, 158, 11, 0.25);
+    background: rgba(245, 158, 11, 0.08);
+  }
+
+  .sdlc-tag.security {
+    color: #a855f7;
+    border-color: rgba(168, 85, 247, 0.25);
+    background: rgba(168, 85, 247, 0.08);
+  }
+
+  .sdlc-tag.architecture {
+    color: #06b6d4;
+    border-color: rgba(6, 182, 212, 0.25);
+    background: rgba(6, 182, 212, 0.08);
+  }
+
   .release-list {
-    margin: 0.25rem 0 0 0;
+    margin: 0;
     padding: 0;
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.45rem;
   }
 
   .release-list li {
