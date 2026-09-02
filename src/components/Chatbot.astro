@@ -57,16 +57,9 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
 
         <!-- Brand Icon Badge -->
         <div class="sk-brand-badge" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M4 19C4 10.716 10.716 4 19 4V8C12.925 8 8 12.925 8 19H4Z" fill="url(#headerLogoGrad)"/>
-            <path d="M8 19C8 12.925 12.925 8 19 8V12C15.134 12 12 15.134 12 19H8Z" fill="#38bdf8"/>
-            <defs>
-              <linearGradient id="headerLogoGrad" x1="4" y1="4" x2="19" y2="19" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#ec4899"/>
-                <stop offset="0.5" stop-color="#a855f7"/>
-                <stop offset="1" stop-color="#38bdf8"/>
-              </linearGradient>
-            </defs>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="24" height="24" rx="6" fill="#2563eb"/>
+            <text x="12" y="16.5" fill="#ffffff" font-size="11.5" font-weight="800" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" text-anchor="middle" letter-spacing="-0.4">SK</text>
           </svg>
         </div>
 
@@ -107,6 +100,10 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
             </svg>
           </button>
           <div id="chat-options-menu" class="sk-options-menu" aria-hidden="true">
+            <button type="button" class="sk-menu-item" id="opt-export-transcript">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Export Transcript
+            </button>
             <button type="button" class="sk-menu-item" id="opt-clear-chat">
               <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
               Clear Conversation
@@ -138,12 +135,11 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
       <div class="sk-msg-row bot">
         <div class="sk-bubble bot">
           <div class="sk-bubble-content">
-            Hi there! I'm <strong>SK Agent</strong>, Sunil Khobragade's AI Assistant. How can I help you today?
-          </div>
-          <div class="sk-bubble-footer">
-            <span class="sk-time-text" id="init-bot-time"></span>
+            Hi there! 👋<br><br>
+            I'm <strong>SK Agent</strong>, the AI assistant for <strong>Sunil Khobragade</strong>. How can I assist you today—project details, technical help, or collaboration info?
           </div>
         </div>
+        <div class="sk-msg-sublabel">SK Agent &bull; Just now</div>
       </div>
 
       <!-- Quick Suggestion Chips -->
@@ -176,32 +172,9 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
 
         <!-- Bottom Action Bar inside input card -->
         <div class="sk-input-actions">
-          <!-- Left Utilities Toolbar -->
+          <!-- Left Voice Input Button -->
           <div class="sk-left-tools">
-            <!-- Paperclip -->
-            <button type="button" class="sk-tool-btn" id="tool-attach-btn" title="Download Profile Summary" aria-label="Profile">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
-              </svg>
-            </button>
-
-            <!-- Emoji -->
-            <button type="button" class="sk-tool-btn" id="tool-emoji-btn" title="Insert Emoji" aria-label="Emoji">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
-                <line x1="9" y1="9" x2="9.01" y2="9"></line>
-                <line x1="15" y1="9" x2="15.01" y2="9"></line>
-              </svg>
-            </button>
-
-            <!-- GIF -->
-            <button type="button" class="sk-tool-btn" id="tool-gif-btn" title="Explore Projects" aria-label="Projects">
-              <span class="sk-gif-text">GIF</span>
-            </button>
-
-            <!-- Microphone -->
-            <button type="button" class="sk-tool-btn" id="tool-mic-btn" title="Voice Input" aria-label="Voice input">
+            <button type="button" class="sk-tool-btn" id="tool-mic-btn" title="Voice Input (Click to speak)" aria-label="Voice input">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
                 <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
@@ -229,7 +202,7 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
   </div>
 </div>
 
-<style>
+<style is:global>
   /* ==========================================================================
      Crisp Native Chat Application Theme & Typography
      ========================================================================== */
@@ -699,71 +672,85 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
   .sk-messages-box {
     flex: 1;
     overflow-y: auto;
-    padding: 12px 12px 6px 12px;
+    padding: 16px 14px 10px 14px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    background: var(--sk-chat-messages-bg);
+    gap: 14px;
+    background: #ffffff;
+  }
+
+  [data-theme="dark"] .sk-messages-box,
+  .theme-dark .sk-messages-box {
+    background: #121216;
   }
 
   /* Message Rows */
   .sk-msg-row {
-    display: flex;
-    width: 100%;
-    margin: 3px 0;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    margin: 2px 0 !important;
   }
 
   .sk-msg-row.bot {
-    justify-content: flex-start;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
   }
 
   .sk-msg-row.user {
-    justify-content: flex-end;
+    align-items: flex-end !important;
+    justify-content: flex-end !important;
   }
 
-  /* Chat Bubbles (Crisp 13px font size) */
+  /* Chat Bubbles */
   .sk-bubble {
-    padding: 8px 12px 6px 12px;
-    font-size: 13px;
-    line-height: 1.45;
     word-break: break-word;
     position: relative;
     display: flex;
     flex-direction: column;
   }
 
-  /* Bot Bubble: Left-aligned with subtle border */
+  /* Bot Bubble: Soft light-gray card with rounded corners */
   .sk-bubble.bot {
-    max-width: 85%;
-    margin-right: auto;
-    margin-left: 0;
-    background: var(--sk-chat-bot-bubble-bg);
-    color: var(--sk-chat-bot-bubble-text);
-    border-radius: 14px 14px 14px 3px;
-    border: 1px solid var(--sk-chat-bot-bubble-border);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    max-width: 86% !important;
+    margin-right: auto !important;
+    margin-left: 0 !important;
+    background: #f3f4f6 !important;
+    color: #111827 !important;
+    border-radius: 18px !important;
+    border: none !important;
+    padding: 13px 18px !important;
+    font-size: 13.5px !important;
+    line-height: 1.55 !important;
+    box-shadow: none !important;
   }
 
-  /* User Bubble: Right-aligned with solid blue accent */
+  [data-theme="dark"] .sk-bubble.bot,
+  .theme-dark .sk-bubble.bot {
+    background: #27272a !important;
+    color: #f4f4f5 !important;
+  }
+
+  /* User Bubble: Right-aligned white pill card with subtle border */
   .sk-bubble.user {
-    max-width: 80%;
-    margin-left: auto;
-    margin-right: 0;
-    background: var(--sk-chat-user-bubble-bg);
-    color: var(--sk-chat-user-bubble-text);
-    border-radius: 14px 14px 3px 14px;
-    border: none;
-    box-shadow: 0 1px 3px rgba(37, 99, 235, 0.25);
+    max-width: 80% !important;
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    border-radius: 20px !important;
+    border: 1px solid #e5e7eb !important;
+    padding: 9px 18px !important;
+    font-size: 13.5px !important;
+    line-height: 1.45 !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
   }
 
-  .sk-bubble.user .sk-bubble-content a {
-    color: #ffffff;
-    text-decoration: underline;
-  }
-
-  .sk-bubble.user .sk-bubble-content code {
-    background: rgba(255, 255, 255, 0.2);
-    color: #ffffff;
+  [data-theme="dark"] .sk-bubble.user,
+  .theme-dark .sk-bubble.user {
+    background: #18181b !important;
+    color: #f4f4f5 !important;
+    border: 1px solid #27272a !important;
   }
 
   .sk-bubble-content {
@@ -771,7 +758,7 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
   }
 
   .sk-bubble-content p {
-    margin: 3px 0;
+    margin: 4px 0;
   }
 
   .sk-bubble-content strong {
@@ -779,63 +766,121 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
   }
 
   .sk-bubble-content a {
-    color: var(--sk-chat-link);
+    color: #2563eb;
     text-decoration: underline;
     font-weight: 500;
   }
 
+  [data-theme="dark"] .sk-bubble-content a,
+  .theme-dark .sk-bubble-content a {
+    color: #60a5fa;
+  }
+
   .sk-bubble-content ul, 
   .sk-bubble-content ol {
-    margin: 3px 0;
-    padding-left: 14px;
+    margin: 4px 0;
+    padding-left: 18px;
   }
 
   .sk-bubble-content li {
-    margin-bottom: 2px;
+    margin-bottom: 3px;
   }
 
   .sk-bubble-content code {
     font-family: var(--font-mono, monospace);
-    background: var(--sk-chat-code-bg);
-    padding: 1px 4px;
-    border-radius: 3px;
-    font-size: 11.5px;
+    background: rgba(0, 0, 0, 0.06);
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+
+  [data-theme="dark"] .sk-bubble-content code,
+  .theme-dark .sk-bubble-content code {
+    background: rgba(255, 255, 255, 0.1);
   }
 
   .sk-bubble-content pre {
-    background: var(--sk-chat-code-bg);
-    padding: 6px 8px;
-    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.06);
+    padding: 8px 10px;
+    border-radius: 6px;
     overflow-x: auto;
     font-family: var(--font-mono, monospace);
-    font-size: 11.5px;
-    margin: 4px 0;
-    line-height: 1.35;
+    font-size: 12px;
+    margin: 6px 0;
+    line-height: 1.4;
   }
 
-  /* Bubble Timestamps */
-  .sk-bubble-footer {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 3px;
-    margin-top: 2px;
-    user-select: none;
+  [data-theme="dark"] .sk-bubble-content pre,
+  .theme-dark .sk-bubble-content pre {
+    background: rgba(255, 255, 255, 0.08);
   }
 
-  .sk-bubble.bot .sk-time-text {
-    font-size: 9.5px;
-    color: var(--sk-chat-bot-time);
+  /* Markdown Tables inside bubbles */
+  .sk-table-wrap {
+    width: 100% !important;
+    overflow-x: auto !important;
+    margin: 8px 0 !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    background: rgba(0, 0, 0, 0.02) !important;
   }
 
-  .sk-bubble.user .sk-time-text {
-    font-size: 9.5px;
-    color: var(--sk-chat-user-time);
+  [data-theme="dark"] .sk-table-wrap,
+  .theme-dark .sk-table-wrap {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    background: rgba(255, 255, 255, 0.03) !important;
   }
 
-  .sk-ticks-icon {
-    display: inline-flex;
-    color: var(--sk-tick-color);
+  .sk-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 12px !important;
+    text-align: left !important;
+    line-height: 1.4 !important;
+  }
+
+  .sk-table th {
+    background: rgba(0, 0, 0, 0.05) !important;
+    font-weight: 600 !important;
+    padding: 6px 10px !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+    white-space: nowrap !important;
+  }
+
+  [data-theme="dark"] .sk-table th,
+  .theme-dark .sk-table th {
+    background: rgba(255, 255, 255, 0.07) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .sk-table td {
+    padding: 6px 10px !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+    font-size: 12px !important;
+  }
+
+  [data-theme="dark"] .sk-table td,
+  .theme-dark .sk-table td {
+    border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+  }
+
+  .sk-table tr:last-child td {
+    border-bottom: none !important;
+  }
+
+  /* Sublabel below bot bubble */
+  .sk-msg-sublabel {
+    font-size: 11px !important;
+    color: #9ca3af !important;
+    margin-top: 4px !important;
+    padding-left: 6px !important;
+    font-weight: 500 !important;
+    user-select: none !important;
+  }
+
+  [data-theme="dark"] .sk-msg-sublabel,
+  .theme-dark .sk-msg-sublabel {
+    color: #71717a !important;
   }
 
   /* Suggestion Chips */
@@ -941,9 +986,9 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
   }
 
   .sk-tool-btn {
-    width: 24px;
-    height: 24px;
-    border-radius: 5px;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
     background: transparent;
     border: none;
     color: var(--sk-chat-placeholder);
@@ -952,6 +997,27 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
     justify-content: center;
     cursor: pointer;
     transition: all 0.15s ease;
+  }
+
+  .sk-tool-btn:hover {
+    color: var(--sk-chat-icon-hover-text);
+    background: var(--sk-chat-icon-hover-bg);
+  }
+
+  @keyframes skPulseRecording {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.18);
+    }
+  }
+
+  .sk-tool-btn.recording {
+    color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.12) !important;
+    border-radius: 50% !important;
+    animation: skPulseRecording 1.1s infinite ease-in-out;
   }
 
   .sk-tool-btn:hover {
@@ -1109,6 +1175,7 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
       const optionsBtn = document.getElementById('chat-options-btn');
       const optionsMenu = document.getElementById('chat-options-menu');
       const clearBtn = document.getElementById('opt-clear-chat');
+      const exportBtn = document.getElementById('opt-export-transcript');
       const messagesBox = document.getElementById('chat-messages-container');
       const textarea = document.getElementById('chat-textarea');
       const sendBtn = document.getElementById('chat-send-btn');
@@ -1120,9 +1187,6 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
       }
 
       // Toolbar Buttons
-      const attachBtn = document.getElementById('tool-attach-btn');
-      const emojiBtn = document.getElementById('tool-emoji-btn');
-      const gifBtn = document.getElementById('tool-gif-btn');
       const micBtn = document.getElementById('tool-mic-btn');
 
       // Extract system knowledge & model configuration
@@ -1199,10 +1263,6 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
               row.innerHTML = `
                 <div class="sk-bubble user">
                   <div class="sk-bubble-content">${escapeHtml(msg.content)}</div>
-                  <div class="sk-bubble-footer">
-                    <span class="sk-time-text">${msg.time || getFormattedTime()}</span>
-                    ${doubleTickSvg}
-                  </div>
                 </div>
               `;
               messagesBox.appendChild(row);
@@ -1212,10 +1272,8 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
               row.innerHTML = `
                 <div class="sk-bubble bot">
                   <div class="sk-bubble-content">${msg.html || formatMarkdown(msg.content)}</div>
-                  <div class="sk-bubble-footer">
-                    <span class="sk-time-text">${msg.time || getFormattedTime()}</span>
-                  </div>
                 </div>
+                <div class="sk-msg-sublabel">SK Agent &bull; ${msg.time || getFormattedTime()}</div>
               `;
               messagesBox.appendChild(row);
             }
@@ -1330,14 +1388,65 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
             <div class="sk-msg-row bot">
               <div class="sk-bubble bot">
                 <div class="sk-bubble-content">
-                  Chat cleared! How can I help you today with Sunil's experience, projects, or technical topics?
-                </div>
-                <div class="sk-bubble-footer">
-                  <span class="sk-time-text">${t}</span>
+                  Chat cleared! How can I help you today with Sunil's experience, projects, or technical questions?
                 </div>
               </div>
+              <div class="sk-msg-sublabel">SK Agent &bull; ${t}</div>
             </div>
           `;
+          if (optionsMenu) optionsMenu.classList.remove('show');
+        });
+      }
+
+      // Export Transcript
+      if (exportBtn) {
+        exportBtn.addEventListener('click', async () => {
+          try {
+            const savedMsgs = await loadMessagesFromDB();
+            let transcriptText = `# 💬 SK Agent — Conversation Transcript\n`;
+            transcriptText += `Date: ${new Date().toLocaleString()}\n`;
+            transcriptText += `Assistant: SK Agent (Sunil Khobragade's AI Assistant)\n`;
+            transcriptText += `Portfolio: https://sk-builds.vercel.app\n`;
+            transcriptText += `==================================================\n\n`;
+
+            if (savedMsgs && savedMsgs.length > 0) {
+              savedMsgs.forEach((msg) => {
+                const sender = msg.role === 'user' ? '👤 User' : '🤖 SK Agent';
+                const time = msg.time ? ` [${msg.time}]` : '';
+                transcriptText += `${sender}${time}:\n${msg.content}\n\n`;
+              });
+            } else {
+              const rows = messagesBox.querySelectorAll('.sk-msg-row');
+              rows.forEach((row) => {
+                const isUser = row.classList.contains('user');
+                const sender = isUser ? '👤 User' : '🤖 SK Agent';
+                const content = row.querySelector('.sk-bubble-content')?.innerText?.trim() || '';
+                if (content) {
+                  transcriptText += `${sender}:\n${content}\n\n`;
+                }
+              });
+            }
+
+            transcriptText += `==================================================\n`;
+            transcriptText += `Connect with Sunil Khobragade:\n`;
+            transcriptText += `• Email: sunilkhobragade@proton.me\n`;
+            transcriptText += `• Phone: +91 74989 50562\n`;
+            transcriptText += `• Book Consultation: https://sk-builds.vercel.app/tools/appointment\n`;
+            transcriptText += `• GitHub: https://github.com/naman-mahi\n`;
+
+            const blob = new Blob([transcriptText], { type: 'text/markdown;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const dateStr = new Date().toISOString().slice(0, 10);
+            a.href = url;
+            a.download = `sk_agent_transcript_${dateStr}.md`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          } catch (err) {
+            console.error('Failed to export transcript:', err);
+          }
           if (optionsMenu) optionsMenu.classList.remove('show');
         });
       }
@@ -1381,80 +1490,87 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
         });
       }
 
-      // Toolbar Buttons Actions
-      if (attachBtn) {
-        attachBtn.addEventListener('click', () => {
-          const q = "Can you summarize Sunil's profile?";
-          appendUserMessage(q);
-          saveMessageToDB('user', q, "", getFormattedTime());
-          generateSmartResponse("resume summary");
-        });
-      }
+      // Voice Input (Web Speech API) with Live Real-Time Transcription
+      if (micBtn) {
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+          const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+          const recognition = new SpeechRec();
+          recognition.continuous = true;
+          recognition.interimResults = true;
+          recognition.lang = 'en-US';
+          let isRecording = false;
+          let finalTranscript = '';
 
-      if (emojiBtn) {
-        emojiBtn.addEventListener('click', () => {
-          textarea.value += "👋 ";
-          textarea.dispatchEvent(new Event('input'));
-          textarea.focus();
-        });
-      }
+          recognition.onstart = () => {
+            isRecording = true;
+            micBtn.classList.add('recording');
+            textarea.setAttribute('placeholder', 'Listening... speak now');
+            finalTranscript = textarea.value;
+          };
 
-      if (gifBtn) {
-        gifBtn.addEventListener('click', () => {
-          const q = "Show me Sunil's featured projects.";
-          appendUserMessage(q);
-          saveMessageToDB('user', q, "", getFormattedTime());
-          generateSmartResponse("projects");
-        });
-      }
+          recognition.onresult = (event) => {
+            let interimTranscript = '';
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+              if (event.results[i].isFinal) {
+                finalTranscript += (finalTranscript ? ' ' : '') + event.results[i][0].transcript.trim();
+              } else {
+                interimTranscript += event.results[i][0].transcript;
+              }
+            }
+            // Update textarea live as the user speaks!
+            const currentText = (finalTranscript + (interimTranscript ? ' ' + interimTranscript : '')).trim();
+            textarea.value = currentText;
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 90) + 'px';
 
-      // Voice Input (Web Speech API)
-      if (micBtn && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new SpeechRec();
-        recognition.continuous = false;
-        recognition.interimResults = false;
-        recognition.lang = 'en-US';
+            if (currentText.length > 0) {
+              sendBtn.classList.add('active');
+              sendBtn.removeAttribute('disabled');
+            }
+          };
 
-        recognition.onstart = () => {
-          micBtn.style.color = '#ef4444';
-          textarea.setAttribute('placeholder', 'Listening...');
-        };
+          recognition.onerror = (e) => {
+            console.warn('Speech recognition error:', e);
+            isRecording = false;
+            micBtn.classList.remove('recording');
+            textarea.setAttribute('placeholder', 'Message...');
+          };
 
-        recognition.onresult = (event) => {
-          const transcript = event.results[0][0].transcript;
-          textarea.value = transcript;
-          textarea.dispatchEvent(new Event('input'));
-          handleSendMessage();
-        };
+          recognition.onend = () => {
+            isRecording = false;
+            micBtn.classList.remove('recording');
+            textarea.setAttribute('placeholder', 'Message...');
+            if (textarea.value.trim().length > 0) {
+              sendBtn.classList.add('active');
+              sendBtn.removeAttribute('disabled');
+            }
+          };
 
-        recognition.onerror = () => {
-          micBtn.style.color = '';
-          textarea.setAttribute('placeholder', 'Message...');
-        };
-
-        recognition.onend = () => {
-          micBtn.style.color = '';
-          textarea.setAttribute('placeholder', 'Message...');
-        };
-
-        micBtn.addEventListener('click', () => {
-          recognition.start();
-        });
+          micBtn.addEventListener('click', () => {
+            if (isRecording) {
+              recognition.stop();
+            } else {
+              try {
+                recognition.start();
+              } catch (err) {
+                console.warn('Speech recognition start failed:', err);
+              }
+            }
+          });
+        } else {
+          micBtn.addEventListener('click', () => {
+            alert('Voice input is not supported in this browser. Please try Chrome, Edge, or Safari.');
+          });
+        }
       }
 
       // Message UI Elements
       function appendUserMessage(text) {
-        const timeStr = getFormattedTime();
         const row = document.createElement('div');
         row.className = 'sk-msg-row user';
         row.innerHTML = `
           <div class="sk-bubble user">
             <div class="sk-bubble-content">${escapeHtml(text)}</div>
-            <div class="sk-bubble-footer">
-              <span class="sk-time-text">${timeStr}</span>
-              ${doubleTickSvg}
-            </div>
           </div>
         `;
         messagesBox.appendChild(row);
@@ -1473,13 +1589,13 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
         contentDiv.className = 'sk-bubble-content';
         contentDiv.innerHTML = '';
         
-        const footerDiv = document.createElement('div');
-        footerDiv.className = 'sk-bubble-footer';
-        footerDiv.innerHTML = `<span class="sk-time-text">${timeStr}</span>`;
+        const subLabel = document.createElement('div');
+        subLabel.className = 'sk-msg-sublabel';
+        subLabel.innerHTML = `SK Agent &bull; ${timeStr}`;
 
         bubble.appendChild(contentDiv);
-        bubble.appendChild(footerDiv);
         row.appendChild(bubble);
+        row.appendChild(subLabel);
         messagesBox.appendChild(row);
 
         scrollToBottom();
@@ -1493,10 +1609,8 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
         row.innerHTML = `
           <div class="sk-bubble bot">
             <div class="sk-bubble-content">${html}</div>
-            <div class="sk-bubble-footer">
-              <span class="sk-time-text">${timeStr}</span>
-            </div>
           </div>
+          <div class="sk-msg-sublabel">SK Agent &bull; ${timeStr}</div>
         `;
         messagesBox.appendChild(row);
         scrollToBottom();
@@ -1549,17 +1663,52 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
         // 5. Inline Code
         clean = clean.replace(/`([^`]+)`/g, '<code>$1</code>');
 
-        // 6. Bold & Italic
+        // 6. Markdown Tables
+        clean = clean.replace(/((?:^|\n)\|[^\n]+\|(?:\r?\n\|[^\n]+\|)+)/g, (match) => {
+          const lines = match.trim().split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+          if (lines.length < 2) return match;
+
+          const isSeparator = (line) => /^\|(?:\s*:?-+:?\s*\|)+$/.test(line);
+          let html = '<div class="sk-table-wrap"><table class="sk-table">';
+          let startIndex = 0;
+
+          if (isSeparator(lines[1])) {
+            const headers = lines[0].split('|').slice(1, -1).map(h => h.trim());
+            html += '<thead><tr>';
+            headers.forEach(h => {
+              html += `<th>${h}</th>`;
+            });
+            html += '</tr></thead>';
+            startIndex = 2;
+          }
+
+          html += '<tbody>';
+          for (let i = startIndex; i < lines.length; i++) {
+            if (isSeparator(lines[i])) continue;
+            const cells = lines[i].split('|').slice(1, -1).map(c => c.trim());
+            if (cells.length > 0) {
+              html += '<tr>';
+              cells.forEach(c => {
+                html += `<td>${c}</td>`;
+              });
+              html += '</tr>';
+            }
+          }
+          html += '</tbody></table></div>';
+          return '\n' + html + '\n';
+        });
+
+        // 7. Bold & Italic
         clean = clean.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
         clean = clean.replace(/\*(.*?)\*/g, '<em>$1</em>');
 
-        // 7. Markdown Links: [Text](URL)
+        // 8. Markdown Links: [Text](URL)
         clean = clean.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
 
-        // 8. Bullet points
+        // 9. Bullet points
         clean = clean.replace(/^[-*]\s+(.+)$/gm, '• $1');
 
-        // 9. Line breaks
+        // 10. Line breaks (preserve html tags cleanly)
         clean = clean.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
 
         return clean;
@@ -1614,9 +1763,12 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
                 },
                 body: JSON.stringify({
                   model: modelName,
-                  messages: messages,
-                  temperature: 0.5,
-                  max_tokens: 350,
+                  messages: [
+                    ...messages,
+                    { role: 'system', content: 'You are exclusively the AI assistant for Sunil Khobragade and his portfolio. You must ONLY answer questions directly related to Sunil Khobragade, his technical skills, work experience, projects, education, and hiring availability. If the user asks general, off-topic, or unrelated questions, politely decline and guide them back to Sunil\'s portfolio. Answer completely what was asked—neither too short nor too long. Give exactly as much as was requested.' }
+                  ],
+                  temperature: 0.35,
+                  max_tokens: 450,
                   stream: true
                 })
               });
@@ -1678,34 +1830,35 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
         const q = query.toLowerCase();
         let reply = "";
 
-        if (q.includes('python') || q.includes('code') || q.includes('script') || q.includes('example')) {
-          reply = `Here is a clean Python example:<br><pre><code>def greet(name: str) -> str:
-    return f"Hello, {name}! Welcome to SK Builds."
-
-print(greet("Engineer"))</code></pre>Let me know if you need code for FastAPI, Node.js, AI Agents, or RAG pipelines!`;
-        } else if (q.includes('skill') || q.includes('stack') || q.includes('technolog') || q.includes('ai agent') || q.includes('rag')) {
+        if (q.includes('skill') || q.includes('stack') || q.includes('technolog') || q.includes('ai agent') || q.includes('rag')) {
           reply = `• <strong>AI &amp; GenAI:</strong> AI Agents (LangGraph, CrewAI), RAG pipelines, Vector DBs (pgvector, Pinecone).<br>
-          • <strong>Full-Stack:</strong> Node.js, Python (FastAPI), React 19, Next.js, Laravel.<br>
-          • <strong>Cloud &amp; DevOps:</strong> Docker, Kubernetes, AWS, CI/CD pipelines.`;
-        } else if (q.includes('project') || q.includes('portfolio') || q.includes('work done') || q.includes('build')) {
+• <strong>Full-Stack:</strong> Node.js, Python (FastAPI), React 19, Next.js, Laravel.<br>
+• <strong>Cloud &amp; DevOps:</strong> Docker, Kubernetes, AWS, CI/CD automation.<br><br>
+See full stack on <a href="/tech-stack">Tech Stack &rarr;</a>`;
+        } else if (q.includes('project') || q.includes('portfolio') || q.includes('work done') || q.includes('pulse') || q.includes('lms') || q.includes('booking') || q.includes('e-commerce')) {
           reply = `• <a href="/projects/pulse-chat"><strong>Pulse Chat</strong></a>: AI customer support with real-time WebSockets.<br>
-          • <a href="/projects/ai-enabled-lms"><strong>AI LMS</strong></a>: Live education workflows with Vertex AI.<br>
-          • <a href="/projects/e-commerce-platform"><strong>E-Commerce</strong></a>: Multi-gateway payments (Stripe/Razorpay).<br>
-          • <a href="/projects/real-time-appointment-booking"><strong>Booking System</strong></a>: Concurrency-safe Redis locking.<br><br>
-          Explore all on <a href="/projects">Projects &rarr;</a>`;
-        } else if (q.includes('experience') || q.includes('career') || q.includes('intencode') || q.includes('job')) {
+• <a href="/projects/ai-enabled-lms"><strong>AI-Enabled LMS</strong></a>: Educational platform with Vertex AI.<br>
+• <a href="/projects/e-commerce-platform"><strong>E-Commerce Platform</strong></a>: Multi-gateway payments (Stripe/Razorpay).<br>
+• <a href="/projects/real-time-appointment-booking"><strong>Appointment Booking</strong></a>: Concurrency-safe Redis locking.<br><br>
+Explore all on <a href="/projects">Projects &rarr;</a>`;
+        } else if (q.includes('experience') || q.includes('career') || q.includes('intencode') || q.includes('job') || q.includes('company')) {
           reply = `• <strong>Intencode India</strong> (2022–Present): Full-Stack Dev leading microservices and CI/CD.<br>
-          • <strong>Freelance Solutions Architect</strong> (2020–2022): Delivered 15+ production web applications.<br>
-          • <strong>IBM India Intern</strong> (2021–2022): Modernized internal tools with Node &amp; Angular.<br><br>
-          Full timeline on <a href="/work">Work Experience &rarr;</a>`;
-        } else if (q.includes('contact') || q.includes('hire') || q.includes('email') || q.includes('phone') || q.includes('book') || q.includes('call')) {
+• <strong>Freelance Solutions Architect</strong> (2020–2022): Built 15+ enterprise web platforms.<br>
+• <strong>IBM India Intern</strong> (2021–2022): Enhanced internal tools with Node &amp; Angular.<br><br>
+Full career details on <a href="/work">Work Experience &rarr;</a>`;
+        } else if (q.includes('contact') || q.includes('hire') || q.includes('email') || q.includes('phone') || q.includes('book') || q.includes('call') || q.includes('rate') || q.includes('cost')) {
           reply = `• <strong>Email:</strong> <a href="mailto:sunilkhobragade@proton.me">sunilkhobragade@proton.me</a><br>
-          • <strong>Phone:</strong> <a href="tel:+917498950562">+91 74989 50562</a><br>
-          • <strong>1:1 Consultation:</strong> <a href="/tools/appointment">Book on Google Calendar &rarr;</a><br>
-          • <strong>Project Cost:</strong> <a href="/tools/estimator">Use Project Estimator &rarr;</a>`;
+• <strong>Phone:</strong> <a href="tel:+917498950562">+91 74989 50562</a><br>
+• <strong>1:1 Consultation:</strong> <a href="/tools/appointment">Book on Google Calendar &rarr;</a><br>
+• <strong>Project Estimator:</strong> <a href="/tools/estimator">Estimate Project Cost &rarr;</a>`;
+        } else if (q.includes('education') || q.includes('degree') || q.includes('certif') || q.includes('college')) {
+          reply = `• <strong>M.Sc. Information Security</strong> (2025–Present) | IGNOU<br>
+• <strong>PG Diploma Information Security</strong> (2024–2025) | IGNOU<br>
+• <strong>Adv. Diploma IT &amp; Cloud</strong> (2019–2022) | NSTI Hyderabad (IBM)<br>
+• <strong>B.Com</strong> (2019–2022) | YCMOU`;
         } else {
-          reply = `Sunil Khobragade is a <strong>Senior Full-Stack Developer &amp; AI Architect</strong> (6+ yrs exp) specializing in AI Agents, RAG, Node.js, Python, and React.<br><br>
-          Ask about his <a href="/projects">Projects</a>, <a href="/work">Experience</a>, or request any code snippet!`;
+          reply = `I am specifically designed to answer questions about <strong>Sunil Khobragade</strong> and his portfolio.<br><br>
+Feel free to ask about Sunil's <a href="/projects">Projects</a>, <a href="/tech-stack">Tech Stack</a>, <a href="/work">Work Experience</a>, or <a href="/tools/appointment">Hiring / 1:1 Consultation</a>!`;
         }
 
         messages.push({ role: 'assistant', content: reply });
