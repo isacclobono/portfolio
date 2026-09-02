@@ -8,6 +8,27 @@ const year = new Date().getFullYear();
 <footer class="site-footer">
   <div class="footer-brand">
     &copy; {year} | {SITE.AUTHOR}
+    <span class="footer-divider">&bull;</span>
+    <a href="/privacy" class="footer-legal-link">Privacy Policy</a>
+    <span class="footer-divider">&bull;</span>
+    <a href="/terms" class="footer-legal-link">Terms</a>
   </div>
   <ThemeToggle />
 </footer>
+
+<style>
+  .footer-divider {
+    margin: 0 0.35rem;
+    opacity: 0.4;
+  }
+  .footer-legal-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: color 0.15s ease;
+  }
+  .footer-legal-link:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
+  }
+</style>

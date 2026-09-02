@@ -36,7 +36,7 @@ function getSiteUrl() {
     }
   }
 
-  return 'https://sk-builds.vercel.app';
+  return 'https://sunilkhobragade.pages.dev';
 }
 
 // https://astro.build/config

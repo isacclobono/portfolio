@@ -3,7 +3,7 @@ export const SITE = {
   DESCRIPTION: "SK Builds builds fast, high-concurrency web platforms, autonomous AI agents, RAG systems, and cloud architectures by Sunil Khobragade, Senior Full-Stack Developer & AI Solutions Architect.",
   AUTHOR: "Sunil Khobragade",
   BRAND: "SK Builds",
-  URL: "https://sk-builds.vercel.app",
+  URL: "https://sunilkhobragade.pages.dev",
   ROLE: "Senior Full-Stack Developer, AI Architect & Cloud Specialist",
   LOCATION: "Hyderabad, India",
   EMAIL: "sunilkhobragade@proton.me",

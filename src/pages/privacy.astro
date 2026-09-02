@@ -1,0 +1,298 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import Button from '../components/Button.astro';
+import { SITE } from '../data/site';
+
+const lastUpdated = "September 3, 2026";
+---
+
+<Layout 
+  title="Privacy Policy | SK Builds" 
+  description="Privacy Policy and Google API User Data Policy compliance for Sunil Khobragade's portfolio, AI assistant, and engineering consulting suite." 
+  currentPath="/privacy"
+>
+  <Breadcrumb items={[
+    { label: 'Privacy Policy' }
+  ]} />
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <Button href="/" variant="back" size="sm">
+      Back to home
+    </Button>
+  </div>
+
+  <article class="legal-page">
+    <header class="legal-header">
+      <div class="legal-badge">Official Legal Document</div>
+      <h1 class="legal-title">Privacy Policy</h1>
+      <p class="legal-subtitle">Last updated: {lastUpdated} &bull; Effective immediately</p>
+    </header>
+
+    <div class="legal-content">
+      <!-- 1. Introduction -->
+      <section class="legal-section">
+        <h2>1. Introduction &amp; Ownership</h2>
+        <p>
+          Welcome to <strong>SK Builds</strong>, the official software engineering portfolio, client tools suite, and consulting website operated by <strong>Sunil Khobragade</strong> ("we", "our", or "us"), accessible at <a href="https://sunilkhobragade.pages.dev">https://sunilkhobragade.pages.dev</a>.
+        </p>
+        <p>
+          We are committed to full transparency and privacy by design. This Privacy Policy outlines what information we collect, how it is handled, and your rights when using our website, AI assistant, developer tools, and consultation services.
+        </p>
+      </section>
+
+      <!-- 2. Google API Compliance -->
+      <section class="legal-section">
+        <h2>2. Google API Services User Data Policy Compliance</h2>
+        <p>
+          Our application integrates with Google Calendar and Google Meet to allow visitors to schedule 1:1 technical discovery and architecture consultation meetings.
+        </p>
+        
+        <div class="legal-callout">
+          <div class="callout-icon">🛡️</div>
+          <div class="callout-body">
+            <strong>Google API Services User Data Policy Disclosure:</strong>
+            <p>
+              SK Builds' use and transfer to any other app of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer">Google API Services User Data Policy</a>, including the Limited Use requirements.
+            </p>
+          </div>
+        </div>
+
+        <ul class="styled-list">
+          <li><strong>Data Accessed:</strong> When scheduling a consultation via <code>/tools/appointment</code>, we only construct calendar event parameters (event title, start/end timestamps, attendee email, and Google Meet room details) strictly to confirm your requested appointment.</li>
+          <li><strong>Zero Storage of Private Google Credentials:</strong> We never harvest, log, or store your Google account passwords, tokens, or private calendar events on our backend servers.</li>
+          <li><strong>No Selling or Monetization:</strong> We do not sell, rent, or transfer your Google user data to third parties, advertising networks, data brokers, or external AI model training datasets.</li>
+        </ul>
+      </section>
+
+      <!-- 3. Information We Collect -->
+      <section class="legal-section">
+        <h2>3. Information We Collect &amp; Process</h2>
+        
+        <div class="info-grid">
+          <div class="info-card">
+            <h3>📅 Consultation Booking</h3>
+            <p>
+              When you book a meeting via <code>/tools/appointment</code>, you provide your name, email address, and meeting notes. This data is used solely to facilitate the consultation and calendar invite.
+            </p>
+          </div>
+
+          <div class="info-card">
+            <h3>🤖 AI Assistant (SK Agent)</h3>
+            <p>
+              Chat messages exchanged with the <em>SK Agent</em> are processed in real-time via Groq LPU and stored locally in your browser's <strong>IndexedDB</strong> (<code>SK_Portfolio_ChatDB</code>). You can clear this anytime.
+            </p>
+          </div>
+
+          <div class="info-card">
+            <h3>🛠️ In-Browser Developer Tools</h3>
+            <p>
+              Utilities like the Project Estimator, JWT Decoder, SQL Formatter, and Cron Generator execute <strong>100% client-side</strong> inside your browser. No tokens, SQL queries, or payloads leave your machine.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Cookies and Local Storage -->
+      <section class="legal-section">
+        <h2>4. Browser Storage &amp; Cookie Usage</h2>
+        <p>
+          We avoid tracking cookies and marketing analytics pixels. We use minimal browser storage strictly for application state:
+        </p>
+        <ul class="styled-list">
+          <li><code>theme</code> in localStorage: Remembers your preferred Dark/Light theme mode.</li>
+          <li><code>sk_chat_w</code> &amp; <code>sk_chat_h</code>: Remembers your custom resized chatbot window dimensions.</li>
+          <li><code>SK_Portfolio_ChatDB</code> in IndexedDB: Saves your chatbot conversation history locally in your own browser.</li>
+        </ul>
+      </section>
+
+      <!-- 5. Data Security -->
+      <section class="legal-section">
+        <h2>5. Data Protection &amp; Security Standards</h2>
+        <p>
+          We employ robust security practices including HTTPS/TLS 1.3 encryption for all data in transit, strict Content Security Policies (CSP), and zero persistent server-side storage of personal credentials.
+        </p>
+      </section>
+
+      <!-- 6. Your Rights -->
+      <section class="legal-section">
+        <h2>6. Your Privacy Rights (GDPR / CCPA / DPDP)</h2>
+        <p>
+          Depending on your jurisdiction, you have rights to access, correct, or request deletion of any personal consultation data. You may exercise these rights by reaching out directly to the contact details below.
+        </p>
+      </section>
+
+      <!-- 7. Contact Info -->
+      <section class="legal-section contact-box">
+        <h2>7. Contact Sunil Khobragade</h2>
+        <p>For any privacy inquiries, data requests, or consultation questions:</p>
+        <div class="contact-details">
+          <div><strong>Primary Email:</strong> <a href="mailto:skhobragade993@gmail.com">skhobragade993@gmail.com</a></div>
+          <div><strong>Alternative Email:</strong> <a href="mailto:sunilkhobragade@proton.me">sunilkhobragade@proton.me</a></div>
+          <div><strong>Phone / WhatsApp:</strong> <a href="tel:+917498950562">+91 74989 50562</a></div>
+          <div><strong>Location:</strong> Hyderabad, India</div>
+          <div><strong>Website:</strong> <a href="https://sunilkhobragade.pages.dev">https://sunilkhobragade.pages.dev</a></div>
+        </div>
+      </section>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .legal-page {
+    max-width: 800px;
+    margin: 0 auto 4rem auto;
+  }
+
+  .legal-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .legal-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: rgba(59, 130, 246, 0.12);
+    color: #3b82f6;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    margin-bottom: 0.75rem;
+  }
+
+  .legal-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .legal-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .legal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.25rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: 0.95rem;
+  }
+
+  .legal-section h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.75rem 0;
+  }
+
+  .legal-section p {
+    margin: 0 0 0.75rem 0;
+  }
+
+  .styled-list {
+    margin: 0.5rem 0 1rem 0;
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .styled-list li strong {
+    color: var(--text-primary);
+  }
+
+  .legal-content a {
+    color: var(--accent-primary, #3b82f6);
+    text-decoration: underline;
+    font-weight: 500;
+  }
+
+  .legal-content code {
+    background: var(--bg-secondary);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.3rem;
+    font-size: 0.85em;
+    font-family: var(--font-mono, monospace);
+  }
+
+  .legal-callout {
+    display: flex;
+    gap: 1rem;
+    background: var(--bg-secondary);
+    border-left: 4px solid #3b82f6;
+    padding: 1.2rem;
+    border-radius: 0.5rem;
+    margin: 1.25rem 0;
+  }
+
+  .callout-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .callout-body strong {
+    color: var(--text-primary);
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+
+  .callout-body p {
+    margin: 0;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .info-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.2rem;
+  }
+
+  .info-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .info-card p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  .contact-box {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+  }
+
+  .contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .contact-details strong {
+    color: var(--text-primary);
+  }
+</style>

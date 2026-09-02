@@ -1,0 +1,243 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import Button from '../components/Button.astro';
+import { SITE } from '../data/site';
+
+const lastUpdated = "September 3, 2026";
+---
+
+<Layout 
+  title="Terms of Service | SK Builds" 
+  description="Terms of Service and conditions of use for Sunil Khobragade's engineering portfolio, developer utilities, and consulting services." 
+  currentPath="/terms"
+>
+  <Breadcrumb items={[
+    { label: 'Terms of Service' }
+  ]} />
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <Button href="/" variant="back" size="sm">
+      Back to home
+    </Button>
+  </div>
+
+  <article class="legal-page">
+    <header class="legal-header">
+      <div class="legal-badge">Official Terms of Service</div>
+      <h1 class="legal-title">Terms of Service</h1>
+      <p class="legal-subtitle">Last updated: {lastUpdated} &bull; Effective immediately</p>
+    </header>
+
+    <div class="legal-content">
+      <!-- 1. Agreement -->
+      <section class="legal-section">
+        <h2>1. Agreement to Terms</h2>
+        <p>
+          By accessing or utilizing <strong>SK Builds</strong> (<a href="https://sunilkhobragade.pages.dev">https://sunilkhobragade.pages.dev</a>), you agree to be bound by these Terms of Service. If you do not agree to all terms and conditions stated herein, please do not use our website, tools, or consultation booking platform.
+        </p>
+      </section>
+
+      <!-- 2. Services & Consultations -->
+      <section class="legal-section">
+        <h2>2. Engineering Consultations &amp; Discovery Calls</h2>
+        <p>
+          We provide 1:1 technical discovery and software architecture consultations with <strong>Sunil Khobragade</strong> through our appointment booking system (<code>/tools/appointment</code>).
+        </p>
+        <ul class="styled-list">
+          <li><strong>Purpose of Calls:</strong> Consultations are intended for evaluating technical feasibility, reviewing system architecture, discussing tech stacks (Node.js, Python, React, PostgreSQL, AI Agents), and exploring prospective contract or freelance engineering work.</li>
+          <li><strong>Scheduling &amp; Rescheduling:</strong> While we make every effort to honor confirmed slots, we reserve the right to reschedule or cancel meetings with reasonable prior notice in case of emergency conflicts.</li>
+          <li><strong>No Attorney-Client or Guaranteed Outcome:</strong> Technical discussions represent professional software engineering guidance and do not replace legal, accounting, or formal regulatory audits.</li>
+        </ul>
+      </section>
+
+      <!-- 3. Tools & AI Assistant -->
+      <section class="legal-section">
+        <h2>3. Developer Utilities &amp; AI Copilot (SK Agent)</h2>
+        <div class="info-grid">
+          <div class="info-card">
+            <h3>🤖 AI Assistant Guidance</h3>
+            <p>
+              The <em>SK Agent</em> assistant provides AI-generated responses based on verified technical expertise. Users must exercise their own professional engineering judgment before deploying generated code to production systems.
+            </p>
+          </div>
+
+          <div class="info-card">
+            <h3>📊 Project Estimator</h3>
+            <p>
+              Cost, timeline, and architectural estimates generated on <code>/tools/estimator</code> are non-binding discovery approximations until a formalized Statement of Work (SOW) is signed.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Intellectual Property -->
+      <section class="legal-section">
+        <h2>4. Intellectual Property &amp; Open Source</h2>
+        <p>
+          All original written blog articles, case studies, architectural diagrams, and website design on SK Builds are the intellectual property of Sunil Khobragade.
+        </p>
+        <p>
+          Open-source software projects and code samples linked via GitHub (<a href="https://github.com/naman-mahi" target="_blank" rel="noopener noreferrer">@naman-mahi</a>) are licensed under their respective open-source licenses (MIT or Apache 2.0).
+        </p>
+      </section>
+
+      <!-- 5. Acceptable Use -->
+      <section class="legal-section">
+        <h2>5. Acceptable Use Policy</h2>
+        <p>You agree not to:</p>
+        <ul class="styled-list">
+          <li>Attempt to disrupt, reverse-engineer, exploit, or launch denial-of-service (DoS) attacks against the website infrastructure.</li>
+          <li>Scrape or harvest personal contact information for automated unsolicited commercial communications (spam).</li>
+          <li>Abuse or overload the AI assistant with malicious prompt injection attacks.</li>
+        </ul>
+      </section>
+
+      <!-- 6. Contact Information -->
+      <section class="legal-section contact-box">
+        <h2>6. Inquiries &amp; Contract Engagements</h2>
+        <p>For questions regarding these Terms or to initiate a contract engineering discussion:</p>
+        <div class="contact-details">
+          <div><strong>Primary Email:</strong> <a href="mailto:skhobragade993@gmail.com">skhobragade993@gmail.com</a></div>
+          <div><strong>Alternative Email:</strong> <a href="mailto:sunilkhobragade@proton.me">sunilkhobragade@proton.me</a></div>
+          <div><strong>Phone:</strong> <a href="tel:+917498950562">+91 74989 50562</a></div>
+          <div><strong>Website:</strong> <a href="https://sunilkhobragade.pages.dev">https://sunilkhobragade.pages.dev</a></div>
+        </div>
+      </section>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .legal-page {
+    max-width: 800px;
+    margin: 0 auto 4rem auto;
+  }
+
+  .legal-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .legal-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: rgba(59, 130, 246, 0.12);
+    color: #3b82f6;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    margin-bottom: 0.75rem;
+  }
+
+  .legal-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .legal-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .legal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.25rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: 0.95rem;
+  }
+
+  .legal-section h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.75rem 0;
+  }
+
+  .legal-section p {
+    margin: 0 0 0.75rem 0;
+  }
+
+  .styled-list {
+    margin: 0.5rem 0 1rem 0;
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .styled-list li strong {
+    color: var(--text-primary);
+  }
+
+  .legal-content a {
+    color: var(--accent-primary, #3b82f6);
+    text-decoration: underline;
+    font-weight: 500;
+  }
+
+  .legal-content code {
+    background: var(--bg-secondary);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.3rem;
+    font-size: 0.85em;
+    font-family: var(--font-mono, monospace);
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .info-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.2rem;
+  }
+
+  .info-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .info-card p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  .contact-box {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+  }
+
+  .contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .contact-details strong {
+    color: var(--text-primary);
+  }
+</style>

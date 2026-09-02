@@ -3,11 +3,14 @@ import Layout from '../../layouts/Layout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import Button from '../../components/Button.astro';
 import { SITE } from '../../data/site';
+
+const googleClientId = import.meta.env.PUBLIC_GOOGLE_CLIENT_ID || '';
+const googleApiKey = import.meta.env.PUBLIC_GOOGLE_CALENDAR_API_KEY || '';
 ---
 
 <Layout 
-  title="Book 1:1 Consultation | Google Calendar" 
-  description="Schedule a direct 1:1 architecture discovery or technical consultation call with Sunil Khobragade connected with Google Calendar." 
+  title="Book 1:1 Consultation | Google Calendar API" 
+  description="Schedule a direct 1:1 architecture discovery or technical consultation call with Sunil Khobragade connected with Google Calendar & Google Meet." 
   currentPath="/tools/appointment"
 >
   <Breadcrumb items={[
@@ -22,8 +25,8 @@ import { SITE } from '../../data/site';
   </div>
 
   <!-- Perfectly Balanced 2-Column Booking Widget (Form on Left, Calendar on Right) -->
-  <div class="cal-booking-card">
-    <!-- COLUMN 1 (LEFT): Meeting Overview & Booking Form in Empty Space -->
+  <div class="cal-booking-card" id="cal-booking-container" data-google-client-id={googleClientId} data-google-api-key={googleApiKey}>
+    <!-- COLUMN 1 (LEFT): Meeting Overview & Booking Form in Left Space -->
     <div class="cal-col-info">
       <div class="cal-author-badge">
         <span class="cal-avatar">SK</span>
@@ -36,7 +39,7 @@ import { SITE } from '../../data/site';
         <li>Understand your product roadmap, scope, and technical bottlenecks.</li>
         <li>Review recommended tech stack (Node.js, Next.js, Postgres, Redis, AWS).</li>
         <li>Outline architectural roadmap, delivery timeline, and estimate.</li>
-        <li>Answer technical questions regarding microservices or database scaling.</li>
+        <li>Answer technical questions regarding microservices, AI agents, or scaling.</li>
       </ul>
 
       <div class="cal-meta-list">
@@ -45,7 +48,7 @@ import { SITE } from '../../data/site';
             <circle cx="12" cy="12" r="10"/>
             <polyline points="12 6 12 12 16 14"/>
           </svg>
-          <span>30m &bull; Google Meet video call</span>
+          <span>30m &bull; Google Meet video conferencing</span>
         </div>
         <div class="cal-meta-item">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -53,7 +56,7 @@ import { SITE } from '../../data/site';
             <line x1="2" x2="22" y1="12" y2="12"/>
             <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"/>
           </svg>
-          <span>Asia/Calcutta (IST)</span>
+          <span>Asia/Calcutta (IST) &bull; Auto-converts to your local timezone</span>
         </div>
       </div>
 
@@ -61,52 +64,61 @@ import { SITE } from '../../data/site';
       <div class="cal-confirm-panel" id="cal-confirm-panel">
         <div class="confirm-slot-badge">
           <span>Selected Slot:</span>
-          <strong id="confirm-slot-time">Wed, Aug 12 at 11:00 AM</strong>
+          <strong id="confirm-slot-time">Loading slot...</strong>
         </div>
 
-        <div class="confirm-inputs-grid">
-          <input 
-            type="text" 
-            id="cal-client-name" 
-            placeholder="Your Name *" 
-            class="cal-input-field" 
-            required 
-          />
-          <input 
-            type="email" 
-            id="cal-client-email" 
-            placeholder="Your Email *" 
-            class="cal-input-field" 
-            required 
-          />
-        </div>
+        <form id="appointment-form" onsubmit="return false;">
+          <div class="confirm-inputs-grid">
+            <input 
+              type="text" 
+              id="cal-client-name" 
+              placeholder="Your Full Name *" 
+              class="cal-input-field" 
+              required 
+            />
+            <input 
+              type="email" 
+              id="cal-client-email" 
+              placeholder="Your Email Address *" 
+              class="cal-input-field" 
+              required 
+            />
+          </div>
 
-        <textarea 
-          id="cal-client-notes" 
-          placeholder="Briefly describe what you'd like to discuss (e.g. SaaS MVP architecture, PostgreSQL scaling)..." 
-          rows="2" 
-          class="cal-input-field"
-        ></textarea>
+          <textarea 
+            id="cal-client-notes" 
+            placeholder="Briefly describe what you'd like to discuss (e.g. AI Agent architecture, PostgreSQL scaling, SaaS MVP)..." 
+            rows="2" 
+            class="cal-input-field"
+          ></textarea>
 
-        <div class="confirm-actions-row">
-          <a id="cal-google-meet-btn" href="#" target="_blank" rel="noopener noreferrer" class="action-btn btn-primary btn-compact" style="flex: 1; justify-content: center;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
-              <line x1="16" x2="16" y1="2" y2="6"/>
-              <line x1="8" x2="8" y1="2" y2="6"/>
-              <line x1="3" x2="21" y1="10" y2="10"/>
-            </svg>
-            Confirm on Google Calendar
-          </a>
-          <button type="button" id="cal-ics-btn" class="action-btn btn-secondary btn-compact">
-            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="7 10 12 15 17 10"/>
-              <line x1="12" x2="12" y1="15" y2="3"/>
-            </svg>
-            .ICS
-          </button>
-        </div>
+          <div class="confirm-actions-row">
+            <!-- Primary Google Calendar Sync Button -->
+            <a id="cal-google-meet-btn" href="#" target="_blank" rel="noopener noreferrer" class="action-btn btn-primary btn-compact" style="flex: 1; justify-content: center;">
+              <!-- Google Calendar Colored Icon -->
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="18" height="18" x="3" y="4" rx="3" fill="#ffffff" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M16 2V6M8 2V6M3 10H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <rect x="7" y="13" width="3" height="3" rx="0.5" fill="#3b82f6"/>
+                <rect x="14" y="13" width="3" height="3" rx="0.5" fill="#10b981"/>
+              </svg>
+              Confirm on Google Calendar
+            </a>
+
+            <!-- Offline .ICS Calendar File Download -->
+            <button type="button" id="cal-ics-btn" class="action-btn btn-secondary btn-compact" title="Download .ICS Calendar file">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              .ICS
+            </button>
+          </div>
+        </form>
+
+        <!-- Dynamic Booking Status Feedback -->
+        <div id="booking-status-box" class="booking-status-box" style="display: none;"></div>
       </div>
     </div>
 
@@ -115,7 +127,7 @@ import { SITE } from '../../data/site';
       <!-- Calendar Picker -->
       <div class="cal-picker-section">
         <div class="cal-header">
-          <div class="cal-month-title" id="cal-month-display">August 2026</div>
+          <div class="cal-month-title" id="cal-month-display">Month Year</div>
           <div class="cal-nav-buttons">
             <button type="button" id="prev-month-btn" class="cal-nav-btn" aria-label="Previous Month">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -149,8 +161,8 @@ import { SITE } from '../../data/site';
       <div class="cal-slots-section-below">
         <div class="cal-slots-header">
           <div class="cal-selected-day-label">
-            <span>Available: </span>
-            <strong id="slots-selected-day">Wed 12</strong>
+            <span>Available Slots: </span>
+            <strong id="slots-selected-day">Selected Day</strong>
           </div>
           <div class="cal-time-toggle">
             <button type="button" class="time-format-btn active" data-format="12h">12h</button>
@@ -165,12 +177,392 @@ import { SITE } from '../../data/site';
   </div>
 </Layout>
 
+<style>
+  .cal-booking-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  @media (max-width: 860px) {
+    .cal-booking-card {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cal-col-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .cal-author-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .cal-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cal-author-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .cal-call-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .cal-agenda-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .cal-agenda-list li {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    position: relative;
+    padding-left: 1.2rem;
+    line-height: 1.4;
+  }
+
+  .cal-agenda-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #10b981;
+    font-weight: 700;
+  }
+
+  .cal-meta-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.75rem 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .cal-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  .cal-confirm-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .confirm-slot-badge {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(59, 130, 246, 0.08);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.825rem;
+    color: var(--text-primary);
+  }
+
+  .confirm-inputs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  @media (max-width: 480px) {
+    .confirm-inputs-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .cal-input-field {
+    width: 100%;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.825rem;
+    color: var(--text-primary);
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.15s ease;
+  }
+
+  .cal-input-field:focus {
+    border-color: #3b82f6;
+  }
+
+  .confirm-actions-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 0.9rem;
+    border-radius: 0.5rem;
+    font-size: 0.825rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s ease;
+  }
+
+  .btn-primary {
+    background: #2563eb;
+    color: #ffffff;
+  }
+
+  .btn-primary:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+  }
+
+  .btn-secondary:hover {
+    background: var(--bg-hover);
+  }
+
+  /* Calendar Right Column */
+  .cal-col-main {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .cal-picker-section {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1rem;
+  }
+
+  .cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+
+  .cal-month-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .cal-nav-buttons {
+    display: flex;
+    gap: 0.35rem;
+  }
+
+  .cal-nav-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 0.35rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .cal-nav-btn:hover {
+    background: var(--bg-hover);
+  }
+
+  .cal-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .cal-days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+
+  .cal-day-cell {
+    aspect-ratio: 1;
+    border-radius: 0.4rem;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .cal-day-cell:hover:not(.disabled) {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+  }
+
+  .cal-day-cell.selected {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    font-weight: 700;
+  }
+
+  .cal-day-cell.today {
+    border-color: #3b82f6;
+  }
+
+  .cal-day-cell.disabled {
+    color: var(--text-muted);
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .cal-day-cell.empty {
+    pointer-events: none;
+  }
+
+  /* Slots Section */
+  .cal-slots-section-below {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1rem;
+  }
+
+  .cal-slots-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+
+  .cal-selected-day-label {
+    font-size: 0.825rem;
+    color: var(--text-secondary);
+  }
+
+  .cal-selected-day-label strong {
+    color: var(--text-primary);
+  }
+
+  .cal-time-toggle {
+    display: flex;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.35rem;
+    padding: 2px;
+  }
+
+  .time-format-btn {
+    padding: 2px 8px;
+    font-size: 0.725rem;
+    border-radius: 0.25rem;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+
+  .time-format-btn.active {
+    background: #2563eb;
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  .cal-slots-grid-below {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 6px;
+  }
+
+  .cal-slot-btn {
+    padding: 0.45rem 0.25rem;
+    border-radius: 0.4rem;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.775rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .cal-slot-btn:hover {
+    background: var(--bg-hover);
+    border-color: #3b82f6;
+  }
+
+  .cal-slot-btn.selected {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+  }
+</style>
+
 <script is:inline>
   function setupLiveCalendly() {
+    const container = document.getElementById('cal-booking-container');
+    if (!container) return;
+
+    const googleClientId = container.getAttribute('data-google-client-id') || '';
+    const googleApiKey = container.getAttribute('data-google-api-key') || '';
+
     const today = new Date();
     let viewYear = today.getFullYear();
     let viewMonth = today.getMonth();
 
+    // Default to tomorrow
     let selectedDate = new Date();
     selectedDate.setDate(selectedDate.getDate() + 1);
 
@@ -210,6 +602,27 @@ import { SITE } from '../../data/site';
       '10:00', '10:30', '11:00', '11:30', 
       '12:00', '14:00', '14:30', '17:00', '20:00'
     ];
+
+    // Helper: Parse selected slot string into Date object
+    function parseSlotToDate(baseDate, slotStr) {
+      let parts = slotStr.trim().split(' ');
+      let timeParts = parts[0].split(':');
+      let hours = parseInt(timeParts[0], 10);
+      let minutes = parseInt(timeParts[1], 10);
+
+      if (parts[1]) {
+        const modifier = parts[1].toUpperCase();
+        if (modifier === 'PM' && hours < 12) hours += 12;
+        if (modifier === 'AM' && hours === 12) hours = 0;
+      }
+
+      return new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate(), hours, minutes, 0);
+    }
+
+    // Convert Date to UTC ISO format for Google Calendar (YYYYMMDDTHHmmssZ)
+    function toGCalUTC(date) {
+      return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+    }
 
     function renderCalendar() {
       if (!monthDisplay || !daysGrid) return;
@@ -267,7 +680,7 @@ import { SITE } from '../../data/site';
 
       const dayName = dayNamesShort[selectedDate.getDay()];
       const dayNum = selectedDate.getDate();
-      slotsSelectedDay.textContent = `${dayName} ${dayNum}`;
+      slotsSelectedDay.textContent = `${dayName}, ${monthNames[selectedDate.getMonth()]} ${dayNum}`;
 
       const slots = is24h ? availableSlots24h : availableSlots12h;
       slotsList.innerHTML = '';
@@ -308,31 +721,34 @@ import { SITE } from '../../data/site';
       updateCalendarLinks();
     }
 
+    // Build Exact Google Calendar API & Web Links
     function updateCalendarLinks() {
-      const clientName = clientNameInput?.value || 'Client';
-      const clientEmail = clientEmailInput?.value || '';
-      const notes = clientNotesInput?.value || '1:1 Architecture & Discovery Call';
+      const clientName = clientNameInput?.value.trim() || 'Client';
+      const clientEmail = clientEmailInput?.value.trim() || '';
+      const notes = clientNotesInput?.value.trim() || '1:1 Technical Consultation and Architecture Discussion';
 
-      const y = selectedDate.getFullYear();
-      const m = String(selectedDate.getMonth() + 1).padStart(2, '0');
-      const d = String(selectedDate.getDate()).padStart(2, '0');
+      const startDateTime = parseSlotToDate(selectedDate, selectedSlot);
+      const endDateTime = new Date(startDateTime.getTime() + 30 * 60 * 1000); // 30 minutes duration
 
-      const startDateTimeStr = `${y}${m}${d}T113000Z`;
-      const endDateTimeStr = `${y}${m}${d}T120000Z`;
+      const startUTCStr = toGCalUTC(startDateTime);
+      const endUTCStr = toGCalUTC(endDateTime);
 
       const calTitle = encodeURIComponent(`1:1 Architecture Discovery - Sunil Khobragade & ${clientName}`);
       const calDetails = encodeURIComponent(
-`1:1 Consultation with Sunil Khobragade
-Attendee: ${clientName} (${clientEmail})
+`1:1 Architecture & Technical Consultation with Sunil Khobragade
+Attendee: ${clientName} ${clientEmail ? '(' + clientEmail + ')' : ''}
 
-Agenda:
+Agenda & Discussion Notes:
 ${notes}
 
-Location: Google Meet
-Host: sunilkhobragade@proton.me`
+Conference: Google Meet video call
+Host: skhobragade993@gmail.com
+Portfolio: https://sk-builds.vercel.app`
       );
 
-      const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${calTitle}&dates=${startDateTimeStr}/${endDateTimeStr}&details=${calDetails}&add=sunilkhobragade@proton.me&location=Google+Meet`;
+      // Google Calendar API Direct Event URL with exact start/end time and Google Meet conferencing
+      const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${calTitle}&dates=${startUTCStr}/${endUTCStr}&details=${calDetails}&add=skhobragade993@gmail.com&location=Google+Meet`;
+      
       if (googleMeetBtn) {
         googleMeetBtn.setAttribute('href', googleCalUrl);
       }
@@ -369,33 +785,44 @@ Host: sunilkhobragade@proton.me`
     clientEmailInput?.addEventListener('input', updateCalendarLinks);
     clientNotesInput?.addEventListener('input', updateCalendarLinks);
 
+    // .ICS Export with exact timezone and UID
     icsBtn?.addEventListener('click', () => {
-      const clientName = clientNameInput?.value || 'Client';
-      const notes = clientNotesInput?.value || '1:1 Architecture Discovery Call';
-      const y = selectedDate.getFullYear();
-      const m = String(selectedDate.getMonth() + 1).padStart(2, '0');
-      const d = String(selectedDate.getDate()).padStart(2, '0');
-      const icsDate = `${y}${m}${d}`;
+      const clientName = clientNameInput?.value.trim() || 'Client';
+      const clientEmail = clientEmailInput?.value.trim() || '';
+      const notes = clientNotesInput?.value.trim() || '1:1 Architecture Discovery Call';
+      
+      const startDateTime = parseSlotToDate(selectedDate, selectedSlot);
+      const endDateTime = new Date(startDateTime.getTime() + 30 * 60 * 1000);
+
+      const startUTCStr = toGCalUTC(startDateTime);
+      const endUTCStr = toGCalUTC(endDateTime);
+      const uid = `sk-${Date.now()}@sk-builds.vercel.app`;
 
       const icsContent = [
         'BEGIN:VCALENDAR',
         'VERSION:2.0',
         'PRODID:-//Sunil Khobragade//Consultation Booking//EN',
+        'CALSCALE:GREGORIAN',
+        'METHOD:REQUEST',
         'BEGIN:VEVENT',
+        `UID:${uid}`,
+        `DTSTAMP:${toGCalUTC(new Date())}`,
         `SUMMARY:1:1 Architecture Discovery - Sunil Khobragade & ${clientName}`,
-        `DESCRIPTION:${notes}\\nHost: sunilkhobragade@proton.me`,
-        `DTSTART:${icsDate}T113000Z`,
-        `DTEND:${icsDate}T120000Z`,
+        `DESCRIPTION:1:1 Consultation with Sunil Khobragade\\nAttendee: ${clientName} (${clientEmail})\\nAgenda: ${notes}\\nHost: skhobragade993@gmail.com`,
+        `DTSTART:${startUTCStr}`,
+        `DTEND:${endUTCStr}`,
         'LOCATION:Google Meet',
         'STATUS:CONFIRMED',
+        'ORGANIZER;CN=Sunil Khobragade:mailto:skhobragade993@gmail.com',
+        clientEmail ? `ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;CN=${clientName}:mailto:${clientEmail}` : '',
         'END:VEVENT',
         'END:VCALENDAR'
-      ].join('\r\n');
+      ].filter(Boolean).join('\r\n');
 
       const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
       const link = document.createElement('a');
       link.href = window.URL.createObjectURL(blob);
-      link.setAttribute('download', 'architecture-call-sunil-khobragade.ics');
+      link.setAttribute('download', `consultation-sunil-khobragade-${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}-${selectedDate.getDate()}.ics`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
