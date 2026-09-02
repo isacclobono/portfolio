@@ -3,155 +3,587 @@ import { SITE } from '../data/site';
 import ThemeToggle from './ThemeToggle.astro';
 
 const year = new Date().getFullYear();
+
+const navLinks = [
+  { label: 'Home Overview', href: '/' },
+  { label: 'Featured Projects', href: '/projects' },
+  { label: 'Work Experience', href: '/work' },
+  { label: 'Education & Certifications', href: '/education' },
+  { label: 'Tech Stack & Skills', href: '/tech-stack' },
+  { label: 'Uses & Workstation', href: '/uses' },
+];
+
+const toolsLinks = [
+  { label: 'Developer Tools Hub', href: '/tools' },
+  { label: '1:1 Consultation Scheduler', href: '/tools/appointment', badge: '1:1' },
+  { label: 'Project Scope Estimator', href: '/tools/estimator' },
+  { label: 'SQL Formatter & Optimizer', href: '/tools/sql-formatter' },
+  { label: 'JWT Token Decoder', href: '/tools/jwt-decoder' },
+  { label: 'Cron Expression Generator', href: '/tools/cron-generator' },
+];
+
+const publicationLinks = [
+  { label: 'All Technical Articles', href: '/blog' },
+  { label: 'Ultra-Fast LLM Inference', href: '/blog/ultra-fast-llm-inference-groq-lpu-streaming' },
+  { label: 'Zero-JS Baseline Web Apps', href: '/blog/zero-js-baseline-web-applications-astro-5' },
+  { label: 'High-Throughput Microservices', href: '/blog/building-high-throughput-microservices-with-nodejs-and-redis' },
+  { label: 'Concurrency-Safe Bookings', href: '/blog/architecting-concurrency-safe-booking-systems' },
+  { label: 'Multi-Agent Orchestration', href: '/blog/autonomous-multi-agent-orchestration-langgraph' },
+];
+
+const platformLinks = [
+  { label: 'Edge System Status', href: '/status', isLive: true },
+  { label: 'Release Changelog', href: '/changelog' },
+  { label: 'RSS 2.0 Feed', href: '/rss.xml' },
+  { label: 'XML Sitemap Index', href: '/sitemap-index.xml' },
+  { label: 'AI Agent Feed (llms.txt)', href: '/llms.txt' },
+  { label: 'Privacy Policy & Terms', href: '/privacy' },
+];
 ---
 
-<footer class="site-footer">
-  <!-- Line 1: Copyright / Author Name on Left, Theme Toggle on Right -->
-  <div class="footer-primary-row">
-    <div class="footer-brand-text">
-      &copy; {year} | <strong class="footer-author-name">{SITE.AUTHOR}</strong> ({SITE.BRAND})
+<footer class="footer-root" role="contentinfo">
+  <!-- Brand & Action Buttons Row -->
+  <div class="footer-hero-box">
+    <div class="footer-brand-info">
+      <a href="/" class="brand-link" aria-label="Home">
+        <span class="brand-monogram">SK</span>
+        <span class="brand-author-name">{SITE.AUTHOR}</span>
+      </a>
+      <p class="brand-headline">
+        Senior Full-Stack Developer &amp; AI Architect specializing in high-concurrency backends, LLM agents, and cloud platforms.
+      </p>
     </div>
-    <div class="footer-theme-wrap">
-      <ThemeToggle />
+
+    <div class="footer-action-buttons">
+      <a href="/tools/appointment" class="cta-button btn-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <span>Book Consultation</span>
+      </a>
+      <a href="/tools/estimator" class="cta-button btn-secondary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+        </svg>
+        <span>Project Estimator</span>
+      </a>
     </div>
   </div>
 
-  <!-- Line 2: Pages Section with Generous Breathing Room -->
-  <div class="footer-pages-section">
-    <div class="footer-pages-heading">Pages</div>
-    <nav class="footer-nav-list" aria-label="Footer Navigation">
-      <a href="/status" class="footer-nav-item">
-        <span class="status-indicator-dot" aria-hidden="true"></span>
-        Status
-      </a>
-      <span class="nav-separator" aria-hidden="true">&bull;</span>
-      
-      <a href="/changelog" class="footer-nav-item">Changelog</a>
-      <span class="nav-separator" aria-hidden="true">&bull;</span>
-      
-      <a href="/tech-stack" class="footer-nav-item">Tech Stack &amp; Uses</a>
-      <span class="nav-separator" aria-hidden="true">&bull;</span>
-      
-      <a href="/privacy" class="footer-nav-item">Privacy Policy</a>
-      <span class="nav-separator" aria-hidden="true">&bull;</span>
-      
-      <a href="/terms" class="footer-nav-item">Terms</a>
-      <span class="nav-separator" aria-hidden="true">&bull;</span>
-      
-      <a href="/rss.xml" class="footer-nav-item">RSS</a>
-      <span class="nav-separator" aria-hidden="true">&bull;</span>
+  <div class="footer-divider-line"></div>
 
-      <a href="/sitemap-index.xml" class="footer-nav-item">Sitemap</a>
+  <!-- Primary 2x2 Category Grid (Optimized for 680px site container) -->
+  <div class="footer-category-grid">
+    <!-- Category 1: Navigation -->
+    <div class="category-block">
+      <div class="category-title cat-navigation">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cat-svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+        </svg>
+        <span>Navigation</span>
+      </div>
+      <ul class="category-links-list">
+        {navLinks.map((item) => (
+          <li>
+            <a href={item.href} class="category-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="link-arrow" aria-hidden="true">
+                <path d="m9 18 6-6-6-6"></path>
+              </svg>
+              <span>{item.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Category 2: Developer Tools -->
+    <div class="category-block">
+      <div class="category-title cat-tools">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cat-svg" aria-hidden="true">
+          <path d="m18 16 4-4-4-4"></path>
+          <path d="m6 8-4 4 4 4"></path>
+          <path d="m14.5 4-5 16"></path>
+        </svg>
+        <span>Developer Tools</span>
+      </div>
+      <ul class="category-links-list">
+        {toolsLinks.map((item) => (
+          <li>
+            <a href={item.href} class="category-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="link-arrow" aria-hidden="true">
+                <path d="m9 18 6-6-6-6"></path>
+              </svg>
+              <span>{item.label}</span>
+              {item.badge && <span class="custom-badge">{item.badge}</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Category 3: Publications -->
+    <div class="category-block">
+      <div class="category-title cat-publications">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cat-svg" aria-hidden="true">
+          <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+          <path d="M6 6h10"></path>
+          <path d="M6 10h10"></path>
+        </svg>
+        <span>Publications</span>
+      </div>
+      <ul class="category-links-list">
+        {publicationLinks.map((item) => (
+          <li>
+            <a href={item.href} class="category-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="link-arrow" aria-hidden="true">
+                <path d="m9 18 6-6-6-6"></path>
+              </svg>
+              <span>{item.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Category 4: Platform & Feeds -->
+    <div class="category-block">
+      <div class="category-title cat-platform">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cat-svg" aria-hidden="true">
+          <rect width="20" height="8" x="2" y="2" rx="2" ry="2"></rect>
+          <rect width="20" height="8" x="2" y="14" rx="2" ry="2"></rect>
+          <line x1="6" y1="6" x2="6.01" y2="6"></line>
+          <line x1="6" y1="18" x2="6.01" y2="18"></line>
+        </svg>
+        <span>Platform &amp; Feeds</span>
+      </div>
+      <ul class="category-links-list">
+        {platformLinks.map((item) => (
+          <li>
+            <a href={item.href} class="category-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="link-arrow" aria-hidden="true">
+                <path d="m9 18 6-6-6-6"></path>
+              </svg>
+              <span>{item.label}</span>
+              {item.isLive && <span class="edge-status-dot" title="Live Edge Service"></span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-divider-line"></div>
+
+  <!-- Connect & Socials Strip -->
+  <div class="footer-connect-strip">
+    <div class="connect-label-group">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+      </svg>
+      <span>Connect:</span>
+    </div>
+
+    <nav class="connect-links-nav" aria-label="Social Links">
+      <a href={SITE.GITHUB} target="_blank" rel="noopener noreferrer" class="social-nav-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        <span>GitHub</span>
+      </a>
+      <span class="social-sep" aria-hidden="true">&bull;</span>
+
+      <a href={SITE.LINKEDIN} target="_blank" rel="noopener noreferrer" class="social-nav-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.55a1.6 1.6 0 0 0-1.6 1.6 1.6 1.6 0 0 0 1.6 1.6 1.6 1.6 0 0 0 1.6-1.6 1.6 1.6 0 0 0-1.6-1.6Z"/>
+        </svg>
+        <span>LinkedIn</span>
+      </a>
+      <span class="social-sep" aria-hidden="true">&bull;</span>
+
+      <a href={SITE.TWITTER} target="_blank" rel="noopener noreferrer" class="social-nav-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+        <span>X / Twitter</span>
+      </a>
+      <span class="social-sep" aria-hidden="true">&bull;</span>
+
+      <a href={`mailto:${SITE.EMAIL}`} class="social-nav-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+        </svg>
+        <span>Email</span>
+      </a>
+      <span class="social-sep" aria-hidden="true">&bull;</span>
+
+      <a href="tel:+917498950562" class="social-nav-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        </svg>
+        <span>Phone</span>
+      </a>
     </nav>
+  </div>
+
+  <!-- Bottom Bar: Copyright, Edge Status & Theme Toggle -->
+  <div class="footer-bottom-bar">
+    <div class="copyright-info">
+      &copy; {year} <strong class="author-name-text">{SITE.AUTHOR}</strong> ({SITE.BRAND}) &bull; All rights reserved.
+    </div>
+
+    <div class="footer-utilities">
+      <a href="/status" class="status-indicator-badge" title="Live Edge Status">
+        <span class="pulse-indicator"></span>
+        <span>Operational</span>
+      </a>
+      <ThemeToggle />
+    </div>
   </div>
 </footer>
 
 <style>
-  .site-footer {
+  .footer-root {
     width: 100%;
-    margin-top: 5.5rem;
-    padding-top: 2.25rem;
-    padding-bottom: 4rem;
-    border-top: 1px solid var(--border-color);
+    margin-top: 4.5rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    border-top: 1px solid var(--border-subtle);
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-  }
-
-  /* Line 1: Name & Theme Toggle */
-  .footer-primary-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
     gap: 1.5rem;
   }
 
-  .footer-brand-text {
-    font-size: 0.925rem;
+  /* Hero & Brand Box */
+  .footer-hero-box {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+
+  .footer-brand-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    max-width: 360px;
+  }
+
+  .brand-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+
+  .brand-monogram {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 800;
+    font-family: var(--font-mono, monospace);
+  }
+
+  .brand-author-name {
+    font-size: 0.975rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .brand-headline {
+    font-size: 0.8rem;
     color: var(--text-secondary);
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  .footer-action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: var(--radius-md, 8px);
+    text-decoration: none;
+    transition: all 0.18s ease;
     white-space: nowrap;
   }
 
-  .footer-author-name {
-    color: var(--text-primary);
-    font-weight: 600;
+  .btn-primary {
+    background: #2563eb;
+    color: #ffffff;
+    border: 1px solid #2563eb;
   }
 
-  .footer-theme-wrap {
+  .btn-primary:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  }
+
+  .btn-secondary {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-card);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--border-card-hover);
+    background: var(--bg-card-hover);
+    transform: translateY(-1px);
+  }
+
+  .footer-divider-line {
+    width: 100%;
+    height: 1px;
+    background: var(--border-subtle);
+    opacity: 0.8;
+  }
+
+  /* 2x2 Grid Layout */
+  .footer-category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.75rem 2.5rem;
+    width: 100%;
+  }
+
+  .category-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .category-title {
     display: flex;
     align-items: center;
+    gap: 0.45rem;
+    font-size: 0.725rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .cat-navigation { color: #3b82f6; }
+  .cat-tools { color: #10b981; }
+  .cat-publications { color: #a855f7; }
+  .cat-platform { color: #f59e0b; }
+
+  .cat-svg {
     flex-shrink: 0;
   }
 
-  /* Line 2: Pages Section */
-  .footer-pages-section {
+  .category-links-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    width: 100%;
-    padding-top: 0.5rem;
+    gap: 0.4rem;
   }
 
-  .footer-pages-heading {
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-  }
-
-  .footer-nav-list {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.85rem 1.15rem;
-    font-size: 0.875rem;
-  }
-
-  .footer-nav-item {
+  .category-link {
+    font-size: 0.815rem;
     color: var(--text-secondary);
     text-decoration: none;
     display: inline-flex;
     align-items: center;
-    gap: 0.45rem;
+    gap: 0.35rem;
+    line-height: 1.4;
+    transition: color 0.15s ease, transform 0.15s ease;
+  }
+
+  .category-link:hover {
+    color: var(--text-primary);
+    transform: translateX(2px);
+  }
+
+  .link-arrow {
+    color: var(--text-muted);
+    opacity: 0.6;
+    flex-shrink: 0;
+    transition: transform 0.15s ease, color 0.15s ease;
+  }
+
+  .category-link:hover .link-arrow {
+    color: #3b82f6;
+    transform: translateX(2px);
+  }
+
+  .custom-badge {
+    font-size: 0.6rem;
+    font-weight: 700;
+    font-family: var(--font-mono, monospace);
+    padding: 0.05rem 0.35rem;
+    border-radius: 4px;
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    margin-left: 0.2rem;
+  }
+
+  .edge-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 5px rgba(16, 185, 129, 0.8);
+    display: inline-block;
+    margin-left: 0.25rem;
+  }
+
+  /* Connect Strip */
+  .footer-connect-strip {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.65rem;
+    font-size: 0.8rem;
+    padding: 0.25rem 0;
+  }
+
+  .connect-label-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 700;
+    font-size: 0.725rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-right: 0.25rem;
+  }
+
+  .connect-links-nav {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.65rem;
+  }
+
+  .social-nav-link {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
     transition: color 0.15s ease;
   }
 
-  .footer-nav-item:hover {
-    color: var(--text-primary);
+  .social-nav-link:hover {
+    color: #3b82f6;
     text-decoration: underline;
   }
 
-  .status-indicator-dot {
-    width: 6.5px;
-    height: 6.5px;
-    border-radius: 50%;
-    background: #10b981;
-    display: inline-block;
-    box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+  .social-sep {
+    color: var(--text-muted);
+    opacity: 0.35;
+    font-size: 0.65rem;
+    user-select: none;
   }
 
-  .nav-separator {
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    opacity: 0.4;
-    user-select: none;
-    margin: 0 0.15rem;
+  /* Bottom Bar */
+  .footer-bottom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 0.5rem;
+    font-size: 0.785rem;
+    color: var(--text-secondary);
+  }
+
+  .author-name-text {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .footer-utilities {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .status-indicator-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.65rem;
+    border-radius: var(--radius-full, 9999px);
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.725rem;
+    font-weight: 500;
+    transition: all 0.15s ease;
+  }
+
+  .status-indicator-badge:hover {
+    border-color: rgba(16, 185, 129, 0.5);
+    color: var(--text-primary);
+  }
+
+  .pulse-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 5px rgba(16, 185, 129, 0.8);
   }
 
   @media (max-width: 580px) {
-    .footer-primary-row {
-      flex-direction: row;
+    .footer-category-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem 0;
+    }
+
+    .footer-hero-box {
+      flex-direction: column;
+    }
+
+    .footer-action-buttons {
+      width: 100%;
+    }
+
+    .cta-button {
+      flex: 1;
+    }
+
+    .footer-bottom-bar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.85rem;
+    }
+
+    .footer-utilities {
+      width: 100%;
       justify-content: space-between;
-    }
-
-    .footer-brand-text {
-      white-space: normal;
-    }
-
-    .footer-nav-list {
-      gap: 0.75rem 0.85rem;
     }
   }
 </style>

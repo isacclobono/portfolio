@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Button from '../../components/Button.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -62,4 +63,12 @@ const formatDate = (date: Date) => {
   <article class="prose-content" style="margin-top: 1.5rem;">
     <Content />
   </article>
+
+  <!-- Interactive Share Article Widget -->
+  <ShareButtons 
+    title={post.data.title}
+    description={post.data.description}
+    tags={post.data.tags}
+    type="article"
+  />
 </Layout>
