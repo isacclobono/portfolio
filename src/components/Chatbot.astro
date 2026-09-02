@@ -4,17 +4,19 @@ import { CHATBOT_SYSTEM_PROMPT, SUNIL_KNOWLEDGE_BASE } from '../data/chatbotKnow
 const defaultSystemPrompt = JSON.stringify(CHATBOT_SYSTEM_PROMPT);
 const knowledgeData = JSON.stringify(SUNIL_KNOWLEDGE_BASE);
 const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
+const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
 ---
 
-<!-- Floating AI Chatbot Container (LinkMate Style) -->
+<!-- Floating AI Chatbot Container (Native Messenger Feel, Crisp 12.5px Typography, IndexedDB) -->
 <div 
   id="sk-ai-chatbot" 
   class="sk-chatbot-root" 
   data-system-prompt={defaultSystemPrompt} 
   data-knowledge={knowledgeData}
   data-env-key={envGroqKey}
+  data-model={envGroqModel}
 >
-  <!-- Floating Launcher Button (Bottom-Right) -->
+  <!-- Compact Floating Launcher Button with "SK" (Bottom-Right) -->
   <button 
     type="button" 
     id="chatbot-trigger" 
@@ -23,21 +25,11 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
     aria-expanded="false"
     title="Chat with Sunil's AI Assistant"
   >
-    <div class="sk-launcher-icon-wrap">
-      <!-- AI Brand Gradient Icon (Visible when closed) -->
-      <svg class="sk-icon-bot" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M12 2C6.477 2 2 6.477 2 12c0 1.821.487 3.53 1.338 5L2.1 21.9a1 1 0 0 0 1.258 1.258L8 21.862A9.957 9.957 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" fill="url(#launcherGrad)"/>
-        <path d="M8 11.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm8 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm-8 4.5c.8 1.2 2.2 2 4 2s3.2-.8 4-2" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/>
-        <defs>
-          <linearGradient id="launcherGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#ec4899"/>
-            <stop offset="0.5" stop-color="#8b5cf6"/>
-            <stop offset="1" stop-color="#06b6d4"/>
-          </linearGradient>
-        </defs>
-      </svg>
+    <div class="sk-launcher-inner">
+      <!-- "SK" Brand Monogram Badge (Visible when closed) -->
+      <span class="sk-launcher-sk">SK</span>
       <!-- Close Icon (Visible when open) -->
-      <svg class="sk-icon-close" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <svg class="sk-icon-close" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <line x1="18" y1="6" x2="6" y2="18"></line>
         <line x1="6" y1="6" x2="18" y2="18"></line>
       </svg>
@@ -45,22 +37,27 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
     <span class="sk-status-dot" aria-hidden="true"></span>
   </button>
 
-  <!-- Main AI Assistant Window Modal (Matches Screenshot) -->
+  <!-- Main AI Assistant Window Modal -->
   <div id="chatbot-panel" class="sk-chat-modal" aria-hidden="true" role="dialog" aria-label="AI Assistant Chat">
     
+    <!-- Multi-direction Resize Handles -->
+    <div id="resize-handle-corner" class="sk-resize-corner" title="Drag to resize"></div>
+    <div id="resize-handle-top" class="sk-resize-edge-top" title="Drag to resize height"></div>
+    <div id="resize-handle-left" class="sk-resize-edge-left" title="Drag to resize width"></div>
+
     <!-- Top Header Bar -->
     <header class="sk-modal-header">
       <div class="sk-header-left">
         <!-- Back Chevron -->
         <button type="button" id="chat-back-btn" class="sk-header-icon-btn" aria-label="Back">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="15 18 9 12 15 6"></polyline>
           </svg>
         </button>
 
-        <!-- Brand Icon Badge (Curved Arch Logo from Screenshot) -->
+        <!-- Brand Icon Badge -->
         <div class="sk-brand-badge" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
             <path d="M4 19C4 10.716 10.716 4 19 4V8C12.925 8 8 12.925 8 19H4Z" fill="url(#headerLogoGrad)"/>
             <path d="M8 19C8 12.925 12.925 8 19 8V12C15.134 12 12 15.134 12 19H8Z" fill="#38bdf8"/>
             <defs>
@@ -78,16 +75,32 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
           <div class="sk-title-row">
             <h2 class="sk-modal-title">SK Agent <span class="sk-agent-pill">AI</span></h2>
           </div>
-          <p class="sk-modal-subtitle">Sunil's AI Assistant &bull; Always Available</p>
+          <p class="sk-modal-subtitle">Sunil's AI Assistant &bull; Online</p>
         </div>
       </div>
 
       <!-- Header Action Controls (Right) -->
       <div class="sk-header-right">
+        <!-- Expand / Shrink Size Toggle Button -->
+        <button type="button" id="chat-resize-btn" class="sk-header-icon-btn" title="Toggle Size (Compact / Expanded)" aria-label="Resize window">
+          <svg id="icon-expand" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <polyline points="9 21 3 21 3 15"></polyline>
+            <line x1="21" y1="3" x2="14" y2="10"></line>
+            <line x1="3" y1="21" x2="10" y2="14"></line>
+          </svg>
+          <svg id="icon-shrink" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+            <polyline points="4 14 10 14 10 20"></polyline>
+            <polyline points="20 10 14 10 14 4"></polyline>
+            <line x1="14" y1="10" x2="21" y2="3"></line>
+            <line x1="3" y1="21" x2="10" y2="14"></line>
+          </svg>
+        </button>
+
         <!-- Options Menu Button (•••) -->
         <div class="sk-options-dropdown-wrap">
           <button type="button" id="chat-options-btn" class="sk-header-icon-btn" aria-label="More options" aria-haspopup="true">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
               <circle cx="5" cy="12" r="2"></circle>
               <circle cx="12" cy="12" r="2"></circle>
               <circle cx="19" cy="12" r="2"></circle>
@@ -95,15 +108,15 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
           </button>
           <div id="chat-options-menu" class="sk-options-menu" aria-hidden="true">
             <button type="button" class="sk-menu-item" id="opt-clear-chat">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
               Clear Conversation
             </button>
             <a href="/tools/appointment" class="sk-menu-item">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
               Book 1:1 Consultation
             </a>
             <a href="mailto:sunilkhobragade@proton.me" class="sk-menu-item">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
               Email Sunil Directly
             </a>
           </div>
@@ -111,7 +124,7 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
 
         <!-- Close Button (✕) -->
         <button type="button" id="chat-close-btn" class="sk-header-icon-btn" aria-label="Close Chat">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
@@ -121,67 +134,60 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
 
     <!-- Chat Messages Scroll Container -->
     <main id="chat-messages-container" class="sk-messages-box">
-      <!-- Bot Intro Pill 1 -->
+      <!-- Default Bot Greeting Message -->
       <div class="sk-msg-row bot">
         <div class="sk-bubble bot">
-          Hi there! You're speaking with SK Agent, Sunil Khobragade's AI Assistant. I'm well trained on all of Sunil's projects, architecture work, and technical skills. How can I help you today?
+          <div class="sk-bubble-content">
+            Hi there! 👋 I'm <strong>SK Agent</strong>, Sunil Khobragade's AI Assistant. How can I help you today?
+          </div>
+          <div class="sk-bubble-footer">
+            <span class="sk-time-text" id="init-bot-time"></span>
+          </div>
         </div>
-      </div>
-
-      <!-- Bot Intro Pill 2 -->
-      <div class="sk-msg-row bot" style="margin-top: 4px;">
-        <div class="sk-bubble bot">
-          Feel free to ask about his experience, stack, or book a 1:1 call!
-        </div>
-      </div>
-
-      <!-- Subtitle timestamp line -->
-      <div class="sk-msg-meta">
-        SK Agent &bull; Just now
       </div>
 
       <!-- Quick Suggestion Chips -->
       <div class="sk-quick-chips" id="quick-chips">
-        <button type="button" class="sk-chip-btn" data-query="What are Sunil's core technical skills and AI expertise?">
-          🛠️ Skills &amp; AI Stack
+        <button type="button" class="sk-chip-btn" data-query="What are Sunil's core skills and AI expertise?">
+          🛠️ Skills &amp; AI
         </button>
-        <button type="button" class="sk-chip-btn" data-query="Tell me about Sunil's featured projects and architecture work.">
-          🚀 Featured Projects
+        <button type="button" class="sk-chip-btn" data-query="Tell me about Sunil's top projects.">
+          🚀 Projects
         </button>
-        <button type="button" class="sk-chip-btn" data-query="What is Sunil's professional work experience and background?">
-          💼 Work Experience
+        <button type="button" class="sk-chip-btn" data-query="What is Sunil's work experience?">
+          💼 Experience
         </button>
-        <button type="button" class="sk-chip-btn" data-query="How can I hire Sunil or book a 1:1 consultation call?">
-          📅 Book / Hire Sunil
+        <button type="button" class="sk-chip-btn" data-query="How can I contact or hire Sunil?">
+          📅 Contact / Hire
         </button>
       </div>
     </main>
 
-    <!-- Input Footer Card Container (Exact Match to Screenshot) -->
+    <!-- Input Footer Card Container -->
     <footer class="sk-modal-footer">
       <div class="sk-input-card">
         <textarea 
           id="chat-textarea" 
           class="sk-input-field" 
           rows="1" 
-          placeholder="Ask a question..."
-          aria-label="Ask a question"
+          placeholder="Message..."
+          aria-label="Message..."
         ></textarea>
 
         <!-- Bottom Action Bar inside input card -->
         <div class="sk-input-actions">
-          <!-- Left Utilities Toolbar (Attachment, Emoji, GIF, Mic) -->
+          <!-- Left Utilities Toolbar -->
           <div class="sk-left-tools">
-            <!-- Paperclip (Attachment / Resume Download) -->
-            <button type="button" class="sk-tool-btn" id="tool-attach-btn" title="Download Sunil's Profile Summary" aria-label="Attach profile">
-              <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Paperclip -->
+            <button type="button" class="sk-tool-btn" id="tool-attach-btn" title="Download Profile Summary" aria-label="Profile">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
               </svg>
             </button>
 
             <!-- Emoji -->
-            <button type="button" class="sk-tool-btn" id="tool-emoji-btn" title="Insert Emoji" aria-label="Add emoji">
-              <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <button type="button" class="sk-tool-btn" id="tool-emoji-btn" title="Insert Emoji" aria-label="Emoji">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"></circle>
                 <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
                 <line x1="9" y1="9" x2="9.01" y2="9"></line>
@@ -194,9 +200,9 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
               <span class="sk-gif-text">GIF</span>
             </button>
 
-            <!-- Microphone (Speech Recognition) -->
+            <!-- Microphone -->
             <button type="button" class="sk-tool-btn" id="tool-mic-btn" title="Voice Input" aria-label="Voice input">
-              <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
                 <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
                 <line x1="12" y1="19" x2="12" y2="22"></line>
@@ -204,7 +210,7 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
             </button>
           </div>
 
-          <!-- Right Send Button (Circular with upward arrow) -->
+          <!-- Right Send Button -->
           <button 
             type="button" 
             id="chat-send-btn" 
@@ -212,7 +218,7 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
             aria-label="Send Message" 
             disabled
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="19" x2="12" y2="5"></line>
               <polyline points="5 12 12 5 19 12"></polyline>
             </svg>
@@ -225,56 +231,245 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
 
 <style>
   /* ==========================================================================
-     LinkMate AI Chatbot Styles (Pixel-matched with Dark/Light Support)
+     Crisp Native Chat Application Theme & Typography
      ========================================================================== */
   
   .sk-chatbot-root {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
+    bottom: 18px;
+    right: 18px;
     z-index: 9999;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+    /* Base Light Mode Tokens */
+    --sk-chat-bg: #f8fafc;
+    --sk-chat-header-bg: #ffffff;
+    --sk-chat-border: #e2e8f0;
+    --sk-chat-divider: #f1f5f9;
+    --sk-chat-messages-bg: #f4f6f8;
+    
+    /* Native Chat Bubbles */
+    --sk-chat-bot-bubble-bg: #ffffff;
+    --sk-chat-bot-bubble-text: #0f172a;
+    --sk-chat-bot-bubble-border: #e2e8f0;
+    --sk-chat-bot-time: #94a3b8;
+
+    --sk-chat-user-bubble-bg: #ffffff;
+    --sk-chat-user-bubble-text: #0f172a;
+    --sk-chat-user-bubble-border: #cbd5e1;
+    --sk-chat-user-time: #94a3b8;
+
+    --sk-chat-input-bg: #ffffff;
+    --sk-chat-input-border: #e2e8f0;
+    --sk-chat-input-text: #0f172a;
+    --sk-chat-placeholder: #94a3b8;
+    --sk-chat-title: #0f172a;
+    --sk-chat-subtitle: #64748b;
+    --sk-chat-icon-btn: #64748b;
+    --sk-chat-icon-hover-bg: #f1f5f9;
+    --sk-chat-icon-hover-text: #0f172a;
+    --sk-chat-chip-bg: #ffffff;
+    --sk-chat-chip-border: #e2e8f0;
+    --sk-chat-chip-text: #334155;
+    --sk-chat-chip-hover-bg: #f1f5f9;
+    --sk-chat-chip-hover-border: #94a3b8;
+    --sk-chat-chip-hover-text: #0f172a;
+    --sk-chat-send-bg: #e2e8f0;
+    --sk-chat-send-color: #94a3b8;
+    --sk-chat-send-active-bg: #0f172a;
+    --sk-chat-send-active-color: #ffffff;
+    --sk-chat-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+    --sk-chat-launcher-bg: #ffffff;
+    --sk-chat-launcher-border: rgba(0, 0, 0, 0.1);
+    --sk-chat-brand-badge-bg: #f8fafc;
+    --sk-chat-code-bg: rgba(0, 0, 0, 0.05);
+    --sk-chat-link: #2563eb;
+    --sk-tick-color: #38bdf8;
   }
 
-  /* Floating Launcher Button */
+  /* 🌙 System Preference: Dark Mode */
+  @media (prefers-color-scheme: dark) {
+    .sk-chatbot-root {
+      --sk-chat-bg: #121216;
+      --sk-chat-header-bg: #16161b;
+      --sk-chat-border: #26262e;
+      --sk-chat-divider: #1f1f26;
+      --sk-chat-messages-bg: #0d0d10;
+
+      /* Dark Messenger Bubbles */
+      --sk-chat-bot-bubble-bg: #18181f;
+      --sk-chat-bot-bubble-text: #f1f5f9;
+      --sk-chat-bot-bubble-border: #26262e;
+      --sk-chat-bot-time: #64748b;
+
+      --sk-chat-user-bubble-bg: #2563eb;
+      --sk-chat-user-bubble-text: #ffffff;
+      --sk-chat-user-bubble-border: transparent;
+      --sk-chat-user-time: rgba(255, 255, 255, 0.7);
+
+      --sk-chat-input-bg: #18181f;
+      --sk-chat-input-border: #26262e;
+      --sk-chat-input-text: #f1f5f9;
+      --sk-chat-placeholder: #64748b;
+      --sk-chat-title: #f8fafc;
+      --sk-chat-subtitle: #94a3b8;
+      --sk-chat-icon-btn: #94a3b8;
+      --sk-chat-icon-hover-bg: #22222b;
+      --sk-chat-icon-hover-text: #ffffff;
+      --sk-chat-chip-bg: #18181f;
+      --sk-chat-chip-border: #26262e;
+      --sk-chat-chip-text: #cbd5e1;
+      --sk-chat-chip-hover-bg: #22222b;
+      --sk-chat-chip-hover-border: #3b82f6;
+      --sk-chat-chip-hover-text: #ffffff;
+      --sk-chat-send-bg: #26262e;
+      --sk-chat-send-color: #64748b;
+      --sk-chat-send-active-bg: #3b82f6;
+      --sk-chat-send-active-color: #ffffff;
+      --sk-chat-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
+      --sk-chat-launcher-bg: #16161b;
+      --sk-chat-launcher-border: #26262e;
+      --sk-chat-brand-badge-bg: #22222b;
+      --sk-chat-code-bg: rgba(255, 255, 255, 0.08);
+      --sk-chat-link: #60a5fa;
+      --sk-tick-color: #38bdf8;
+    }
+  }
+
+  /* Explicit theme attributes */
+  [data-theme="dark"] .sk-chatbot-root,
+  .sk-chatbot-root.theme-dark {
+    --sk-chat-bg: #121216;
+    --sk-chat-header-bg: #16161b;
+    --sk-chat-border: #26262e;
+    --sk-chat-divider: #1f1f26;
+    --sk-chat-messages-bg: #0d0d10;
+    --sk-chat-bot-bubble-bg: #18181f;
+    --sk-chat-bot-bubble-text: #f1f5f9;
+    --sk-chat-bot-bubble-border: #26262e;
+    --sk-chat-bot-time: #64748b;
+    --sk-chat-user-bubble-bg: #2563eb;
+    --sk-chat-user-bubble-text: #ffffff;
+    --sk-chat-user-bubble-border: transparent;
+    --sk-chat-user-time: rgba(255, 255, 255, 0.7);
+    --sk-chat-input-bg: #18181f;
+    --sk-chat-input-border: #26262e;
+    --sk-chat-input-text: #f1f5f9;
+    --sk-chat-placeholder: #64748b;
+    --sk-chat-title: #f8fafc;
+    --sk-chat-subtitle: #94a3b8;
+    --sk-chat-icon-btn: #94a3b8;
+    --sk-chat-icon-hover-bg: #22222b;
+    --sk-chat-icon-hover-text: #ffffff;
+    --sk-chat-chip-bg: #18181f;
+    --sk-chat-chip-border: #26262e;
+    --sk-chat-chip-text: #cbd5e1;
+    --sk-chat-chip-hover-bg: #22222b;
+    --sk-chat-chip-hover-border: #3b82f6;
+    --sk-chat-chip-hover-text: #ffffff;
+    --sk-chat-send-bg: #26262e;
+    --sk-chat-send-color: #64748b;
+    --sk-chat-send-active-bg: #3b82f6;
+    --sk-chat-send-active-color: #ffffff;
+    --sk-chat-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
+    --sk-chat-launcher-bg: #16161b;
+    --sk-chat-launcher-border: #26262e;
+    --sk-chat-brand-badge-bg: #22222b;
+    --sk-chat-code-bg: rgba(255, 255, 255, 0.08);
+    --sk-chat-link: #60a5fa;
+    --sk-tick-color: #38bdf8;
+  }
+
+  [data-theme="light"] .sk-chatbot-root,
+  .sk-chatbot-root.theme-light {
+    --sk-chat-bg: #f8fafc;
+    --sk-chat-header-bg: #ffffff;
+    --sk-chat-border: #e2e8f0;
+    --sk-chat-divider: #f1f5f9;
+    --sk-chat-messages-bg: #f4f6f8;
+    --sk-chat-bot-bubble-bg: #ffffff;
+    --sk-chat-bot-bubble-text: #0f172a;
+    --sk-chat-bot-bubble-border: #e2e8f0;
+    --sk-chat-bot-time: #94a3b8;
+    --sk-chat-user-bubble-bg: #ffffff;
+    --sk-chat-user-bubble-text: #0f172a;
+    --sk-chat-user-bubble-border: #cbd5e1;
+    --sk-chat-user-time: #94a3b8;
+    --sk-chat-input-bg: #ffffff;
+    --sk-chat-input-border: #e2e8f0;
+    --sk-chat-input-text: #0f172a;
+    --sk-chat-placeholder: #94a3b8;
+    --sk-chat-title: #0f172a;
+    --sk-chat-subtitle: #64748b;
+    --sk-chat-icon-btn: #64748b;
+    --sk-chat-icon-hover-bg: #f1f5f9;
+    --sk-chat-icon-hover-text: #0f172a;
+    --sk-chat-chip-bg: #ffffff;
+    --sk-chat-chip-border: #e2e8f0;
+    --sk-chat-chip-text: #334155;
+    --sk-chat-chip-hover-bg: #f1f5f9;
+    --sk-chat-chip-hover-border: #94a3b8;
+    --sk-chat-chip-hover-text: #0f172a;
+    --sk-chat-send-bg: #e2e8f0;
+    --sk-chat-send-color: #94a3b8;
+    --sk-chat-send-active-bg: #0f172a;
+    --sk-chat-send-active-color: #ffffff;
+    --sk-chat-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+    --sk-chat-launcher-bg: #ffffff;
+    --sk-chat-launcher-border: rgba(0, 0, 0, 0.1);
+    --sk-chat-brand-badge-bg: #f8fafc;
+    --sk-chat-code-bg: rgba(0, 0, 0, 0.05);
+    --sk-chat-link: #2563eb;
+    --sk-tick-color: #38bdf8;
+  }
+
+  /* Compact Floating Launcher Button with "SK" */
   .sk-launcher-btn {
-    width: 58px;
-    height: 58px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    background: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.16);
+    background: var(--sk-chat-launcher-bg);
+    border: 1px solid var(--sk-chat-launcher-border);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.16);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  [data-theme="dark"] .sk-launcher-btn {
-    background: #18181b;
-    border-color: #27272a;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    padding: 0;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .sk-launcher-btn:hover {
-    transform: scale(1.06) translateY(-2px);
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.22);
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.24);
   }
 
-  .sk-launcher-icon-wrap {
+  .sk-launcher-inner {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .sk-launcher-sk {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #06b6d4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    user-select: none;
+    line-height: 1;
   }
 
   .sk-icon-close {
     display: none;
-    color: var(--text-primary);
+    color: var(--sk-chat-title);
   }
 
-  .sk-chatbot-root.is-open .sk-icon-bot {
+  .sk-chatbot-root.is-open .sk-launcher-sk {
     display: none;
   }
 
@@ -284,46 +479,38 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
 
   .sk-status-dot {
     position: absolute;
-    top: 2px;
-    right: 2px;
-    width: 12px;
-    height: 12px;
+    top: 1px;
+    right: 1px;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
     background: #10b981;
-    border: 2px solid #ffffff;
-  }
-
-  [data-theme="dark"] .sk-status-dot {
-    border-color: #18181b;
+    border: 2px solid var(--sk-chat-launcher-bg);
   }
 
   /* Chatbot Modal Container */
   .sk-chat-modal {
     position: absolute;
-    bottom: 72px;
+    bottom: 56px;
     right: 0;
-    width: 380px;
+    width: 375px;
+    min-width: 310px;
     max-width: calc(100vw - 32px);
-    height: 580px;
-    max-height: calc(100vh - 110px);
-    background: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 20px;
-    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.16);
+    height: 560px;
+    min-height: 380px;
+    max-height: calc(100vh - 80px);
+    background: var(--sk-chat-bg);
+    border: 1px solid var(--sk-chat-border);
+    border-radius: 16px;
+    box-shadow: var(--sk-chat-shadow);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(16px) scale(0.96);
+    transform: translateY(12px) scale(0.96);
     transform-origin: bottom right;
-    transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  [data-theme="dark"] .sk-chat-modal {
-    background: #121215;
-    border-color: #27272a;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
+    transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .sk-chatbot-root.is-open .sk-chat-modal {
@@ -332,35 +519,69 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
     transform: translateY(0) scale(1);
   }
 
+  /* Expanded View */
+  .sk-chat-modal.is-expanded {
+    width: 640px !important;
+    height: 700px !important;
+    max-width: calc(100vw - 32px) !important;
+    max-height: calc(100vh - 70px) !important;
+  }
+
+  /* Resize Handles */
+  .sk-resize-corner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 14px;
+    height: 14px;
+    cursor: nwse-resize;
+    z-index: 50;
+  }
+
+  .sk-resize-edge-top {
+    position: absolute;
+    top: 0;
+    left: 14px;
+    right: 14px;
+    height: 6px;
+    cursor: ns-resize;
+    z-index: 40;
+  }
+
+  .sk-resize-edge-left {
+    position: absolute;
+    top: 14px;
+    left: 0;
+    bottom: 14px;
+    width: 6px;
+    cursor: ew-resize;
+    z-index: 40;
+  }
+
   /* Header */
   .sk-modal-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 16px;
-    background: #ffffff;
-    border-bottom: 1px solid #f1f5f9;
+    padding: 10px 14px;
+    background: var(--sk-chat-header-bg);
+    border-bottom: 1px solid var(--sk-chat-divider);
     flex-shrink: 0;
-  }
-
-  [data-theme="dark"] .sk-modal-header {
-    background: #121215;
-    border-bottom-color: #202024;
   }
 
   .sk-header-left {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
   }
 
   .sk-header-icon-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
     background: transparent;
     border: none;
-    color: #64748b;
+    color: var(--sk-chat-icon-btn);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -368,33 +589,20 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
     transition: all 0.15s ease;
   }
 
-  [data-theme="dark"] .sk-header-icon-btn {
-    color: #94a3b8;
-  }
-
   .sk-header-icon-btn:hover {
-    background: #f1f5f9;
-    color: #0f172a;
-  }
-
-  [data-theme="dark"] .sk-header-icon-btn:hover {
-    background: #202025;
-    color: #ffffff;
+    background: var(--sk-chat-icon-hover-bg);
+    color: var(--sk-chat-icon-hover-text);
   }
 
   .sk-brand-badge {
-    width: 32px;
-    height: 32px;
-    border-radius: 9px;
-    background: #f8fafc;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: var(--sk-chat-brand-badge-bg);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-  }
-
-  [data-theme="dark"] .sk-brand-badge {
-    background: #1e1e24;
   }
 
   .sk-header-titles {
@@ -405,51 +613,38 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
   .sk-title-row {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
   }
 
   .sk-modal-title {
-    font-size: 15px;
+    font-size: 13.5px;
     font-weight: 700;
-    color: #0f172a;
+    color: var(--sk-chat-title);
     margin: 0;
     line-height: 1.2;
   }
 
-  [data-theme="dark"] .sk-modal-title {
-    color: #fafafa;
-  }
-
   .sk-agent-pill {
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 700;
-    padding: 1px 5px;
-    border-radius: 4px;
-    background: #e0f2fe;
-    color: #0284c7;
+    padding: 1px 4px;
+    border-radius: 3px;
+    background: #0284c7;
+    color: #ffffff;
     letter-spacing: 0.5px;
   }
 
-  [data-theme="dark"] .sk-agent-pill {
-    background: #082f49;
-    color: #38bdf8;
-  }
-
   .sk-modal-subtitle {
-    font-size: 12px;
-    color: #64748b;
-    margin: 2px 0 0 0;
+    font-size: 11px;
+    color: var(--sk-chat-subtitle);
+    margin: 1px 0 0 0;
     line-height: 1.2;
-  }
-
-  [data-theme="dark"] .sk-modal-subtitle {
-    color: #a1a1aa;
   }
 
   .sk-header-right {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 2px;
   }
 
   .sk-options-dropdown-wrap {
@@ -458,23 +653,17 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
 
   .sk-options-menu {
     position: absolute;
-    top: 36px;
+    top: 32px;
     right: 0;
-    width: 200px;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-    padding: 6px;
+    width: 190px;
+    background: var(--sk-chat-header-bg);
+    border: 1px solid var(--sk-chat-border);
+    border-radius: 10px;
+    box-shadow: var(--sk-chat-shadow);
+    padding: 4px;
     display: none;
     flex-direction: column;
     z-index: 100;
-  }
-
-  [data-theme="dark"] .sk-options-menu {
-    background: #18181b;
-    border-color: #27272a;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
   }
 
   .sk-options-menu.show {
@@ -482,50 +671,38 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
   }
 
   .sk-menu-item {
-    padding: 8px 10px;
-    font-size: 13px;
-    color: #334155;
+    padding: 6px 8px;
+    font-size: 12px;
+    color: var(--sk-chat-title);
     background: transparent;
     border: none;
-    border-radius: 6px;
+    border-radius: 5px;
     text-align: left;
     text-decoration: none;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
     transition: background 0.15s ease;
   }
 
-  [data-theme="dark"] .sk-menu-item {
-    color: #d4d4d8;
-  }
-
   .sk-menu-item:hover {
-    background: #f1f5f9;
-    color: #0f172a;
-  }
-
-  [data-theme="dark"] .sk-menu-item:hover {
-    background: #27272a;
-    color: #ffffff;
+    background: var(--sk-chat-icon-hover-bg);
+    color: var(--sk-chat-icon-hover-text);
   }
 
   /* Messages Area */
   .sk-messages-box {
     flex: 1;
     overflow-y: auto;
-    padding: 16px;
+    padding: 12px 12px 6px 12px;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    background: #f8fafc;
+    background: var(--sk-chat-messages-bg);
   }
 
-  [data-theme="dark"] .sk-messages-box {
-    background: #0e0e11;
-  }
-
+  /* Message Rows */
   .sk-msg-row {
     display: flex;
     width: 100%;
@@ -539,130 +716,146 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
     justify-content: flex-end;
   }
 
-  /* Chat Bubbles (Matching Screenshot) */
+  /* Chat Bubbles (Crisp 12.5px font size) */
   .sk-bubble {
-    max-width: 86%;
-    padding: 12px 16px;
-    font-size: 14px;
-    line-height: 1.5;
-    word-break: break-word;
-  }
-
-  .sk-bubble.bot {
-    background: #ffffff;
-    color: #1e293b;
-    border-radius: 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e2e8f0;
-  }
-
-  [data-theme="dark"] .sk-bubble.bot {
-    background: #18181c;
-    color: #e4e4e7;
-    border-color: #27272a;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  }
-
-  .sk-bubble.user {
-    background: #0f172a;
-    color: #ffffff;
-    border-radius: 16px;
-    border-bottom-right-radius: 4px;
-  }
-
-  [data-theme="dark"] .sk-bubble.user {
-    background: #3b82f6;
-    color: #ffffff;
-  }
-
-  .sk-bubble a {
-    color: #2563eb;
-    text-decoration: underline;
-  }
-
-  [data-theme="dark"] .sk-bubble a {
-    color: #60a5fa;
-  }
-
-  .sk-bubble ul, .sk-bubble ol {
-    margin: 6px 0;
-    padding-left: 18px;
-  }
-
-  .sk-bubble code {
-    font-family: var(--font-mono, monospace);
-    background: rgba(0, 0, 0, 0.06);
-    padding: 2px 5px;
-    border-radius: 4px;
+    max-width: 82%;
+    padding: 7px 11px 5px 11px;
     font-size: 12.5px;
+    line-height: 1.45;
+    word-break: break-word;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    position: relative;
+    display: flex;
+    flex-direction: column;
   }
 
-  [data-theme="dark"] .sk-bubble code {
-    background: rgba(255, 255, 255, 0.1);
+  /* Bot Bubble: Left-aligned with subtle border */
+  .sk-bubble.bot {
+    background: var(--sk-chat-bot-bubble-bg);
+    color: var(--sk-chat-bot-bubble-text);
+    border-radius: 12px 14px 14px 3px;
+    border: 1px solid var(--sk-chat-bot-bubble-border);
   }
 
-  .sk-msg-meta {
+  /* User Bubble: Right-aligned */
+  .sk-bubble.user {
+    background: var(--sk-chat-user-bubble-bg);
+    color: var(--sk-chat-user-bubble-text);
+    border-radius: 14px 12px 3px 14px;
+    border: 1px solid var(--sk-chat-user-bubble-border);
+  }
+
+  .sk-bubble-content {
+    display: inline;
+  }
+
+  .sk-bubble-content p {
+    margin: 3px 0;
+  }
+
+  .sk-bubble-content strong {
+    font-weight: 600;
+  }
+
+  .sk-bubble-content a {
+    color: var(--sk-chat-link);
+    text-decoration: underline;
+    font-weight: 500;
+  }
+
+  .sk-bubble-content ul, 
+  .sk-bubble-content ol {
+    margin: 3px 0;
+    padding-left: 14px;
+  }
+
+  .sk-bubble-content li {
+    margin-bottom: 2px;
+  }
+
+  .sk-bubble-content code {
+    font-family: var(--font-mono, monospace);
+    background: var(--sk-chat-code-bg);
+    padding: 1px 4px;
+    border-radius: 3px;
     font-size: 11.5px;
-    color: #94a3b8;
-    margin: 2px 0 12px 6px;
   }
 
-  [data-theme="dark"] .sk-msg-meta {
-    color: #71717a;
+  .sk-bubble-content pre {
+    background: var(--sk-chat-code-bg);
+    padding: 6px 8px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-family: var(--font-mono, monospace);
+    font-size: 11.5px;
+    margin: 4px 0;
+    line-height: 1.35;
+  }
+
+  /* Bubble Timestamps */
+  .sk-bubble-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 3px;
+    margin-top: 2px;
+    user-select: none;
+  }
+
+  .sk-bubble.bot .sk-time-text {
+    font-size: 9.5px;
+    color: var(--sk-chat-bot-time);
+  }
+
+  .sk-bubble.user .sk-time-text {
+    font-size: 9.5px;
+    color: var(--sk-chat-user-time);
+  }
+
+  .sk-ticks-icon {
+    display: inline-flex;
+    color: var(--sk-tick-color);
   }
 
   /* Suggestion Chips */
   .sk-quick-chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 4px;
-    margin-bottom: 8px;
+    gap: 5px;
+    margin-top: 2px;
+    margin-bottom: 2px;
   }
 
   .sk-chip-btn {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
+    background: var(--sk-chat-chip-bg);
+    border: 1px solid var(--sk-chat-chip-border);
     border-radius: 9999px;
-    padding: 6px 12px;
-    font-size: 12px;
-    color: #334155;
+    padding: 4px 9px;
+    font-size: 11px;
+    color: var(--sk-chat-chip-text);
     cursor: pointer;
     transition: all 0.15s ease;
   }
 
-  [data-theme="dark"] .sk-chip-btn {
-    background: #1c1c21;
-    border-color: #2e2e35;
-    color: #d4d4d8;
-  }
-
   .sk-chip-btn:hover {
-    background: #f1f5f9;
-    border-color: #cbd5e1;
-    color: #0f172a;
-    transform: translateY(-1px);
-  }
-
-  [data-theme="dark"] .sk-chip-btn:hover {
-    background: #27272e;
-    border-color: #3f3f46;
-    color: #ffffff;
+    background: var(--sk-chat-chip-hover-bg);
+    border-color: var(--sk-chat-chip-hover-border);
+    color: var(--sk-chat-chip-hover-text);
   }
 
   /* Typing Dots */
   .sk-typing-indicator {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    padding: 4px 8px;
+    gap: 3px;
+    padding: 5px 8px;
   }
 
   .sk-typing-dot {
-    width: 6px;
-    height: 6px;
+    width: 4.5px;
+    height: 4.5px;
     border-radius: 50%;
-    background: #94a3b8;
+    background: var(--sk-chat-placeholder);
     animation: skBlink 1.4s infinite both;
   }
 
@@ -676,38 +869,23 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
 
   /* Footer Area & Input Card */
   .sk-modal-footer {
-    padding: 12px 14px;
-    background: #ffffff;
-    border-top: 1px solid #f1f5f9;
+    padding: 8px 10px;
+    background: var(--sk-chat-header-bg);
+    border-top: 1px solid var(--sk-chat-divider);
     flex-shrink: 0;
   }
 
-  [data-theme="dark"] .sk-modal-footer {
-    background: #121215;
-    border-top-color: #202024;
-  }
-
   .sk-input-card {
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    background: #ffffff;
-    padding: 10px 12px 8px 12px;
+    border: 1px solid var(--sk-chat-input-border);
+    border-radius: 12px;
+    background: var(--sk-chat-input-bg);
+    padding: 7px 9px 5px 9px;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
-  [data-theme="dark"] .sk-input-card {
-    border-color: #27272a;
-    background: #18181c;
-  }
-
   .sk-input-card:focus-within {
-    border-color: #94a3b8;
-    box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.15);
-  }
-
-  [data-theme="dark"] .sk-input-card:focus-within {
     border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
   }
 
   .sk-input-field {
@@ -715,24 +893,16 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
     border: none;
     background: transparent;
     outline: none;
-    font-size: 14px;
-    color: #0f172a;
+    font-size: 13px;
+    color: var(--sk-chat-input-text);
     resize: none;
     max-height: 90px;
     line-height: 1.4;
     font-family: inherit;
   }
 
-  [data-theme="dark"] .sk-input-field {
-    color: #f4f4f5;
-  }
-
   .sk-input-field::placeholder {
-    color: #94a3b8;
-  }
-
-  [data-theme="dark"] .sk-input-field::placeholder {
-    color: #71717a;
+    color: var(--sk-chat-placeholder);
   }
 
   /* Bottom Actions Toolbar */
@@ -740,22 +910,22 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 6px;
+    margin-top: 3px;
   }
 
   .sk-left-tools {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 3px;
   }
 
   .sk-tool-btn {
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
     background: transparent;
     border: none;
-    color: #94a3b8;
+    color: var(--sk-chat-placeholder);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -763,59 +933,40 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
     transition: all 0.15s ease;
   }
 
-  [data-theme="dark"] .sk-tool-btn {
-    color: #71717a;
-  }
-
   .sk-tool-btn:hover {
-    color: #0f172a;
-    background: #f1f5f9;
-  }
-
-  [data-theme="dark"] .sk-tool-btn:hover {
-    color: #ffffff;
-    background: #27272a;
+    color: var(--sk-chat-icon-hover-text);
+    background: var(--sk-chat-icon-hover-bg);
   }
 
   .sk-gif-text {
-    font-size: 10.5px;
+    font-size: 9.5px;
     font-weight: 700;
-    border: 1.2px solid currentColor;
-    border-radius: 3px;
-    padding: 1px 3px;
+    border: 1px solid currentColor;
+    border-radius: 2px;
+    padding: 0 2px;
     line-height: 1;
   }
 
-  /* Send Button (Circular with upward arrow) */
+  /* Send Button */
   .sk-send-btn {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
-    background: #e2e8f0;
-    color: #94a3b8;
+    background: var(--sk-chat-send-bg);
+    color: var(--sk-chat-send-color);
     border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: not-allowed;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  [data-theme="dark"] .sk-send-btn {
-    background: #27272a;
-    color: #71717a;
+    transition: all 0.18s ease;
   }
 
   .sk-send-btn.active {
-    background: #0f172a;
-    color: #ffffff;
+    background: var(--sk-chat-send-active-bg);
+    color: var(--sk-chat-send-active-color);
     cursor: pointer;
     transform: scale(1.05);
-  }
-
-  [data-theme="dark"] .sk-send-btn.active {
-    background: #3b82f6;
-    color: #ffffff;
   }
 
   .sk-send-btn.active:hover {
@@ -825,20 +976,101 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
   /* Responsive Mobile Tweaks */
   @media (max-width: 480px) {
     .sk-chatbot-root {
-      bottom: 16px;
-      right: 16px;
+      bottom: 14px;
+      right: 14px;
     }
 
     .sk-chat-modal {
-      width: calc(100vw - 32px);
-      height: calc(100vh - 100px);
-      bottom: 68px;
+      width: calc(100vw - 28px);
+      height: calc(100vh - 90px);
+      bottom: 56px;
+    }
+
+    .sk-chat-modal.is-expanded {
+      width: calc(100vw - 28px) !important;
+      height: calc(100vh - 90px) !important;
     }
   }
 </style>
 
 <script is:inline>
   (function() {
+    // ==========================================
+    // 🗄️ IndexedDB Storage Manager for Chat History
+    // ==========================================
+    const DB_NAME = 'SK_Portfolio_ChatDB';
+    const DB_VERSION = 1;
+    const STORE_NAME = 'chat_messages';
+
+    function getFormattedTime() {
+      const now = new Date();
+      return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function openChatDB() {
+      return new Promise((resolve) => {
+        if (!window.indexedDB) return resolve(null);
+        const req = window.indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+          }
+        };
+        req.onsuccess = (e) => resolve(e.target.result);
+        req.onerror = () => resolve(null);
+      });
+    }
+
+    async function saveMessageToDB(role, content, html, timeStr) {
+      try {
+        const db = await openChatDB();
+        if (!db) return;
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        store.add({
+          role,
+          content,
+          html,
+          time: timeStr || getFormattedTime(),
+          timestamp: Date.now()
+        });
+      } catch (err) {
+        console.warn('IndexedDB save failed:', err);
+      }
+    }
+
+    async function loadMessagesFromDB() {
+      try {
+        const db = await openChatDB();
+        if (!db) return [];
+        return new Promise((resolve) => {
+          const tx = db.transaction(STORE_NAME, 'readonly');
+          const store = tx.objectStore(STORE_NAME);
+          const req = store.getAll();
+          req.onsuccess = () => resolve(req.result || []);
+          req.onerror = () => resolve([]);
+        });
+      } catch (err) {
+        return [];
+      }
+    }
+
+    async function clearMessagesFromDB() {
+      try {
+        const db = await openChatDB();
+        if (!db) return;
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        const store = tx.objectStore(STORE_NAME);
+        store.clear();
+      } catch (err) {
+        console.warn('IndexedDB clear failed:', err);
+      }
+    }
+
+    // ==========================================
+    // 🤖 Native Chat Messenger Controller
+    // ==========================================
     function initLinkMateChatbot() {
       const root = document.getElementById('sk-ai-chatbot');
       if (!root) return;
@@ -847,6 +1079,9 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
       const panel = document.getElementById('chatbot-panel');
       const closeBtn = document.getElementById('chat-close-btn');
       const backBtn = document.getElementById('chat-back-btn');
+      const resizeBtn = document.getElementById('chat-resize-btn');
+      const iconExpand = document.getElementById('icon-expand');
+      const iconShrink = document.getElementById('icon-shrink');
       const optionsBtn = document.getElementById('chat-options-btn');
       const optionsMenu = document.getElementById('chat-options-menu');
       const clearBtn = document.getElementById('opt-clear-chat');
@@ -854,6 +1089,11 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
       const textarea = document.getElementById('chat-textarea');
       const sendBtn = document.getElementById('chat-send-btn');
       const quickChips = document.getElementById('quick-chips');
+      const initBotTime = document.getElementById('init-bot-time');
+
+      if (initBotTime) {
+        initBotTime.textContent = getFormattedTime();
+      }
 
       // Toolbar Buttons
       const attachBtn = document.getElementById('tool-attach-btn');
@@ -861,10 +1101,11 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
       const gifBtn = document.getElementById('tool-gif-btn');
       const micBtn = document.getElementById('tool-mic-btn');
 
-      // Extract system knowledge
+      // Extract system knowledge & model configuration
       let systemPrompt = '';
       let knowledgeBase = null;
       let groqApiKey = root.getAttribute('data-env-key') || '';
+      let configuredModel = root.getAttribute('data-model') || 'openai/gpt-oss-120b';
 
       try {
         systemPrompt = JSON.parse(root.getAttribute('data-system-prompt') || '""');
@@ -873,10 +1114,153 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
         console.error('Failed to parse chatbot knowledge:', e);
       }
 
-      // Conversation History
+      // Restore saved user width/height preference
+      const savedWidth = localStorage.getItem('sk_chat_w');
+      const savedHeight = localStorage.getItem('sk_chat_h');
+      if (savedWidth && savedHeight && window.innerWidth > 600) {
+        panel.style.width = savedWidth + 'px';
+        panel.style.height = savedHeight + 'px';
+      }
+
+      // Live System OS Theme Sync
+      function syncSystemTheme() {
+        const docTheme = document.documentElement.getAttribute('data-theme');
+        if (docTheme === 'dark') {
+          root.classList.add('theme-dark');
+          root.classList.remove('theme-light');
+        } else if (docTheme === 'light') {
+          root.classList.add('theme-light');
+          root.classList.remove('theme-dark');
+        } else {
+          const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (isDark) {
+            root.classList.add('theme-dark');
+            root.classList.remove('theme-light');
+          } else {
+            root.classList.add('theme-light');
+            root.classList.remove('theme-dark');
+          }
+        }
+      }
+
+      syncSystemTheme();
+      if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', syncSystemTheme);
+      }
+
+      // Initialize Conversation Context
       let messages = [
         { role: 'system', content: systemPrompt }
       ];
+
+      // Double Checkmark SVG for User Message
+      const doubleTickSvg = `
+        <span class="sk-ticks-icon" title="Delivered">
+          <svg width="13" height="10" viewBox="0 0 16 11" fill="none">
+            <path d="M11 1.5L4.5 8L1.5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14.5 1.5L8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      `;
+
+      // Restore Conversation from IndexedDB
+      loadMessagesFromDB().then((saved) => {
+        if (saved && saved.length > 0) {
+          messagesBox.innerHTML = '';
+          saved.forEach((msg) => {
+            messages.push({ role: msg.role, content: msg.content });
+            if (msg.role === 'user') {
+              const row = document.createElement('div');
+              row.className = 'sk-msg-row user';
+              row.innerHTML = `
+                <div class="sk-bubble user">
+                  <div class="sk-bubble-content">${escapeHtml(msg.content)}</div>
+                  <div class="sk-bubble-footer">
+                    <span class="sk-time-text">${msg.time || getFormattedTime()}</span>
+                    ${doubleTickSvg}
+                  </div>
+                </div>
+              `;
+              messagesBox.appendChild(row);
+            } else if (msg.role === 'assistant') {
+              const row = document.createElement('div');
+              row.className = 'sk-msg-row bot';
+              row.innerHTML = `
+                <div class="sk-bubble bot">
+                  <div class="sk-bubble-content">${msg.html || formatMarkdown(msg.content)}</div>
+                  <div class="sk-bubble-footer">
+                    <span class="sk-time-text">${msg.time || getFormattedTime()}</span>
+                  </div>
+                </div>
+              `;
+              messagesBox.appendChild(row);
+            }
+          });
+          scrollToBottom();
+        }
+      });
+
+      // Resize / Expand Toggle
+      if (resizeBtn) {
+        resizeBtn.addEventListener('click', () => {
+          const isExpanded = panel.classList.toggle('is-expanded');
+          if (isExpanded) {
+            iconExpand.style.display = 'none';
+            iconShrink.style.display = 'block';
+          } else {
+            iconExpand.style.display = 'block';
+            iconShrink.style.display = 'none';
+          }
+          scrollToBottom();
+        });
+      }
+
+      // Multi-Directional Resize Handles
+      function setupResizeDrag(handleEl, resizeX, resizeY) {
+        if (!handleEl) return;
+        let isResizing = false;
+        let startX, startY, startWidth, startHeight;
+
+        handleEl.addEventListener('mousedown', (e) => {
+          isResizing = true;
+          panel.classList.remove('is-expanded');
+          startX = e.clientX;
+          startY = e.clientY;
+          startWidth = parseInt(document.defaultView.getComputedStyle(panel).width, 10);
+          startHeight = parseInt(document.defaultView.getComputedStyle(panel).height, 10);
+          document.documentElement.addEventListener('mousemove', doDrag, false);
+          document.documentElement.addEventListener('mouseup', stopDrag, false);
+          e.preventDefault();
+        });
+
+        function doDrag(e) {
+          if (!isResizing) return;
+          if (resizeX) {
+            const newWidth = startWidth - (e.clientX - startX);
+            if (newWidth > 310 && newWidth < (window.innerWidth - 30)) {
+              panel.style.width = newWidth + 'px';
+              localStorage.setItem('sk_chat_w', newWidth);
+            }
+          }
+          if (resizeY) {
+            const newHeight = startHeight - (e.clientY - startY);
+            if (newHeight > 380 && newHeight < (window.innerHeight - 70)) {
+              panel.style.height = newHeight + 'px';
+              localStorage.setItem('sk_chat_h', newHeight);
+            }
+          }
+        }
+
+        function stopDrag() {
+          isResizing = false;
+          document.documentElement.removeEventListener('mousemove', doDrag, false);
+          document.documentElement.removeEventListener('mouseup', stopDrag, false);
+        }
+      }
+
+      setupResizeDrag(document.getElementById('resize-handle-corner'), true, true);
+      setupResizeDrag(document.getElementById('resize-handle-top'), false, true);
+      setupResizeDrag(document.getElementById('resize-handle-left'), true, false);
 
       // Toggle Chatbot Window
       function toggleChat(forceOpen) {
@@ -916,19 +1300,25 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
       if (clearBtn) {
         clearBtn.addEventListener('click', () => {
           messages = [{ role: 'system', content: systemPrompt }];
+          clearMessagesFromDB();
+          const t = getFormattedTime();
           messagesBox.innerHTML = `
             <div class="sk-msg-row bot">
               <div class="sk-bubble bot">
-                Chat cleared! How can I help you today with Sunil's experience, projects, or skills?
+                <div class="sk-bubble-content">
+                  Chat cleared! How can I help you today with Sunil's experience, projects, or technical topics?
+                </div>
+                <div class="sk-bubble-footer">
+                  <span class="sk-time-text">${t}</span>
+                </div>
               </div>
             </div>
-            <div class="sk-msg-meta">SK Agent &bull; Just now</div>
           `;
           if (optionsMenu) optionsMenu.classList.remove('show');
         });
       }
 
-      // Input change handler (Enable / Disable send button)
+      // Input change handler
       textarea.addEventListener('input', () => {
         textarea.style.height = 'auto';
         textarea.style.height = Math.min(textarea.scrollHeight, 90) + 'px';
@@ -970,7 +1360,9 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
       // Toolbar Buttons Actions
       if (attachBtn) {
         attachBtn.addEventListener('click', () => {
-          appendUserMessage("Can you summarize Sunil's professional profile and resume?");
+          const q = "Can you summarize Sunil's profile?";
+          appendUserMessage(q);
+          saveMessageToDB('user', q, "", getFormattedTime());
           generateSmartResponse("resume summary");
         });
       }
@@ -985,7 +1377,9 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
 
       if (gifBtn) {
         gifBtn.addEventListener('click', () => {
-          appendUserMessage("Show me Sunil's featured project demos.");
+          const q = "Show me Sunil's featured projects.";
+          appendUserMessage(q);
+          saveMessageToDB('user', q, "", getFormattedTime());
           generateSmartResponse("projects");
         });
       }
@@ -1012,12 +1406,12 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
 
         recognition.onerror = () => {
           micBtn.style.color = '';
-          textarea.setAttribute('placeholder', 'Ask a question...');
+          textarea.setAttribute('placeholder', 'Message...');
         };
 
         recognition.onend = () => {
           micBtn.style.color = '';
-          textarea.setAttribute('placeholder', 'Ask a question...');
+          textarea.setAttribute('placeholder', 'Message...');
         };
 
         micBtn.addEventListener('click', () => {
@@ -1025,27 +1419,64 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
         });
       }
 
-      // Message Handling
+      // Message UI Elements
       function appendUserMessage(text) {
+        const timeStr = getFormattedTime();
         const row = document.createElement('div');
         row.className = 'sk-msg-row user';
-        row.innerHTML = `<div class="sk-bubble user">${escapeHtml(text)}</div>`;
+        row.innerHTML = `
+          <div class="sk-bubble user">
+            <div class="sk-bubble-content">${escapeHtml(text)}</div>
+            <div class="sk-bubble-footer">
+              <span class="sk-time-text">${timeStr}</span>
+              ${doubleTickSvg}
+            </div>
+          </div>
+        `;
         messagesBox.appendChild(row);
         scrollToBottom();
       }
 
-      function appendBotMessage(html) {
+      function createStreamingBotMessage() {
+        const timeStr = getFormattedTime();
         const row = document.createElement('div');
         row.className = 'sk-msg-row bot';
-        row.innerHTML = `<div class="sk-bubble bot">${html}</div>`;
+        
+        const bubble = document.createElement('div');
+        bubble.className = 'sk-bubble bot';
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'sk-bubble-content';
+        contentDiv.innerHTML = '';
+        
+        const footerDiv = document.createElement('div');
+        footerDiv.className = 'sk-bubble-footer';
+        footerDiv.innerHTML = `<span class="sk-time-text">${timeStr}</span>`;
+
+        bubble.appendChild(contentDiv);
+        bubble.appendChild(footerDiv);
+        row.appendChild(bubble);
         messagesBox.appendChild(row);
 
-        const meta = document.createElement('div');
-        meta.className = 'sk-msg-meta';
-        meta.innerHTML = 'SK Agent &bull; Just now';
-        messagesBox.appendChild(meta);
-
         scrollToBottom();
+        return { contentDiv, timeStr };
+      }
+
+      function appendBotMessage(html, rawContent) {
+        const timeStr = getFormattedTime();
+        const row = document.createElement('div');
+        row.className = 'sk-msg-row bot';
+        row.innerHTML = `
+          <div class="sk-bubble bot">
+            <div class="sk-bubble-content">${html}</div>
+            <div class="sk-bubble-footer">
+              <span class="sk-time-text">${timeStr}</span>
+            </div>
+          </div>
+        `;
+        messagesBox.appendChild(row);
+        scrollToBottom();
+        saveMessageToDB('assistant', rawContent || html, html, timeStr);
       }
 
       function showTypingIndicator() {
@@ -1072,29 +1503,62 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
         messagesBox.scrollTop = messagesBox.scrollHeight;
       }
 
+      // Robust Clean Markdown Formatter
       function formatMarkdown(text) {
-        return text
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-          .replace(/\*(.*?)\*/g, '<em>$1</em>')
-          .replace(/`([^`]+)`/g, '<code>$1</code>')
-          .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
-          .replace(/\n\n/g, '<br><br>')
-          .replace(/\n/g, '<br>');
+        if (!text) return '';
+
+        // 1. Sanitize already generated HTML <a> tags
+        let clean = text.replace(/<a\s+(?:[^>]*?\s+)?href="([^"]*)"[^>]*>(.*?)<\/a>/gi, '[$2]($1)');
+
+        // 2. Escape dangerous scripts
+        clean = clean
+          .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+          .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '');
+
+        // 3. Headers
+        clean = clean.replace(/^#{1,6}\s*(.+)$/gm, '<strong>$1</strong>');
+
+        // 4. Code Blocks
+        clean = clean.replace(/```([a-zA-Z]*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+        clean = clean.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+
+        // 5. Inline Code
+        clean = clean.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+        // 6. Bold & Italic
+        clean = clean.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        clean = clean.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+        // 7. Markdown Links: [Text](URL)
+        clean = clean.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+
+        // 8. Bullet points
+        clean = clean.replace(/^[-*]\s+(.+)$/gm, '• $1');
+
+        // 9. Line breaks
+        clean = clean.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
+
+        return clean;
       }
 
       function escapeHtml(unsafe) {
-        return unsafe.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return unsafe
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
       }
 
-      // Handle sending
+      // Live LLM Request with Brevity Instruction
       async function handleSendMessage() {
         const text = textarea.value.trim();
         if (!text) return;
 
+        const userTime = getFormattedTime();
         appendUserMessage(text);
+        saveMessageToDB('user', text, "", userTime);
+
         textarea.value = '';
         textarea.style.height = 'auto';
         sendBtn.classList.remove('active');
@@ -1103,103 +1567,125 @@ const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
         messages.push({ role: 'user', content: text });
         showTypingIndicator();
 
-        // 1. Try Live Groq LLM API if key is present
+        // Check for Groq API Key
         if (groqApiKey && groqApiKey !== 'your_groq_api_key_here') {
-          try {
-            const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${groqApiKey}`
-              },
-              body: JSON.stringify({
-                model: 'llama-3.3-70b-versatile',
-                messages: messages,
-                temperature: 0.5,
-                max_tokens: 600
-              })
-            });
+          const modelsToTry = [
+            configuredModel && !configuredModel.includes('prompt-guard') ? configuredModel : 'openai/gpt-oss-120b',
+            'openai/gpt-oss-120b',
+            'qwen/qwen3.8-27b',
+            'openai/gpt-oss-20b',
+            'qwen/qwen3.6-27b',
+            'groq/compound',
+            'llama-3.3-70b-versatile',
+            'llama-3.1-8b-instant'
+          ];
 
-            if (res.ok) {
-              const data = await res.json();
-              const botReply = data.choices?.[0]?.message?.content || "I'm here to help! Ask me anything about Sunil's projects or experience.";
-              messages.push({ role: 'assistant', content: botReply });
-              removeTypingIndicator();
-              appendBotMessage(formatMarkdown(botReply));
-              return;
+          for (const modelName of modelsToTry) {
+            try {
+              const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${groqApiKey}`
+                },
+                body: JSON.stringify({
+                  model: modelName,
+                  messages: messages,
+                  temperature: 0.5,
+                  max_tokens: 350,
+                  stream: true
+                })
+              });
+
+              if (res.ok && res.body) {
+                removeTypingIndicator();
+                const { contentDiv, timeStr } = createStreamingBotMessage();
+                const reader = res.body.getReader();
+                const decoder = new TextDecoder();
+                let fullResponse = '';
+                let buffer = '';
+
+                while (true) {
+                  const { done, value } = await reader.read();
+                  if (done) break;
+
+                  buffer += decoder.decode(value, { stream: true });
+                  const lines = buffer.split('\n');
+                  buffer = lines.pop() || '';
+
+                  for (const line of lines) {
+                    const trimmed = line.trim();
+                    if (!trimmed || trimmed === 'data: [DONE]') continue;
+                    if (trimmed.startsWith('data: ')) {
+                      try {
+                        const json = JSON.parse(trimmed.slice(6));
+                        const token = json.choices?.[0]?.delta?.content || '';
+                        if (token) {
+                          fullResponse += token;
+                          contentDiv.innerHTML = formatMarkdown(fullResponse);
+                          scrollToBottom();
+                        }
+                      } catch (e) {}
+                    }
+                  }
+                }
+
+                if (fullResponse.trim().length > 0) {
+                  messages.push({ role: 'assistant', content: fullResponse });
+                  saveMessageToDB('assistant', fullResponse, formatMarkdown(fullResponse), timeStr);
+                  return;
+                }
+              }
+            } catch (err) {
+              console.warn(`Streaming error with ${modelName}:`, err);
             }
-          } catch (err) {
-            console.warn('Groq API failed or network error, falling back to Knowledge Engine:', err);
           }
         }
 
-        // 2. Fallback to Smart Offline Knowledge Engine (Deterministic & 100% Accurate)
+        // Offline Smart Knowledge Base Fallback
         setTimeout(() => {
           removeTypingIndicator();
           generateSmartResponse(text);
-        }, 500);
+        }, 350);
       }
 
-      // Deterministic Knowledge Engine matching user's exact content.txt
+      // Short & Meaningful Offline Knowledge Engine
       function generateSmartResponse(query) {
         const q = query.toLowerCase();
         let reply = "";
 
-        if (q.includes('skill') || q.includes('stack') || q.includes('technolog') || q.includes('ai agent') || q.includes('rag')) {
-          reply = `<strong>Sunil's Core Technical Skills:</strong><br><br>
-          • <strong>AI &amp; Generative Systems:</strong> AI Agents (LangGraph, CrewAI), RAG Pipelines, Vector DBs (pgvector, Pinecone, Qdrant), LangChain, OpenAI &amp; Gemini APIs.<br>
-          • <strong>Backend:</strong> Node.js (Express, Fastify, Nest.js), Python (FastAPI, Django), PHP (Laravel), Microservices, REST &amp; GraphQL.<br>
-          • <strong>Frontend:</strong> React 19, Next.js, Astro, Angular, TypeScript, TailwindCSS v4.<br>
-          • <strong>Databases &amp; Caching:</strong> PostgreSQL, Redis, MongoDB, MySQL, RabbitMQ.<br>
-          • <strong>Cloud &amp; DevOps:</strong> AWS (ECS, Lambda, S3, RDS), Azure, Docker, Kubernetes, CI/CD (GitHub Actions, GitLab CI, Jenkins).`;
+        if (q.includes('python') || q.includes('code') || q.includes('script') || q.includes('example')) {
+          reply = `Here is a clean Python example:<br><pre><code>def greet(name: str) -> str:
+    return f"Hello, {name}! Welcome to SK Builds."
+
+print(greet("Engineer"))</code></pre>Let me know if you need code for FastAPI, Node.js, AI Agents, or RAG pipelines!`;
+        } else if (q.includes('skill') || q.includes('stack') || q.includes('technolog') || q.includes('ai agent') || q.includes('rag')) {
+          reply = `• <strong>AI &amp; GenAI:</strong> AI Agents (LangGraph, CrewAI), RAG pipelines, Vector DBs (pgvector, Pinecone).<br>
+          • <strong>Full-Stack:</strong> Node.js, Python (FastAPI), React 19, Next.js, Laravel.<br>
+          • <strong>Cloud &amp; DevOps:</strong> Docker, Kubernetes, AWS, CI/CD pipelines.`;
         } else if (q.includes('project') || q.includes('portfolio') || q.includes('work done') || q.includes('build')) {
-          reply = `<strong>Selected Production Projects:</strong><br><br>
-          1. <a href="/projects/pulse-chat"><strong>Pulse Chat</strong></a>: AI-powered customer support platform with real-time WebSocket messaging and automated knowledge base replies.<br>
-          2. <a href="/projects/ai-enabled-lms"><strong>AI-Enabled LMS</strong></a>: Intelligent education platform with live classes, study workflows, and Vertex AI.<br>
-          3. <a href="/projects/e-commerce-platform"><strong>E-Commerce Platform</strong></a>: High-volume store engine with Stripe, Razorpay &amp; PhonePe payment integrations.<br>
-          4. <a href="/projects/real-time-appointment-booking"><strong>Appointment Booking System</strong></a>: Concurrency-safe slot scheduling with Redis distributed locks.<br><br>
-          Explore all in detail on the <a href="/projects">Projects Page &rarr;</a>`;
-        } else if (q.includes('experience') || q.includes('career') || q.includes('intencode') || q.includes('job') || q.includes('company')) {
-          reply = `<strong>Sunil's Professional Career (6+ Years):</strong><br><br>
-          • <strong>Full-Stack Developer</strong> at <em>Intencode India Pvt. Ltd.</em> (Oct 2022 – Present): Leading enterprise web architectures, microservices, and CI/CD pipelines.<br>
-          • <strong>Freelance Solutions Architect</strong> (Jan 2020 – Sep 2022): Delivered 15+ production-grade web applications for global clients.<br>
-          • <strong>Full-Stack Developer Intern</strong> at <em>IBM India</em> (Sep 2021 – Feb 2022): Enhanced internal tools and automated test suites.<br><br>
-          Read full timeline on the <a href="/work">Work Experience Page &rarr;</a>`;
-        } else if (q.includes('education') || q.includes('degree') || q.includes('certif') || q.includes('m.sc') || q.includes('ignou')) {
-          reply = `<strong>Education &amp; Certifications:</strong><br><br>
-          • <strong>M.Sc. in Information Security</strong> (2025–Present) | IGNOU, Hyderabad<br>
-          • <strong>Post Graduate Diploma in Information Security</strong> (2024–2025) | IGNOU<br>
-          • <strong>Advanced Diploma in IT, Networking &amp; Cloud</strong> (2019–2022) | NSTI Hyderabad (IBM Aligned)<br>
-          • <strong>Bachelor of Commerce (B.Com)</strong> (2019–2022) | YCMOU<br>
-          • <strong>Google Cloud Gen AI Academy APAC Edition</strong> (Vertex AI &amp; Gemini)<br><br>
-          View details on the <a href="/education">Education Page &rarr;</a>`;
-        } else if (q.includes('contact') || q.includes('hire') || q.includes('email') || q.includes('phone') || q.includes('meeting') || q.includes('book') || q.includes('call')) {
-          reply = `<strong>Let's Connect with Sunil:</strong><br><br>
-          • <strong>Email:</strong> <a href="mailto:sunilkhobragade@proton.me">sunilkhobragade@proton.me</a><br>
+          reply = `• <a href="/projects/pulse-chat"><strong>Pulse Chat</strong></a>: AI customer support with real-time WebSockets.<br>
+          • <a href="/projects/ai-enabled-lms"><strong>AI LMS</strong></a>: Live education workflows with Vertex AI.<br>
+          • <a href="/projects/e-commerce-platform"><strong>E-Commerce</strong></a>: Multi-gateway payments (Stripe/Razorpay).<br>
+          • <a href="/projects/real-time-appointment-booking"><strong>Booking System</strong></a>: Concurrency-safe Redis locking.<br><br>
+          Explore all on <a href="/projects">Projects &rarr;</a>`;
+        } else if (q.includes('experience') || q.includes('career') || q.includes('intencode') || q.includes('job')) {
+          reply = `• <strong>Intencode India</strong> (2022–Present): Full-Stack Dev leading microservices and CI/CD.<br>
+          • <strong>Freelance Solutions Architect</strong> (2020–2022): Delivered 15+ production web applications.<br>
+          • <strong>IBM India Intern</strong> (2021–2022): Modernized internal tools with Node &amp; Angular.<br><br>
+          Full timeline on <a href="/work">Work Experience &rarr;</a>`;
+        } else if (q.includes('contact') || q.includes('hire') || q.includes('email') || q.includes('phone') || q.includes('book') || q.includes('call')) {
+          reply = `• <strong>Email:</strong> <a href="mailto:sunilkhobragade@proton.me">sunilkhobragade@proton.me</a><br>
           • <strong>Phone:</strong> <a href="tel:+917498950562">+91 74989 50562</a><br>
-          • <strong>LinkedIn:</strong> <a href="https://linkedin.com/in/sunilkhobragade" target="_blank">sunilkhobragade</a><br>
-          • <strong>GitHub:</strong> <a href="https://github.com/naman-mahi" target="_blank">naman-mahi</a><br>
-          • <strong>1:1 Google Calendar Booking:</strong> <a href="/tools/appointment">Book a Consultation &rarr;</a><br>
-          • <strong>Freelance Project Estimator:</strong> <a href="/tools/estimator">Calculate Timeline &amp; Cost &rarr;</a>`;
-        } else if (q.includes('tool') || q.includes('estimator') || q.includes('jwt') || q.includes('sql') || q.includes('cron')) {
-          reply = `<strong>Interactive Developer &amp; Client Tools:</strong><br><br>
-          • <a href="/tools/estimator"><strong>Project Estimator</strong></a>: Calculate project budget, tech stack, and timeline.<br>
-          • <a href="/tools/appointment"><strong>1:1 Booking Tool</strong></a>: Direct Google Calendar consultation scheduling.<br>
-          • <a href="/tools/jwt-decoder"><strong>JWT Decoder</strong></a>: Client-side token payload inspector.<br>
-          • <a href="/tools/sql-formatter"><strong>SQL Formatter</strong></a>: Query optimizer and indexing assistant.<br>
-          • <a href="/tools/cron-generator"><strong>Cron Generator</strong></a>: Visual cron schedule builder.<br><br>
-          Access all tools on the <a href="/tools">Tools Hub &rarr;</a>`;
+          • <strong>1:1 Consultation:</strong> <a href="/tools/appointment">Book on Google Calendar &rarr;</a><br>
+          • <strong>Project Cost:</strong> <a href="/tools/estimator">Use Project Estimator &rarr;</a>`;
         } else {
-          reply = `Sunil Khobragade is a <strong>Senior Full-Stack Developer &amp; AI Solutions Architect</strong> with 6+ years of experience specializing in AI Agents, RAG systems, Node.js, Python, React, and cloud architectures.<br><br>
-          How can I assist you? You can ask about his:
-          • <a href="/projects">Selected Projects</a>
-          • <a href="/work">Work Experience</a>
-          • Technical Skills &amp; AI Stack
-          • <a href="/tools/appointment">Booking a 1:1 Consultation</a>`;
+          reply = `Sunil Khobragade is a <strong>Senior Full-Stack Developer &amp; AI Architect</strong> (6+ yrs exp) specializing in AI Agents, RAG, Node.js, Python, and React.<br><br>
+          Ask about his <a href="/projects">Projects</a>, <a href="/work">Experience</a>, or request any code snippet!`;
         }
 
         messages.push({ role: 'assistant', content: reply });
-        appendBotMessage(reply);
+        appendBotMessage(reply, reply);
       }
     }
 
