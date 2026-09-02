@@ -2,24 +2,30 @@
 // src/components/GlobalSearch.astro
 ---
 
-<!-- Global Search Trigger Button Component (Can be placed in Header or anywhere) -->
-<button 
-  type="button" 
-  id="global-search-trigger" 
-  class="global-search-btn"
-  aria-label="Search website (Ctrl + K)"
-  title="Search pages, projects, blogs, tools, and actions (Ctrl + K)"
->
-  <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="11" cy="11" r="8"></circle>
-    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-  </svg>
-  <span class="search-placeholder">Search...</span>
-  <span class="search-kbd-shortcut">
-    <kbd class="kbd-key" id="search-mod-key">Ctrl</kbd>
-    <kbd class="kbd-key">K</kbd>
-  </span>
-</button>
+<!-- Floating Left-Center Global Search Trigger Dock -->
+<div class="sk-floating-search-dock">
+  <button 
+    type="button" 
+    id="global-search-trigger" 
+    class="sk-floating-search-btn"
+    aria-label="Global Search (Ctrl + K)"
+    title="Search pages, projects, blogs, tools (Ctrl + K)"
+  >
+    <div class="sk-search-icon-badge">
+      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </div>
+    <div class="sk-search-pill-label">
+      <span class="sk-search-text">Search</span>
+      <span class="sk-search-shortcut">
+        <kbd class="kbd-key" id="search-mod-key">Ctrl</kbd>
+        <kbd class="kbd-key">K</kbd>
+      </span>
+    </div>
+  </button>
+</div>
 
 <!-- Global Command Palette / Search Modal Dialog -->
 <div 
@@ -109,49 +115,78 @@
 
 <style is:global>
   /* ==========================================================================
-     Global Search Trigger Button
+     Floating Left-Center Global Search Trigger
      ========================================================================== */
-  .global-search-btn {
+  .sk-floating-search-dock {
+    position: fixed;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 9990;
+    pointer-events: auto;
+  }
+
+  .sk-floating-search-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.55rem;
     background: var(--bg-card);
     border: 1px solid var(--border-card);
-    border-radius: var(--radius-md, 8px);
-    padding: 0.35rem 0.65rem;
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    font-family: inherit;
+    border-radius: 9999px;
+    padding: 6px 14px 6px 6px;
+    color: var(--text-primary);
+    box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--border-subtle);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     cursor: pointer;
-    transition: all var(--transition-fast, 0.15s ease);
+    font-family: inherit;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     user-select: none;
   }
 
-  .global-search-btn:hover {
+  .sk-floating-search-btn:hover {
     background: var(--bg-card-hover);
-    border-color: var(--border-card-hover);
-    color: var(--text-primary);
+    border-color: #3b82f6;
+    transform: scale(1.04) translateX(2px);
+    box-shadow: 0 14px 30px -4px rgba(59, 130, 246, 0.35), 0 0 0 1px #3b82f6;
   }
 
-  .global-search-btn .search-icon {
-    color: var(--text-muted);
-    transition: color 0.15s ease;
-  }
-
-  .global-search-btn:hover .search-icon {
+  .sk-search-icon-badge {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(59, 130, 246, 0.12);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: #3b82f6;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
   }
 
-  .search-placeholder {
+  .sk-floating-search-btn:hover .sk-search-icon-badge {
+    background: #3b82f6;
+    color: #ffffff;
+  }
+
+  .sk-search-pill-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .sk-search-text {
     font-size: 0.8rem;
-    color: var(--text-muted);
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
   }
 
-  .search-kbd-shortcut {
+  .sk-search-shortcut {
     display: inline-flex;
     align-items: center;
     gap: 2px;
-    margin-left: 0.25rem;
   }
 
   .kbd-key {
@@ -160,10 +195,9 @@
     border-radius: 4px;
     font-family: var(--font-mono, monospace);
     font-size: 0.65rem;
-    font-weight: 600;
-    padding: 1px 4px;
+    font-weight: 700;
+    padding: 1px 5px;
     color: var(--text-secondary);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   }
 
   /* ==========================================================================
@@ -514,14 +548,19 @@
   }
 
   /* Mobile Responsive */
-  @media (max-width: 640px) {
-    .search-placeholder,
-    .search-kbd-shortcut {
-      display: none;
+  @media (max-width: 768px) {
+    .sk-floating-search-dock {
+      left: 12px;
+      top: 45%;
     }
 
-    .global-search-btn {
-      padding: 0.4rem 0.5rem;
+    .sk-floating-search-btn {
+      padding: 6px;
+      border-radius: 50%;
+    }
+
+    .sk-search-pill-label {
+      display: none;
     }
 
     .search-modal-backdrop {
