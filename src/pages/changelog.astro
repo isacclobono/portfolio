@@ -20,43 +20,86 @@ interface Release {
 
 const releases: Release[] = [
   {
-    version: "v2.8.0",
+    version: "v2.8.2",
     date: "September 2026",
-    badge: "Global Search & Voice Intelligence",
+    badge: "Global Command Palette",
     badgeType: "launch",
-    summary: "Integrated site-wide Global Command Palette (Ctrl+K / Cmd+K), SK Agent voice transcription, transcript exports, and strict portfolio guardrails.",
+    summary: "Launched floating screen Command Palette (Ctrl+K / Cmd+K / '/') with fuzzy search indexing 35+ site resources.",
     sections: [
       {
         type: "Added",
         items: [
-          "Built Global Search & Command Palette (Ctrl+K / Cmd+K / '/') indexing all navigation pages, featured projects, 14 blog articles, developer tools, and quick actions.",
-          "Integrated Web Speech API for real-time live voice transcription directly into the message input field with recording pulse animations.",
-          "Added instant 'Export Transcript' feature generating downloadable Markdown (.md) dialogues with timestamps and portfolio metadata.",
-          "Implemented native Markdown table parser rendering responsive, horizontally scrollable GFM tables inside chat bubbles.",
-          "Replaced header graphics with the official SK brand vector monogram logo."
+          "Built floating left-center search dock with frosted glassmorphism styling and platform-aware keyboard shortcut badges (Ctrl+K / ⌘K).",
+          "Indexed 35+ canonical pages, featured projects, 14 architecture blog posts, developer tools, and quick actions with fuzzy keyword matching.",
+          "Added category filter tabs (All, Projects, Blog, Tools, Pages, Actions) for instant domain-specific filtering.",
+          "Integrated full keyboard navigation (↑/↓ arrows to navigate, Enter ↵ to execute action, Escape to close)."
         ]
       },
       {
         type: "Architecture",
         items: [
-          "Indexed 35+ canonical site resources with fuzzy keyword matching, category filtering tabs, and keyboard navigation.",
-          "Enforced strict portfolio-only domain boundaries preventing off-topic drift and ensuring complete, targeted answers.",
-          "Calibrated response generation prompts and token limits (450 tokens) to deliver exact answers without unsolicited filler.",
-          "Docked chat launcher and modal window to the bottom-left corner with multi-directional drag resizing handles."
+          "Added smart 'Ask SK Agent instead' fallback button passing unmatched search queries directly to the AI chatbot.",
+          "Engineered responsive touch-friendly mobile dock collapsing into a thumb-accessible circular action trigger."
+        ]
+      }
+    ]
+  },
+  {
+    version: "v2.8.1",
+    date: "September 2026",
+    badge: "Live Voice & Transcript Export",
+    badgeType: "feature",
+    summary: "Hands-free continuous voice transcription using Web Speech API and instant Markdown (.md) dialogue exports.",
+    sections: [
+      {
+        type: "Added",
+        items: [
+          "Integrated Web Speech API with continuous streaming (interimResults = true) to transcribe speech live directly inside the message input field.",
+          "Added pulsing recording ring animation (@keyframes skPulseRecording) indicating active microphone input state.",
+          "Added instant 'Export Transcript' feature in header dropdown (•••) generating formatted Markdown (.md) conversation logs with timestamps."
         ]
       },
       {
         type: "Changed",
         items: [
-          "Redesigned message UI with right-aligned user pill bubbles (20px radius) and left-aligned agent cards (18px radius).",
-          "Added header search trigger button with platform-aware keyboard shortcut badges (⌘K / Ctrl K)."
+          "Simplified action toolbar by removing attachment, emoji, and GIF buttons in favor of a focused, voice-first input experience."
+        ]
+      }
+    ]
+  },
+  {
+    version: "v2.8.0",
+    date: "September 2026",
+    badge: "SK Agent UI & Guardrails",
+    badgeType: "primary",
+    summary: "Overhauled SK Agent with bottom-left docking, pill/card bubble layout, GFM table rendering, and strict portfolio-only AI guardrails.",
+    sections: [
+      {
+        type: "Added",
+        items: [
+          "Implemented native Markdown table parser converting raw GFM table syntax into responsive, horizontally scrollable HTML tables.",
+          "Replaced header graphics with the official SK brand vector monogram logo badge."
+        ]
+      },
+      {
+        type: "Architecture",
+        items: [
+          "Enforced strict portfolio-only domain boundaries preventing off-topic drift and declining non-portfolio questions with polite redirects.",
+          "Calibrated response generation prompts and token limits (450 tokens) to provide complete answers matching the exact user query without fluff.",
+          "Docked chat launcher and modal window to the bottom-left corner (bottom: 20px; left: 20px;) with multi-directional drag resizing handles."
+        ]
+      },
+      {
+        type: "Changed",
+        items: [
+          "Redesigned message hierarchy with right-aligned user pill bubbles (20px radius) and left-aligned assistant cards (18px radius) with sub-labels."
         ]
       }
     ]
   },
   {
     version: "v2.7.0",
-    date: "September 2026",
+    date: "August 2026",
     badge: "PWA & Offline Architecture",
     badgeType: "primary",
     summary: "Full Progressive Web App (PWA) installation, Service Worker caching strategies, and 4 quick launch app shortcuts.",
@@ -80,7 +123,7 @@ const releases: Release[] = [
   },
   {
     version: "v2.6.0",
-    date: "September 2026",
+    date: "July 2026",
     badge: "Astro 7 & Vite 8 Engine",
     badgeType: "launch",
     summary: "Framework migration from Astro 6 to Astro 7 (v7.2+) powered by Vite 8 and the native Rust compiler.",
@@ -105,7 +148,7 @@ const releases: Release[] = [
   },
   {
     version: "v2.5.0",
-    date: "September 2026",
+    date: "June 2026",
     badge: "Diagnostic Error Suite",
     badgeType: "feature",
     summary: "Complete HTTP error page suite with live edge diagnostic consoles and theme adaptability.",
@@ -130,7 +173,7 @@ const releases: Release[] = [
   },
   {
     version: "v2.4.0",
-    date: "September 2026",
+    date: "May 2026",
     badge: "Calendar & Legal Compliance",
     badgeType: "primary",
     summary: "Automated Google Calendar & Meet synchronization, live system status monitor, and legal disclosures.",
@@ -154,7 +197,7 @@ const releases: Release[] = [
   },
   {
     version: "v2.3.0",
-    date: "September 2026",
+    date: "April 2026",
     badge: "AI Copilot Overhaul",
     badgeType: "accent",
     summary: "SK Agent AI Copilot overhaul: WhatsApp messenger bubbles, Groq LPU streaming (300+ tok/s), and IndexedDB local memory.",
@@ -165,8 +208,7 @@ const releases: Release[] = [
           "Connected Groq Cloud LPU API (openai/gpt-oss-120b & qwen/qwen3.8-27b) with sub-120ms TTFT.",
           "Implemented WhatsApp-style left/right message bubble layout with compact typography and local timestamps.",
           "Added browser-native IndexedDB storage (SK_Portfolio_ChatDB) for offline conversation persistence.",
-          "Built multi-edge modal drag resizing with expand/collapse states saved to localStorage.",
-          "Integrated Web Speech API for hands-free voice-to-text transcriptions."
+          "Built multi-edge modal drag resizing with expand/collapse states saved to localStorage."
         ]
       },
       {
@@ -179,7 +221,7 @@ const releases: Release[] = [
   },
   {
     version: "v2.2.0",
-    date: "August 2026",
+    date: "March 2026",
     badge: "Developer Utilities Suite",
     badgeType: "feature",
     summary: "Launched in-browser client-side developer tools for architecture estimation and debugging.",
@@ -203,7 +245,7 @@ const releases: Release[] = [
   },
   {
     version: "v2.1.0",
-    date: "August 2026",
+    date: "February 2026",
     badge: "SEO & Web Vitals",
     badgeType: "perf",
     summary: "Technical SEO overhaul, Schema.org Graph entities, and sub-second edge performance.",
@@ -226,7 +268,7 @@ const releases: Release[] = [
   },
   {
     version: "v2.0.0",
-    date: "July 2026",
+    date: "January 2026",
     badge: "Astro 5 → 6 Upgrade",
     badgeType: "launch",
     summary: "Upgraded core portfolio architecture from Astro 5 to Astro 6 with enhanced Islands rendering.",
@@ -243,7 +285,7 @@ const releases: Release[] = [
   },
   {
     version: "v1.8.0",
-    date: "May 2026",
+    date: "November 2025",
     badge: "Multi-Agent Systems",
     badgeType: "feature",
     summary: "Prototyped autonomous multi-agent state machines and cyclic evaluation graphs.",
@@ -259,7 +301,7 @@ const releases: Release[] = [
   },
   {
     version: "v1.7.0",
-    date: "January 2026",
+    date: "August 2025",
     badge: "High-Velocity Inference",
     badgeType: "perf",
     summary: "Integrated Language Processing Unit (LPU) hardware acceleration for generative UI streams.",
@@ -275,7 +317,7 @@ const releases: Release[] = [
   },
   {
     version: "v1.6.0",
-    date: "October 2025",
+    date: "May 2025",
     badge: "Vector Search & RAG",
     badgeType: "feature",
     summary: "Integrated PostgreSQL pgvector HNSW indexing for enterprise semantic search.",
@@ -291,7 +333,7 @@ const releases: Release[] = [
   },
   {
     version: "v1.5.0",
-    date: "July 2025",
+    date: "January 2025",
     badge: "Edge Infrastructure",
     badgeType: "perf",
     summary: "Migrated hosting to Cloudflare Pages & global edge network for sub-25ms TTFB.",
@@ -307,7 +349,7 @@ const releases: Release[] = [
   },
   {
     version: "v1.4.0",
-    date: "October 2024",
+    date: "September 2024",
     badge: "Database Multi-Tenancy",
     badgeType: "feature",
     summary: "Architected PostgreSQL Row-Level Security (RLS) policies for SaaS tenant isolation.",
@@ -323,7 +365,7 @@ const releases: Release[] = [
   },
   {
     version: "v1.3.0",
-    date: "June 2024",
+    date: "April 2024",
     badge: "Distributed Concurrency",
     badgeType: "feature",
     summary: "Built distributed reservation engine with Redlock mutexes and row-level locks.",
@@ -339,7 +381,7 @@ const releases: Release[] = [
   },
   {
     version: "v1.2.0",
-    date: "February 2024",
+    date: "November 2023",
     badge: "Real-Time WebSocket Scale",
     badgeType: "perf",
     summary: "Scaled WebSocket messaging infrastructure to 100k concurrent client connections.",
@@ -355,7 +397,7 @@ const releases: Release[] = [
   },
   {
     version: "v1.1.0",
-    date: "June 2023",
+    date: "May 2023",
     badge: "CI/CD & DevOps Automation",
     badgeType: "launch",
     summary: "Automated blue-green container deployment pipeline with GitHub Actions.",
