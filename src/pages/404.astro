@@ -309,23 +309,25 @@ const popularRoutes = [
     51%, 100% { opacity: 0; }
   }
 
-  /* Action Buttons */
+  /* Action Buttons with Generous Spacing */
   .error-actions-group {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.25rem;
     flex-wrap: wrap;
+    margin: 0.5rem 0 1rem 0;
   }
 
   .error-report-link {
     font-size: 0.85rem;
     color: var(--text-secondary);
-    text-decoration: underline;
+    text-decoration: none;
     transition: color 0.15s ease;
   }
 
   .error-report-link:hover {
     color: var(--text-primary);
+    text-decoration: none;
   }
 
   /* Canonical Hubs Section */

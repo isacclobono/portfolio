@@ -1,0 +1,621 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import Button from '../components/Button.astro';
+import { SITE } from '../data/site';
+
+const stats = [
+  { label: "Engineering Experience", value: "6+ Years", highlight: "Full-Stack & AI" },
+  { label: "Type Safety Standard", value: "100%", highlight: "End-to-End TypeScript" },
+  { label: "Global Edge Latency", value: "< 25ms", highlight: "Cloudflare Edge" },
+  { label: "AI Inference Velocity", value: "~300 tok/s", highlight: "Groq Cloud LPU" }
+];
+
+const categories = [
+  {
+    id: "ai-systems",
+    categoryName: "AI Models, LLMs & Agent Frameworks",
+    categoryIconType: "bot",
+    categoryDesc: "Production AI inference engines, agent orchestration pipelines, and vector databases.",
+    items: [
+      {
+        name: "Groq Cloud LPU API",
+        url: "https://groq.com",
+        tag: "Inference Engine",
+        role: "Powers real-time streaming AI responses (300+ tok/s) using openai/gpt-oss-120b and qwen/qwen3.8-27b."
+      },
+      {
+        name: "LangGraph & CrewAI",
+        url: "https://www.langchain.com/langgraph",
+        tag: "Agentic Systems",
+        role: "Orchestrates multi-agent state machines, memory retention, tool calling, and automated copilots."
+      },
+      {
+        name: "pgvector & Pinecone",
+        url: "https://github.com/pgvector/pgvector",
+        tag: "Vector DB",
+        role: "Indexes high-density embeddings for enterprise Retrieval-Augmented Generation (RAG) knowledge retrieval."
+      },
+      {
+        name: "FastAPI (Python 3.12)",
+        url: "https://fastapi.tiangolo.com",
+        tag: "AI Microservices",
+        role: "High-throughput asynchronous REST and WebSocket backend services for LLM pipelines and data ingestion."
+      }
+    ]
+  },
+  {
+    id: "external-apis",
+    categoryName: "External APIs & Cloud Protocols",
+    categoryIconType: "plug",
+    categoryDesc: "Third-party developer APIs, video conferencing, and client-side storage protocols.",
+    items: [
+      {
+        name: "Google Calendar API (v3)",
+        url: "https://developers.google.com/calendar",
+        tag: "Scheduling API",
+        role: "Dynamically books 1:1 architecture discovery sessions with UTC timestamp validation."
+      },
+      {
+        name: "Google Meet",
+        url: "https://meet.google.com",
+        tag: "Video Rooms",
+        role: "Attaches instant video conferencing rooms directly to confirmed client calendar invites."
+      },
+      {
+        name: "iCalendar (.ICS Standard)",
+        url: "https://icalendar.org",
+        tag: "RFC 5545 Spec",
+        role: "Generates offline calendar files compatible with Apple Calendar, Microsoft Outlook, and Thunderbird."
+      },
+      {
+        name: "Web Speech API",
+        url: "https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API",
+        tag: "Browser API",
+        role: "Provides zero-dependency speech-to-text voice recognition for the SK Agent AI assistant."
+      },
+      {
+        name: "IndexedDB API",
+        url: "https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API",
+        tag: "Client Storage",
+        role: "Private client-side database (SK_Portfolio_ChatDB) persisting conversation history locally."
+      }
+    ]
+  },
+  {
+    id: "frontend-frameworks",
+    categoryName: "Core Web Frameworks & Build Tools",
+    categoryIconType: "zap",
+    categoryDesc: "High-speed static site generators, component libraries, and CSS compilers.",
+    items: [
+      {
+        name: "Astro 5",
+        url: "https://astro.build",
+        tag: "SSG Framework",
+        role: "Content-focused static architecture shipping zero runtime JavaScript by default for 100/100 Core Web Vitals."
+      },
+      {
+        name: "TypeScript (Strict Mode)",
+        url: "https://www.typescriptlang.org",
+        tag: "Language",
+        role: "Strictly typed end-to-end schemas across backend microservices and client interfaces."
+      },
+      {
+        name: "TailwindCSS (v4 / Vite)",
+        url: "https://tailwindcss.com",
+        tag: "Styling Engine",
+        role: "Modern atomic CSS compilation with CSS custom property tokens for adaptive Dark/Light themes."
+      },
+      {
+        name: "Shiki Syntax Highlighter",
+        url: "https://shiki.style",
+        tag: "Code Blocks",
+        role: "Server-side Dracula syntax highlighting without client-side bundle weight penalties."
+      },
+      {
+        name: "@astrojs/mdx",
+        url: "https://docs.astro.build/en/guides/integrations-guide/mdx/",
+        tag: "Content Engine",
+        role: "Interactive MDX component authoring for technical architecture breakdowns and blog posts."
+      }
+    ]
+  },
+  {
+    id: "cloud-devops",
+    categoryName: "Cloud Infrastructure, DevOps & Edge CDN",
+    categoryIconType: "cloud",
+    categoryDesc: "Global edge deployment networks, container runtimes, and continuous integration.",
+    items: [
+      {
+        name: "Cloudflare Pages & Workers",
+        url: "https://pages.cloudflare.com",
+        tag: "Edge CDN",
+        role: "Worldwide edge network deployment with HTTP/3, TLS 1.3, and sub-25ms global TTFB."
+      },
+      {
+        name: "Docker & Docker Compose",
+        url: "https://www.docker.com",
+        tag: "Containers",
+        role: "Reproducible containerized environments for full-stack microservices and database clustering."
+      },
+      {
+        name: "Amazon Web Services (AWS)",
+        url: "https://aws.amazon.com",
+        tag: "Cloud Services",
+        role: "S3 object storage, EC2 compute instances, RDS PostgreSQL, and Lambda serverless functions."
+      },
+      {
+        name: "GitHub Actions",
+        url: "https://github.com/features/actions",
+        tag: "CI/CD Pipeline",
+        role: "Automated linting, test suites, static build verification, and zero-downtime CD triggers."
+      }
+    ]
+  },
+  {
+    id: "databases-storage",
+    categoryName: "Databases, Caching & Message Queues",
+    categoryIconType: "database",
+    categoryDesc: "Data persistence engines, in-memory caches, and document stores.",
+    items: [
+      {
+        name: "PostgreSQL (v16)",
+        url: "https://www.postgresql.org",
+        tag: "Relational DB",
+        role: "ACID transactional database for high-concurrency booking schemas, financial records, and audits."
+      },
+      {
+        name: "Redis",
+        url: "https://redis.io",
+        tag: "In-Memory Cache",
+        role: "Sub-millisecond caching, rate-limiting, session management, and distributed mutex locks."
+      },
+      {
+        name: "MongoDB",
+        url: "https://www.mongodb.com",
+        tag: "Document Store",
+        role: "High-flexibility NoSQL document storage for event streams and real-time chat telemetry."
+      }
+    ]
+  },
+  {
+    id: "workstation-gear",
+    categoryName: "Workstation Hardware & Peripherals",
+    categoryIconType: "monitor",
+    categoryDesc: "Physical workstation hardware optimized for engineering focus and ergonomics.",
+    items: [
+      {
+        name: "High-Performance Workstation",
+        url: "https://www.intel.com",
+        tag: "Compute Rig",
+        role: "Multi-core processor with 32GB high-speed RAM and NVMe PCIe 4.0 SSD storage."
+      },
+      {
+        name: "Dual 4K IPS Displays",
+        url: "https://www.lg.com",
+        tag: "Displays",
+        role: "Multi-monitor desktop setup for concurrent IDE authoring, terminal monitoring, and live preview."
+      },
+      {
+        name: "Keychron Mechanical Keyboard",
+        url: "https://www.keychron.com",
+        tag: "Peripherals",
+        role: "Tactile mechanical switches optimized for high-speed, fatigue-free programming sessions."
+      },
+      {
+        name: "Logitech MX Master 3S",
+        url: "https://www.logitech.com",
+        tag: "Ergonomics",
+        role: "Precision wireless mouse with electromagnetic MagSpeed scrolling and custom gesture triggers."
+      }
+    ]
+  }
+];
+---
+
+<Layout 
+  title="Tech Stack & Systems Architecture | SK Builds" 
+  description="Comprehensive breakdown of the programming languages, cloud infrastructure, AI models, vector stores, and developer utilities used by Sunil Khobragade." 
+  currentPath="/tech-stack"
+>
+  <Breadcrumb items={[
+    { label: 'Tech Stack & Architecture' }
+  ]} />
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <Button href="/" variant="back" size="sm">
+      Back to home
+    </Button>
+  </div>
+
+  <article class="stack-page-wrapper">
+    <!-- Hero Header -->
+    <header class="stack-hero-header">
+      <div class="hero-badge-pill">
+        <span class="badge-dot"></span>
+        ENGINEERING BLUEPRINT &bull; TOOLING &bull; 2026
+      </div>
+      <h1 class="stack-main-title">Tech Stack &amp; Architecture</h1>
+      <p class="stack-hero-subtitle">
+        A transparent breakdown of the programming languages, cloud infrastructure, AI models, vector stores, and developer utilities powering Sunil Khobragade's production builds.
+      </p>
+    </header>
+
+    <!-- Key Metrics Grid -->
+    <div class="stack-stats-grid">
+      {stats.map((s) => (
+        <div class="stat-card">
+          <span class="stat-label">{s.label}</span>
+          <span class="stat-value">{s.value}</span>
+          <span class="stat-highlight">{s.highlight}</span>
+        </div>
+      ))}
+    </div>
+
+    <!-- Architectural Categories Breakdown -->
+    <div class="categories-stream">
+      {categories.map((cat) => (
+        <section class="category-block" id={cat.id}>
+          <!-- Category Header -->
+          <div class="category-header-row">
+            <span class="category-icon-container">
+              {cat.categoryIconType === 'bot' && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/>
+                </svg>
+              )}
+              {cat.categoryIconType === 'plug' && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/>
+                </svg>
+              )}
+              {cat.categoryIconType === 'zap' && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+              )}
+              {cat.categoryIconType === 'cloud' && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+                </svg>
+              )}
+              {cat.categoryIconType === 'database' && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/>
+                </svg>
+              )}
+              {cat.categoryIconType === 'monitor' && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/>
+                </svg>
+              )}
+            </span>
+            <div class="category-meta-text">
+              <h2 class="category-title">{cat.categoryName}</h2>
+              <p class="category-subtitle">{cat.categoryDesc}</p>
+            </div>
+          </div>
+
+          <!-- Single-Line Full-Width Items List -->
+          <div class="tech-items-list">
+            {cat.items.map((item) => (
+              <a 
+                href={item.url} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="tech-row-card"
+                title={`Visit official ${item.name} website`}
+              >
+                <!-- Left: Name + External Link Icon + Tag Badge -->
+                <div class="tech-left-column">
+                  <span class="tech-name">{item.name}</span>
+                  <svg class="tech-link-icon" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                  <span class="tech-tag-pill">{item.tag}</span>
+                </div>
+
+                <!-- Right: Technical Role / Description -->
+                <div class="tech-right-role">{item.role}</div>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <!-- Architectural Philosophy Callout -->
+    <section class="philosophy-card">
+      <div class="philosophy-header">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+        </svg>
+        <h3 class="philosophy-title">Architectural Philosophy</h3>
+      </div>
+      <p class="philosophy-body">
+        I prioritize <strong>strict type-safety</strong>, <strong>minimal client-side JavaScript execution</strong>, and <strong>low-latency edge delivery</strong>. Every technology in this stack is chosen for high maintainability, predictable scaling under load, and rock-solid developer experience.
+      </p>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .stack-page-wrapper {
+    max-width: 860px;
+    margin: 0 auto 5rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2.75rem;
+  }
+
+  /* Hero Header */
+  .stack-hero-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .hero-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    padding: 4px 12px;
+    border-radius: 9999px;
+    width: fit-content;
+  }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #3b82f6;
+  }
+
+  .stack-main-title {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+  }
+
+  .stack-hero-subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin: 0;
+    max-width: 680px;
+    line-height: 1.6;
+  }
+
+  /* Stats Grid */
+  .stack-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 0.75rem;
+    padding: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .stat-label {
+    font-size: 0.725rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .stat-value {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    font-family: var(--font-mono, monospace);
+  }
+
+  .stat-highlight {
+    font-size: 0.775rem;
+    color: #3b82f6;
+    font-weight: 600;
+  }
+
+  /* Categories Stream */
+  .categories-stream {
+    display: flex;
+    flex-direction: column;
+    gap: 2.75rem;
+  }
+
+  .category-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .category-header-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .category-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .category-meta-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .category-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .category-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Single-Line Items List */
+  .tech-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    width: 100%;
+  }
+
+  /* Single-Line Full-Width Card */
+  .tech-row-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 0.65rem;
+    padding: 0.9rem 1.15rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    text-decoration: none !important;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+  }
+
+  .tech-row-card:hover {
+    border-color: #3b82f6;
+    background: var(--bg-card-hover, var(--bg-card));
+    transform: translateY(-1px);
+  }
+
+  .tech-row-card:hover .tech-link-icon {
+    transform: translate(2px, -2px);
+    color: #3b82f6;
+  }
+
+  .tech-row-card:hover .tech-name {
+    color: #3b82f6;
+  }
+
+  .tech-left-column {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    flex-shrink: 0;
+  }
+
+  .tech-name {
+    font-size: 0.925rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    transition: color 0.15s ease;
+    white-space: nowrap;
+    text-decoration: none !important;
+  }
+
+  .tech-link-icon {
+    color: var(--text-muted);
+    transition: transform 0.15s ease, color 0.15s ease;
+    flex-shrink: 0;
+  }
+
+  .tech-tag-pill {
+    font-size: 0.725rem;
+    font-weight: 600;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    color: var(--text-secondary);
+    padding: 2px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .tech-right-role {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    text-align: right;
+    flex: 1;
+    text-decoration: none !important;
+  }
+
+  /* Philosophy Callout */
+  .philosophy-card {
+    background: rgba(59, 130, 246, 0.05);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 0.85rem;
+    padding: 1.4rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .philosophy-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .philosophy-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .philosophy-body {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .philosophy-body strong {
+    color: var(--text-primary);
+  }
+
+  @media (max-width: 680px) {
+    .tech-row-card {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.35rem;
+    }
+
+    .tech-left-column {
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .tech-right-role {
+      text-align: left;
+    }
+  }
+</style>

@@ -8,6 +8,7 @@ const PRECACHE_ASSETS = [
   '/maskable-icon.svg',
   '/site.webmanifest',
   '/status',
+  '/tech-stack',
   '/tools'
 ];
 
