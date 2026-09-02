@@ -1,17 +1,68 @@
 {
-  "name": "Sunil Khobragade — Senior Full-Stack Developer & Cloud Architect",
+  "name": "Sunil Khobragade | SK Builds",
   "short_name": "SK Builds",
-  "description": "Portfolio, scalable projects, architecture blogs, and developer tools by Sunil Khobragade.",
+  "description": "Senior Full-Stack Developer & AI Solutions Architect Portfolio, Engineering Articles, and Client Tools Suite.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#09090b",
-  "theme_color": "#121214",
+  "theme_color": "#09090b",
+  "categories": ["productivity", "developer tools", "business"],
   "icons": [
+    {
+      "src": "/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/maskable-icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
     {
       "src": "/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Projects",
+      "short_name": "Projects",
+      "description": "Explore production web architectures and AI systems",
+      "url": "/projects",
+      "icons": [{ "src": "/icon-192.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Developer Tools",
+      "short_name": "Tools",
+      "description": "Client-side project estimator, JWT, SQL, and Cron utilities",
+      "url": "/tools",
+      "icons": [{ "src": "/icon-192.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Book Consultation",
+      "short_name": "Consult",
+      "description": "Schedule a 1:1 architecture discovery call on Google Calendar",
+      "url": "/tools/appointment",
+      "icons": [{ "src": "/icon-192.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "System Status",
+      "short_name": "Status",
+      "description": "Check live infrastructure health and uptime",
+      "url": "/status",
+      "icons": [{ "src": "/icon-192.svg", "sizes": "192x192" }]
     }
   ]
 }

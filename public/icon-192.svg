@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192" fill="none">
+  <defs>
+    <linearGradient id="skGlow192" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="50%" stop-color="#a855f7" />
+      <stop offset="100%" stop-color="#22c55e" />
+    </linearGradient>
+    <linearGradient id="darkBg192" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b" />
+      <stop offset="100%" stop-color="#09090b" />
+    </linearGradient>
+  </defs>
+
+  <rect width="192" height="192" rx="44" fill="url(#darkBg192)" stroke="url(#skGlow192)" stroke-width="6" />
+  <circle cx="148" cy="44" r="10" fill="#22c55e" />
+  
+  <text 
+    x="96" 
+    y="124" 
+    text-anchor="middle" 
+    fill="#ffffff"
+    font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif" 
+    font-size="78" 
+    font-weight="900" 
+    letter-spacing="-3px"
+  >SK</text>
+</svg>
