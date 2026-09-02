@@ -751,8 +751,12 @@ Host: skhobragade993@gmail.com
 Portfolio: https://sk-builds.vercel.app`
       );
 
-      // Google Calendar API Direct Event URL with exact start/end time and Google Meet conferencing
-      const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${calTitle}&dates=${startUTCStr}/${endUTCStr}&details=${calDetails}&add=skhobragade993@gmail.com&location=Google+Meet`;
+      // Google Calendar API Direct Event URL with exact start/end time, attendee emails, and Google Meet conferencing
+      const addParam = clientEmail 
+        ? `skhobragade993@gmail.com&add=${encodeURIComponent(clientEmail)}`
+        : 'skhobragade993@gmail.com';
+
+      const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${calTitle}&dates=${startUTCStr}/${endUTCStr}&details=${calDetails}&add=${addParam}&location=Google+Meet`;
       
       if (googleMeetBtn) {
         googleMeetBtn.setAttribute('href', googleCalUrl);
