@@ -14,6 +14,16 @@ Welcome to the comprehensive documentation for **Sunil Khobragade's Portfolio & 
 
 ---
 
+## 🌐 New Dedicated Utility & Information Pages
+
+* **[System Status (`/status`)](file:///d:/DEVELOPMENT/sunil_khobragade_portfolio/src/pages/status.astro)**: Real-time service uptime, edge CDN latency, and health monitoring.
+* **[Changelog (`/changelog`)](file:///d:/DEVELOPMENT/sunil_khobragade_portfolio/src/pages/changelog.astro)**: Chronological releases, feature additions, and engineering milestones.
+* **[Uses & Stack (`/uses`)](file:///d:/DEVELOPMENT/sunil_khobragade_portfolio/src/pages/uses.astro)**: Complete breakdown of daily hardware, AI frameworks, languages, and cloud tools.
+* **[Privacy Policy (`/privacy`)](file:///d:/DEVELOPMENT/sunil_khobragade_portfolio/src/pages/privacy.astro)**: Google API User Data Policy compliance & GDPR/DPDP privacy disclosures.
+* **[Terms of Service (`/terms`)](file:///d:/DEVELOPMENT/sunil_khobragade_portfolio/src/pages/terms.astro)**: Client consultation guidelines and open-source terms.
+
+---
+
 ## ⚡ Quick Start
 
 ```bash

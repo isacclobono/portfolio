@@ -1,0 +1,480 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import Button from '../components/Button.astro';
+import { SITE } from '../data/site';
+
+const categories = [
+  {
+    categoryName: "AI Models, LLMs & Agent Frameworks",
+    categoryIconType: "bot",
+    categoryDesc: "External AI inference platforms, agentic orchestration libraries, and vector databases used in production.",
+    items: [
+      {
+        name: "Groq Cloud LPU API",
+        url: "https://groq.com",
+        tag: "Inference Engine",
+        role: "Powers real-time streaming AI responses (300+ tok/s) using openai/gpt-oss-120b & qwen/qwen3.8-27b."
+      },
+      {
+        name: "LangGraph & CrewAI",
+        url: "https://www.langchain.com/langgraph",
+        tag: "Agentic Systems",
+        role: "Orchestrates multi-agent stateful workflows, tool calling, and autonomous developer copilots."
+      },
+      {
+        name: "pgvector & Pinecone",
+        url: "https://github.com/pgvector/pgvector",
+        tag: "Vector DB",
+        role: "Stores and queries high-dimensional embeddings for enterprise Retrieval-Augmented Generation (RAG)."
+      },
+      {
+        name: "FastAPI (Python 3.12)",
+        url: "https://fastapi.tiangolo.com",
+        tag: "AI Microservices",
+        role: "Asynchronous REST & WebSocket backend services for LLM pipelines and embedding generation."
+      }
+    ]
+  },
+  {
+    categoryName: "External APIs & Cloud Integrations",
+    categoryIconType: "plug",
+    categoryDesc: "Third-party APIs and scheduling protocols integrated directly into client tools.",
+    items: [
+      {
+        name: "Google Calendar API (v3)",
+        url: "https://developers.google.com/calendar",
+        tag: "Scheduling API",
+        role: "Dynamically schedules 1:1 architecture discovery sessions with UTC timestamp calculations."
+      },
+      {
+        name: "Google Meet",
+        url: "https://meet.google.com",
+        tag: "Video Conferencing",
+        role: "Auto-generates video meeting links attached directly to client calendar invites."
+      },
+      {
+        name: "iCalendar (.ICS Standard)",
+        url: "https://icalendar.org",
+        tag: "RFC 5545 Spec",
+        role: "Generates offline calendar files compatible with Apple Calendar, Outlook, and Thunderbird."
+      },
+      {
+        name: "Web Speech API",
+        url: "https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API",
+        tag: "Browser API",
+        role: "Enables hands-free voice transcription directly in the SK Agent AI Chatbot."
+      },
+      {
+        name: "IndexedDB API",
+        url: "https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API",
+        tag: "Client Storage",
+        role: "Private browser database (SK_Portfolio_ChatDB) storing chat history across sessions."
+      }
+    ]
+  },
+  {
+    categoryName: "Core Web Framework & Build Tools",
+    categoryIconType: "zap",
+    categoryDesc: "High-performance modern static site generator and styling architecture.",
+    items: [
+      {
+        name: "Astro 5",
+        url: "https://astro.build",
+        tag: "SSG Framework",
+        role: "Content-driven static generation with zero client-side JavaScript baseline for 100/100 Core Web Vitals."
+      },
+      {
+        name: "TailwindCSS (v4 / Vite)",
+        url: "https://tailwindcss.com",
+        tag: "Styling Engine",
+        role: "Next-generation CSS compilation engine with custom CSS custom properties design tokens."
+      },
+      {
+        name: "Shiki Syntax Highlighter",
+        url: "https://shiki.style",
+        tag: "Code Blocks",
+        role: "Server-rendered syntax highlighting with Dracula theme and accessible token wrapping."
+      },
+      {
+        name: "@astrojs/mdx",
+        url: "https://docs.astro.build/en/guides/integrations-guide/mdx/",
+        tag: "Content Engine",
+        role: "Interactive MDX component authoring for technical blog posts and case studies."
+      }
+    ]
+  },
+  {
+    categoryName: "Cloud Hosting, DevOps & Edge CDN",
+    categoryIconType: "cloud",
+    categoryDesc: "Global edge deployment network, continuous integration, and infrastructure.",
+    items: [
+      {
+        name: "Cloudflare Pages",
+        url: "https://pages.cloudflare.com",
+        tag: "Edge CDN",
+        role: "Global edge CDN deployment with instant worldwide SSL, HTTP/3, and sub-25ms TTFB."
+      },
+      {
+        name: "Docker & Docker Compose",
+        url: "https://www.docker.com",
+        tag: "Containers",
+        role: "Reproducible containerized environments for microservices and database instances."
+      },
+      {
+        name: "Amazon Web Services (AWS)",
+        url: "https://aws.amazon.com",
+        tag: "Cloud Services",
+        role: "S3 asset storage, EC2 compute, RDS PostgreSQL, and Lambda serverless functions."
+      },
+      {
+        name: "GitHub Actions",
+        url: "https://github.com/features/actions",
+        tag: "CI/CD Pipeline",
+        role: "Automated test suites, static build verification, and zero-downtime deployment triggers."
+      }
+    ]
+  },
+  {
+    categoryName: "Databases, Caching & Message Brokers",
+    categoryIconType: "database",
+    categoryDesc: "Data persistence engines used across full-stack engineering builds.",
+    items: [
+      {
+        name: "PostgreSQL (v16)",
+        url: "https://www.postgresql.org",
+        tag: "Relational DB",
+        role: "ACID transactional database for high-concurrency booking and financial schemas."
+      },
+      {
+        name: "Redis",
+        url: "https://redis.io",
+        tag: "In-Memory Cache",
+        role: "Sub-millisecond caching, rate-limiting, and distributed mutex locking (Redlock)."
+      },
+      {
+        name: "MongoDB",
+        url: "https://www.mongodb.com",
+        tag: "Document Store",
+        role: "Flexible NoSQL persistence for real-time chat telemetry and event streams."
+      }
+    ]
+  },
+  {
+    categoryName: "Workstation Hardware & Peripherals",
+    categoryIconType: "monitor",
+    categoryDesc: "Physical development hardware for focused engineering.",
+    items: [
+      {
+        name: "High-Performance Workstation",
+        url: "https://www.intel.com",
+        tag: "Compute Rig",
+        role: "Multi-core development workstation with 32GB RAM and ultra-fast NVMe PCIe storage."
+      },
+      {
+        name: "Dual 4K IPS Displays",
+        url: "https://www.lg.com",
+        tag: "Displays",
+        role: "Multi-monitor workspace for concurrent IDE, terminal monitoring, and browser testing."
+      },
+      {
+        name: "Keychron Mechanical Keyboard",
+        url: "https://www.keychron.com",
+        tag: "Peripherals",
+        role: "Tactile mechanical switches optimized for high-speed typing and code authoring."
+      },
+      {
+        name: "Logitech MX Master 3S",
+        url: "https://www.logitech.com",
+        tag: "Ergonomics",
+        role: "Ergonomic wireless mouse with precision magnetic scroll and gesture customization."
+      }
+    ]
+  }
+];
+---
+
+<Layout 
+  title="Uses & External Integrations | SK Builds" 
+  description="Comprehensive guide to all external APIs, AI models, frameworks, cloud services, and hardware used across Sunil Khobragade's portfolio." 
+  currentPath="/uses"
+>
+  <Breadcrumb items={[
+    { label: 'Uses & Integrations' }
+  ]} />
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <Button href="/" variant="back" size="sm">
+      Back to home
+    </Button>
+  </div>
+
+  <article class="uses-page">
+    <header class="uses-header">
+      <div class="uses-badge">Tech Stack &amp; External Integrations</div>
+      <h1 class="uses-title">What I Use &amp; External Services</h1>
+      <p class="uses-subtitle">
+        A complete, structured catalog of all third-party APIs, AI inference engines, web frameworks, cloud infrastructure, and hardware tools integrated across this portfolio and Sunil's engineering projects.
+      </p>
+    </header>
+
+    <div class="uses-categories">
+      {categories.map((cat) => (
+        <section class="use-section">
+          <!-- Category Section Heading -->
+          <div class="section-heading-card">
+            <div class="section-heading-row">
+              <span class="category-icon-wrap">
+                {cat.categoryIconType === 'bot' && (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/>
+                  </svg>
+                )}
+                {cat.categoryIconType === 'plug' && (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/>
+                  </svg>
+                )}
+                {cat.categoryIconType === 'zap' && (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                  </svg>
+                )}
+                {cat.categoryIconType === 'cloud' && (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+                  </svg>
+                )}
+                {cat.categoryIconType === 'database' && (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/>
+                  </svg>
+                )}
+                {cat.categoryIconType === 'monitor' && (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/>
+                  </svg>
+                )}
+              </span>
+              <h2 class="category-title">{cat.categoryName}</h2>
+            </div>
+            <p class="category-desc">{cat.categoryDesc}</p>
+          </div>
+
+          <!-- Single-Line Full-Width Items List with External Links -->
+          <div class="items-list-single-line">
+            {cat.items.map((item) => (
+              <a 
+                href={item.url} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="use-row-link"
+                title={`Visit official ${item.name} website`}
+              >
+                <!-- Left: Name + External Link Icon + Badge -->
+                <div class="row-left-info">
+                  <span class="item-name">{item.name}</span>
+                  <svg class="external-icon" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                  <span class="item-tag-badge">{item.tag}</span>
+                </div>
+
+                <!-- Right: Technical Role / Description -->
+                <div class="row-right-role">{item.role}</div>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .uses-page {
+    max-width: 860px;
+    margin: 0 auto 4rem auto;
+  }
+
+  .uses-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .uses-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: rgba(59, 130, 246, 0.12);
+    color: #3b82f6;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    margin-bottom: 0.75rem;
+  }
+
+  .uses-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .uses-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .uses-categories {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .use-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  /* Category Section Heading Card */
+  .section-heading-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .section-heading-row {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .category-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    flex-shrink: 0;
+  }
+
+  .category-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .category-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Single-Line Full-Width Items List */
+  .items-list-single-line {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  /* Single-Line Interactive Card Link */
+  .use-row-link {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 0.65rem;
+    padding: 0.85rem 1.15rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    text-decoration: none;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+  }
+
+  .use-row-link:hover {
+    border-color: #3b82f6;
+    background: var(--bg-hover, var(--bg-surface));
+    transform: translateY(-1px);
+  }
+
+  .use-row-link:hover .external-icon {
+    transform: translate(2px, -2px);
+    color: #3b82f6;
+  }
+
+  .use-row-link:hover .item-name {
+    color: #3b82f6;
+  }
+
+  .row-left-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .item-name {
+    font-size: 0.925rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    transition: color 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .external-icon {
+    color: var(--text-muted);
+    transition: transform 0.15s ease, color 0.15s ease;
+  }
+
+  .item-tag-badge {
+    font-size: 0.725rem;
+    font-weight: 600;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 2px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .row-right-role {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    text-align: right;
+    flex: 1;
+  }
+
+  @media (max-width: 680px) {
+    .use-row-link {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.35rem;
+    }
+
+    .row-left-info {
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .row-right-role {
+      text-align: left;
+    }
+  }
+</style>

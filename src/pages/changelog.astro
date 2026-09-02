@@ -1,0 +1,281 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import Button from '../components/Button.astro';
+import { SITE } from '../data/site';
+
+const releases = [
+  {
+    version: "v2.4.0",
+    date: "September 2026",
+    badge: "Major Feature Release",
+    badgeType: "primary",
+    summary: "Google Calendar & Meet synchronization, Status monitor, Tech Stack (/uses) page, and Privacy/Terms compliance.",
+    items: [
+      "Integrated live Google Calendar & Google Meet sync into /tools/appointment with dynamic UTC time calculations.",
+      "Added /status page with live infrastructure metrics, edge CDN latency, and uptime logs.",
+      "Added /uses page showcasing hardware, development workflow, AI models, and cloud stack.",
+      "Published Google API User Data Policy compliant Privacy Policy and Terms of Service.",
+      "Updated domain to https://sunilkhobragade.pages.dev across canonical headers and sitemap."
+    ]
+  },
+  {
+    version: "v2.3.0",
+    date: "September 2026",
+    badge: "AI & UI Upgrade",
+    badgeType: "accent",
+    summary: "SK Agent AI Copilot overhaul: WhatsApp messenger bubbles, compact 12.5px typography, and IndexedDB local storage.",
+    items: [
+      "Connected Groq LPU streaming inference (300+ tok/s) with dual-engine offline semantic fallback.",
+      "Implemented WhatsApp-style left/right bubble layout with local timestamps and delivery checkmarks.",
+      "Added persistent IndexedDB storage (SK_Portfolio_ChatDB) so chat history survives page reloads.",
+      "Added multi-edge drag resizing and 1-click expand/collapse modal controls with localStorage memory.",
+      "Enhanced system prompt into a developer copilot capable of writing Python, Node.js, and SQL snippets."
+    ]
+  },
+  {
+    version: "v2.2.0",
+    date: "August 2026",
+    badge: "Developer Tools Suite",
+    badgeType: "feature",
+    summary: "Launched in-browser client-side developer utility suite.",
+    items: [
+      "Launched interactive Project Cost & Timeline Estimator with live breakdown and printable PDF export.",
+      "Built client-side JWT Token Decoder with header/payload inspection and expiry timer.",
+      "Added instant SQL Formatter & Beautifier supporting PostgreSQL, MySQL, and SQLite dialects.",
+      "Added Cron Expression Generator with human-readable English schedule translation."
+    ]
+  },
+  {
+    version: "v2.1.0",
+    date: "August 2026",
+    badge: "SEO & 100/100 Core Web Vitals",
+    badgeType: "perf",
+    summary: "Technical SEO overhaul, Schema.org Graph, and sub-second edge performance.",
+    items: [
+      "Implemented comprehensive Schema.org JSON-LD structured data (Person, WebSite, BlogPosting, Service).",
+      "Added dynamic /llms.txt endpoint for AI search crawlers and LLM indexing.",
+      "Optimized zero-runtime JavaScript overhead for 100/100 Lighthouse and Core Web Vitals score.",
+      "Added RSS 2.0 dynamic XML feed and automated XML sitemap generation."
+    ]
+  },
+  {
+    version: "v2.0.0",
+    date: "July 2026",
+    badge: "Initial Astro 5 Launch",
+    badgeType: "launch",
+    summary: "Complete redesign and migration to modern Astro architecture.",
+    items: [
+      "Migrated portfolio to modern Astro 5 with Content Collections and Markdown/MDX support.",
+      "Implemented responsive vanilla CSS token design system with seamless Dark/Light theme switching.",
+      "Structured work experience timeline, featured engineering case studies, and technical blog."
+    ]
+  }
+];
+---
+
+<Layout 
+  title="Changelog & Release Notes | SK Builds" 
+  description="Chronological record of releases, feature updates, AI chatbot enhancements, and engineering upgrades for Sunil Khobragade's portfolio." 
+  currentPath="/changelog"
+>
+  <Breadcrumb items={[
+    { label: 'Changelog' }
+  ]} />
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <Button href="/" variant="back" size="sm">
+      Back to home
+    </Button>
+  </div>
+
+  <div class="changelog-container">
+    <header class="changelog-header">
+      <h1 class="changelog-title">Product Changelog</h1>
+      <p class="changelog-subtitle">All notable updates, feature releases, and technical improvements to the portfolio.</p>
+    </header>
+
+    <div class="timeline">
+      {releases.map((rel) => (
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="release-header">
+              <div class="version-row">
+                <span class="version-tag">{rel.version}</span>
+                <span class="release-date">{rel.date}</span>
+              </div>
+              <span class={`release-badge ${rel.badgeType}`}>{rel.badge}</span>
+            </div>
+
+            <p class="release-summary">{rel.summary}</p>
+
+            <ul class="release-list">
+              {rel.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .changelog-container {
+    max-width: 800px;
+    margin: 0 auto 4rem auto;
+  }
+
+  .changelog-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .changelog-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.02em;
+  }
+
+  .changelog-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  /* Timeline Tree */
+  .timeline {
+    position: relative;
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .timeline::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    left: 4px;
+    width: 2px;
+    background: var(--border-color);
+  }
+
+  .timeline-item {
+    position: relative;
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -1.5rem;
+    top: 16px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #3b82f6;
+    box-shadow: 0 0 0 3px var(--bg-primary);
+    z-index: 2;
+  }
+
+  .timeline-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 0.85rem;
+    padding: 1.35rem 1.5rem;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .timeline-card:hover {
+    border-color: var(--border-hover, #3b82f6);
+    transform: translateY(-1px);
+  }
+
+  .release-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+
+  .version-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .version-tag {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    font-family: var(--font-mono, monospace);
+  }
+
+  .release-date {
+    font-size: 0.825rem;
+    color: var(--text-muted);
+  }
+
+  .release-badge {
+    font-size: 0.725rem;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .release-badge.primary {
+    background: rgba(59, 130, 246, 0.12);
+    color: #3b82f6;
+  }
+
+  .release-badge.accent {
+    background: rgba(168, 85, 247, 0.12);
+    color: #a855f7;
+  }
+
+  .release-badge.feature {
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+  }
+
+  .release-badge.perf {
+    background: rgba(245, 158, 11, 0.12);
+    color: #f59e0b;
+  }
+
+  .release-badge.launch {
+    background: rgba(236, 72, 153, 0.12);
+    color: #ec4899;
+  }
+
+  .release-summary {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    font-weight: 500;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.5;
+  }
+
+  .release-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .release-list li {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+</style>

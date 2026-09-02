@@ -42,7 +42,7 @@ function getSiteUrl() {
 // https://astro.build/config
 export default defineConfig({
   site: getSiteUrl(),
-  integrations: [mdx(), sitemap()],
+  integrations: [mdx()],
   vite: {
     plugins: [tailwindcss()],
   },

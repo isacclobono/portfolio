@@ -267,10 +267,12 @@ a:hover {
 /* Footer */
 .site-footer {
   margin-top: auto;
-  padding-top: 3.5rem;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
   font-size: 0.875rem;
   color: var(--text-secondary);
   border-top: 1px solid var(--border-subtle);
@@ -279,6 +281,9 @@ a:hover {
 .footer-brand {
   color: var(--text-secondary);
   font-weight: 450;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .theme-toggle-group {
