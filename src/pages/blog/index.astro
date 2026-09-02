@@ -1,14 +1,14 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import Card from '../../components/Card.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
+import Button from '../../components/Button.astro';
 
-const posts = (await getCollection('blog', ({ data }) => !data.draft))
+const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 // Group posts by Year dynamically
-const postsByYear = posts.reduce<Record<string, typeof posts>>((acc, post) => {
+const postsByYear = allPosts.reduce<Record<string, typeof allPosts>>((acc, post) => {
   const year = post.data.date.getFullYear().toString();
   if (!acc[year]) acc[year] = [];
   acc[year].push(post);
@@ -16,25 +16,273 @@ const postsByYear = posts.reduce<Record<string, typeof posts>>((acc, post) => {
 }, {});
 
 const years = Object.keys(postsByYear).sort((a, b) => b.localeCompare(a));
+
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(date);
+};
 ---
 
-<Layout title="Blog" description="Technical articles and architecture notes by Sunil Khobragade." currentPath="/blog">
-  <Breadcrumb items={[{ label: 'blog' }]} />
+<Layout 
+  title="Technical Articles & Publications | SK Builds" 
+  description="Deep-dives on distributed systems, real-time microservices, AI pipelines, database indexing, and web performance by Sunil Khobragade." 
+  currentPath="/blog"
+>
+  <Breadcrumb items={[{ label: 'Blog & Articles' }]} />
 
-  <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 2rem;">Blog</h1>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <Button href="/" variant="back" size="sm">
+      Back to home
+    </Button>
+  </div>
 
-  {years.map((year) => (
-    <section style="margin-bottom: 2.25rem;">
-      <h2 class="year-heading">{year}</h2>
-      <div class="blog-list">
-        {postsByYear[year].map((post) => (
-          <Card 
-            href={`/blog/${post.slug || post.id}`}
-            title={post.data.title}
-            description={post.data.description}
-          />
-        ))}
+  <div class="blog-index-container">
+    <!-- Header Block -->
+    <header class="blog-header">
+      <div class="blog-pill-badge">
+        <span class="badge-dot"></span>
+        PUBLICATIONS &bull; 2022 – 2026
       </div>
-    </section>
-  ))}
+      <h1 class="blog-main-title">Technical Articles</h1>
+      <p class="blog-subtitle">
+        Deep-dives on distributed systems, real-time microservices, AI pipelines, PostgreSQL optimization, and zero-JS web architectures.
+      </p>
+    </header>
+
+    <!-- Articles Grouped by Year -->
+    <div class="years-stream">
+      {years.map((year) => (
+        <section class="year-block">
+          <div class="year-header">
+            <h2 class="year-title">{year}</h2>
+            <span class="year-count">{postsByYear[year].length} {postsByYear[year].length === 1 ? 'Article' : 'Articles'}</span>
+          </div>
+
+          <div class="posts-list">
+            {postsByYear[year].map((post) => (
+              <a href={`/blog/${post.slug || post.id}`} class="post-card">
+                <div class="post-main-content">
+                  <div class="post-meta-row">
+                    <span class="post-date">{formatDate(post.data.date)}</span>
+                    {post.data.tags && post.data.tags.length > 0 && (
+                      <div class="post-tags-inline">
+                        {post.data.tags.slice(0, 3).map((tag) => (
+                          <span class="post-tag-pill">{tag}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <h3 class="post-title">{post.data.title}</h3>
+                  <p class="post-desc">{post.data.description}</p>
+                </div>
+
+                <div class="post-arrow-box" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  </div>
 </Layout>
+
+<style>
+  .blog-index-container {
+    max-width: 820px;
+    margin: 0 auto 5rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2.75rem;
+  }
+
+  /* Header */
+  .blog-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .blog-pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    background: rgba(59, 130, 246, 0.08);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.22);
+    padding: 4px 12px;
+    border-radius: 9999px;
+    width: fit-content;
+  }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #3b82f6;
+  }
+
+  .blog-main-title {
+    font-size: 2.35rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+  }
+
+  .blog-subtitle {
+    font-size: 0.975rem;
+    color: var(--text-secondary);
+    margin: 0;
+    max-width: 660px;
+    line-height: 1.6;
+  }
+
+  /* Years Stream */
+  .years-stream {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .year-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .year-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .year-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    font-family: var(--font-mono, monospace);
+    margin: 0;
+  }
+
+  .year-count {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Posts List */
+  .posts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .post-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 0.75rem;
+    padding: 1.15rem 1.35rem;
+    text-decoration: none !important;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+  }
+
+  .post-card:hover {
+    border-color: #3b82f6;
+    background: var(--bg-card-hover, var(--bg-card));
+    transform: translateY(-1px);
+  }
+
+  .post-card:hover .post-arrow-box {
+    transform: translateX(3px);
+    color: #3b82f6;
+  }
+
+  .post-card:hover .post-title {
+    color: #3b82f6;
+  }
+
+  .post-main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 1;
+  }
+
+  .post-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .post-date {
+    font-size: 0.775rem;
+    font-family: var(--font-mono, monospace);
+    color: var(--text-muted);
+  }
+
+  .post-tags-inline {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .post-tag-pill {
+    font-size: 0.7rem;
+    font-weight: 600;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    color: var(--text-secondary);
+    padding: 1px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .post-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.35;
+    transition: color 0.15s ease;
+  }
+
+  .post-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .post-arrow-box {
+    color: var(--text-muted);
+    transition: transform 0.15s ease, color 0.15s ease;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 600px) {
+    .post-card {
+      padding: 1rem;
+    }
+  }
+</style>
