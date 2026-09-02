@@ -40,10 +40,10 @@ npm run preview
    * **Build command**: `npm run build`
    * **Build output directory**: `dist`
    * **Node.js Version**: `22.x` (or `20.x`)
-4. Add Environment Variables:
-   * `PUBLIC_GROQ_API_KEY`: `gsk_...`
-   * `PUBLIC_GROQ_MODEL`: `openai/gpt-oss-120b`
-   * `SITE_URL`: `https://sk-builds.vercel.app` (or your domain)
+4. Add Environment Variables (Optional):
+   * `GROQ_API_KEY`: `gsk_...`
+   * `GROQ_MODEL`: `openai/gpt-oss-120b`
+   * `SITE_URL`: `https://sunilkhobragade.pages.dev`
 5. Click **Save and Deploy**.
 
 ---

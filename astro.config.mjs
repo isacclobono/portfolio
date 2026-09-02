@@ -42,9 +42,14 @@ function getSiteUrl() {
 // https://astro.build/config
 export default defineConfig({
   site: getSiteUrl(),
+  compressHTML: true,
   integrations: [mdx()],
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      minify: 'esbuild',
+      cssMinify: true,
+    }
   },
   markdown: {
     shikiConfig: {

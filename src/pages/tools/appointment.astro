@@ -3,13 +3,10 @@ import Layout from '../../layouts/Layout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import Button from '../../components/Button.astro';
 import { SITE } from '../../data/site';
-
-const googleClientId = import.meta.env.PUBLIC_GOOGLE_CLIENT_ID || '';
-const googleApiKey = import.meta.env.PUBLIC_GOOGLE_CALENDAR_API_KEY || '';
 ---
 
 <Layout 
-  title="Book 1:1 Consultation | Google Calendar API" 
+  title="Book 1:1 Consultation | Google Calendar & Meet" 
   description="Schedule a direct 1:1 architecture discovery or technical consultation call with Sunil Khobragade connected with Google Calendar & Google Meet." 
   currentPath="/tools/appointment"
 >
@@ -25,7 +22,7 @@ const googleApiKey = import.meta.env.PUBLIC_GOOGLE_CALENDAR_API_KEY || '';
   </div>
 
   <!-- Perfectly Balanced 2-Column Booking Widget (Form on Left, Calendar on Right) -->
-  <div class="cal-booking-card" id="cal-booking-container" data-google-client-id={googleClientId} data-google-api-key={googleApiKey}>
+  <div class="cal-booking-card" id="cal-booking-container">
     <!-- COLUMN 1 (LEFT): Meeting Overview & Booking Form in Left Space -->
     <div class="cal-col-info">
       <div class="cal-author-badge">
@@ -550,13 +547,10 @@ const googleApiKey = import.meta.env.PUBLIC_GOOGLE_CALENDAR_API_KEY || '';
   }
 </style>
 
-<script is:inline>
+<script>
   function setupLiveCalendly() {
     const container = document.getElementById('cal-booking-container');
     if (!container) return;
-
-    const googleClientId = container.getAttribute('data-google-client-id') || '';
-    const googleApiKey = container.getAttribute('data-google-api-key') || '';
 
     const today = new Date();
     let viewYear = today.getFullYear();

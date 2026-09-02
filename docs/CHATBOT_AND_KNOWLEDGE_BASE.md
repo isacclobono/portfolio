@@ -15,7 +15,7 @@ The **SK Agent** AI assistant combines high-performance streaming LLM generation
                                      │
                                      ▼
                   ┌─────────────────────────────────────┐
-                  │    Is PUBLIC_GROQ_API_KEY set?      │
+                  │    Is GROQ_API_KEY set on server?   │
                   └──────────┬───────────────┬──────────┘
                              │               │
                         YES  │               │ NO / Offline

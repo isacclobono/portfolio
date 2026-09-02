@@ -3,8 +3,6 @@ import { CHATBOT_SYSTEM_PROMPT, SUNIL_KNOWLEDGE_BASE } from '../data/chatbotKnow
 
 const defaultSystemPrompt = JSON.stringify(CHATBOT_SYSTEM_PROMPT);
 const knowledgeData = JSON.stringify(SUNIL_KNOWLEDGE_BASE);
-const envGroqKey = import.meta.env.PUBLIC_GROQ_API_KEY || '';
-const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
 ---
 
 <!-- Floating AI Chatbot Container (Native Messenger Feel, Crisp 12.5px Typography, IndexedDB) -->
@@ -13,8 +11,6 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
   class="sk-chatbot-root" 
   data-system-prompt={defaultSystemPrompt} 
   data-knowledge={knowledgeData}
-  data-env-key={envGroqKey}
-  data-model={envGroqModel}
 >
   <!-- Compact Floating Launcher Button with "SK" (Bottom-Right) -->
   <button 
@@ -1083,7 +1079,7 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
   }
 </style>
 
-<script is:inline>
+<script>
   (function() {
     // ==========================================
     // 🗄️ IndexedDB Storage Manager for Chat History
@@ -1189,11 +1185,9 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
       // Toolbar Buttons
       const micBtn = document.getElementById('tool-mic-btn');
 
-      // Extract system knowledge & model configuration
+      // Extract system knowledge
       let systemPrompt = '';
       let knowledgeBase = null;
-      let groqApiKey = root.getAttribute('data-env-key') || '';
-      let configuredModel = root.getAttribute('data-model') || 'openai/gpt-oss-120b';
 
       try {
         systemPrompt = JSON.parse(root.getAttribute('data-system-prompt') || '""');
@@ -1740,82 +1734,55 @@ const envGroqModel = import.meta.env.PUBLIC_GROQ_MODEL || 'openai/gpt-oss-120b';
         messages.push({ role: 'user', content: text });
         showTypingIndicator();
 
-        // Check for Groq API Key
-        if (groqApiKey && groqApiKey !== 'your_groq_api_key_here') {
-          const modelsToTry = [
-            configuredModel && !configuredModel.includes('prompt-guard') ? configuredModel : 'openai/gpt-oss-120b',
-            'openai/gpt-oss-120b',
-            'qwen/qwen3.8-27b',
-            'openai/gpt-oss-20b',
-            'qwen/qwen3.6-27b',
-            'groq/compound',
-            'llama-3.3-70b-versatile',
-            'llama-3.1-8b-instant'
-          ];
+        // Secure Server-side AI Proxy (Zero client API keys)
+        try {
+          const res = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ messages })
+          });
 
-          for (const modelName of modelsToTry) {
-            try {
-              const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${groqApiKey}`
-                },
-                body: JSON.stringify({
-                  model: modelName,
-                  messages: [
-                    ...messages,
-                    { role: 'system', content: 'You are exclusively the AI assistant for Sunil Khobragade and his portfolio. You must ONLY answer questions directly related to Sunil Khobragade, his technical skills, work experience, projects, education, and hiring availability. If the user asks general, off-topic, or unrelated questions, politely decline and guide them back to Sunil\'s portfolio. Answer completely what was asked—neither too short nor too long. Give exactly as much as was requested.' }
-                  ],
-                  temperature: 0.35,
-                  max_tokens: 450,
-                  stream: true
-                })
-              });
+          if (res.ok && res.body) {
+            removeTypingIndicator();
+            const { contentDiv, timeStr } = createStreamingBotMessage();
+            const reader = res.body.getReader();
+            const decoder = new TextDecoder();
+            let fullResponse = '';
+            let buffer = '';
 
-              if (res.ok && res.body) {
-                removeTypingIndicator();
-                const { contentDiv, timeStr } = createStreamingBotMessage();
-                const reader = res.body.getReader();
-                const decoder = new TextDecoder();
-                let fullResponse = '';
-                let buffer = '';
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
 
-                while (true) {
-                  const { done, value } = await reader.read();
-                  if (done) break;
+              buffer += decoder.decode(value, { stream: true });
+              const lines = buffer.split('\n');
+              buffer = lines.pop() || '';
 
-                  buffer += decoder.decode(value, { stream: true });
-                  const lines = buffer.split('\n');
-                  buffer = lines.pop() || '';
-
-                  for (const line of lines) {
-                    const trimmed = line.trim();
-                    if (!trimmed || trimmed === 'data: [DONE]') continue;
-                    if (trimmed.startsWith('data: ')) {
-                      try {
-                        const json = JSON.parse(trimmed.slice(6));
-                        const token = json.choices?.[0]?.delta?.content || '';
-                        if (token) {
-                          fullResponse += token;
-                          contentDiv.innerHTML = formatMarkdown(fullResponse);
-                          scrollToBottom();
-                        }
-                      } catch (e) {}
+              for (const line of lines) {
+                const trimmed = line.trim();
+                if (!trimmed || trimmed === 'data: [DONE]') continue;
+                if (trimmed.startsWith('data: ')) {
+                  try {
+                    const json = JSON.parse(trimmed.slice(6));
+                    const token = json.choices?.[0]?.delta?.content || '';
+                    if (token) {
+                      fullResponse += token;
+                      contentDiv.innerHTML = formatMarkdown(fullResponse);
+                      scrollToBottom();
                     }
-                  }
-                }
-
-                if (fullResponse.trim().length > 0) {
-                  messages.push({ role: 'assistant', content: fullResponse });
-                  saveMessageToDB('assistant', fullResponse, formatMarkdown(fullResponse), timeStr);
-                  return;
+                  } catch (e) {}
                 }
               }
-            } catch (err) {
-              console.warn(`Streaming error with ${modelName}:`, err);
+            }
+
+            if (fullResponse.trim().length > 0) {
+              messages.push({ role: 'assistant', content: fullResponse });
+              saveMessageToDB('assistant', fullResponse, formatMarkdown(fullResponse), timeStr);
+              return;
             }
           }
+        } catch (err) {
+          console.warn('Backend chat service unreachable, using smart offline knowledge engine:', err);
         }
 
         // Offline Smart Knowledge Base Fallback
