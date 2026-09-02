@@ -10,12 +10,12 @@ const releases = [
     date: "September 2026",
     badge: "Astro 6 → 7 Upgrade",
     badgeType: "launch",
-    summary: "Major framework upgrade from Astro 6 to Astro 7 (v7.2+) powered by Vite 6 and Content Layer.",
+    summary: "Major framework upgrade from Astro 6 to Astro 7 (v7.2+) powered by Vite 8, Rust compiler, and Sätteri Markdown.",
     items: [
-      "Upgraded core framework dependencies to Astro v7.2.0 and @astrojs/mdx v7.0.5.",
-      "Migrated content architecture to official Astro 7 Content Layer API (src/content.config.ts) with glob() loaders.",
-      "Adopted Vite 6 build pipeline with sub-second hot module reloading (HMR) and optimized static asset hashing.",
-      "Streamlined Server-Sent Events (SSE) AI inference pipelines for ultra-fast response streaming."
+      "Upgraded core framework dependencies to Astro v7.2.0 and @astrojs/mdx v7.0.5 with Vite 8 bundler.",
+      "Migrated to Astro 7 Rust-based compiler for strict tag validation, faster builds, and zero legacy HTML restructuring.",
+      "Adopted native Sätteri Markdown rendering pipeline for high-performance GFM rendering across 14 technical blogs.",
+      "Migrated content collections to official Content Layer API (src/content.config.ts) with glob() loaders."
     ]
   },
   {
@@ -367,16 +367,30 @@ const releases = [
   }
 
   .release-list {
-    margin: 0;
-    padding-left: 1.25rem;
+    margin: 0.25rem 0 0 0;
+    padding: 0;
+    list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 0.5rem;
   }
 
   .release-list li {
-    font-size: 0.85rem;
+    position: relative;
+    padding-left: 1.15rem;
+    font-size: 0.865rem;
     color: var(--text-secondary);
     line-height: 1.5;
+  }
+
+  .release-list li::before {
+    content: "";
+    position: absolute;
+    left: 0.15rem;
+    top: 0.55rem;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: #3b82f6;
   }
 </style>

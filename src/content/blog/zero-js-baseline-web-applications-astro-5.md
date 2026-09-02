@@ -5,7 +5,7 @@ date: 2026-04-20
 tags: ["Astro", "Web Performance", "TypeScript", "Frontend"]
 ---
 
-Modern Single-Page Applications (SPAs) ship megabytes of JavaScript just to render static text and navigation menus, killing mobile battery life and SEO indexing speed. Astro 7 reverses this model by compiling pure semantic HTML by default while providing Vite 6 tooling and server actions.
+Modern Single-Page Applications (SPAs) ship megabytes of JavaScript just to render static text and navigation menus, killing mobile battery life and SEO indexing speed. Astro 7 reverses this model by compiling pure semantic HTML by default using Vite 8, the Rust compiler, and the native Sätteri Markdown pipeline.
 
 ## Islands Architecture: Hydrate Only What Is Interactive
 
