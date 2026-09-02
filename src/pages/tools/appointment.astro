@@ -178,12 +178,7 @@ import { SITE } from '../../data/site';
   .cal-booking-card {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: 1rem;
-    padding: 1.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    gap: 1.25rem;
   }
 
   @media (max-width: 860px) {
@@ -196,6 +191,10 @@ import { SITE } from '../../data/site';
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg, 12px);
+    padding: 1.25rem;
   }
 
   .cal-author-badge {
@@ -366,14 +365,17 @@ import { SITE } from '../../data/site';
   .cal-col-main {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg, 12px);
+    padding: 1.25rem;
   }
 
   .cal-picker-section {
-    background: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    border-radius: 0.75rem;
-    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   .cal-header {
@@ -470,10 +472,11 @@ import { SITE } from '../../data/site';
 
   /* Slots Section */
   .cal-slots-section-below {
-    background: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    border-radius: 0.75rem;
-    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-subtle);
   }
 
   .cal-slots-header {
@@ -660,8 +663,16 @@ import { SITE } from '../../data/site';
 
           btn.addEventListener('click', () => {
             selectedDate = new Date(viewYear, viewMonth, day);
+            const slots = is24h ? availableSlots24h : availableSlots12h;
+            selectedSlot = slots[0]; // Auto-select default first slot (10:00 AM) for this date
             renderCalendar();
             renderSlots();
+            updateConfirmation();
+            
+            // Auto-focus name field for quick booking setup
+            if (clientNameInput) {
+              clientNameInput.focus({ preventScroll: false });
+            }
           });
         }
 
