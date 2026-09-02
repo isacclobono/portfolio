@@ -1,15 +1,15 @@
 ---
-title: "Low-Latency Edge Computing with Cloudflare Pages & Astro 5"
-description: "Deploying globally distributed edge applications with sub-25ms TTFB and server-rendered dynamic routes."
+title: "Low-Latency Edge Computing with Cloudflare Pages & Astro 7"
+description: "Deploying globally distributed edge applications with sub-25ms TTFB, Vite 6 engine, and server-rendered dynamic routes."
 date: 2025-09-10
 tags: ["Edge", "Astro", "Cloudflare", "Performance"]
 ---
 
 Moving server compute from centralized cloud data centers to Cloudflare's global edge network (300+ PoPs worldwide) reduces Time To First Byte (TTFB) to under 25ms globally.
 
-## Astro 5 Hybrid Edge Adapter Architecture
+## Astro 7 Hybrid Edge Adapter Architecture
 
-With Astro 5, static pages build at zero cost while dynamic authenticated routes execute instantly inside V8 isolates at the nearest edge data center.
+With Astro 7, static pages build with ultra-fast Vite 6 compilation while dynamic authenticated routes execute instantly inside V8 isolates at the nearest edge data center.
 
 ```typescript
 // astro.config.mjs

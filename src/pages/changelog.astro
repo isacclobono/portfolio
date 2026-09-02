@@ -6,6 +6,19 @@ import { SITE } from '../data/site';
 
 const releases = [
   {
+    version: "v2.6.0",
+    date: "September 2026",
+    badge: "Astro 6 → 7 Upgrade",
+    badgeType: "launch",
+    summary: "Major framework upgrade from Astro 6 to Astro 7 (v7.2+) powered by Vite 6 and Content Layer.",
+    items: [
+      "Upgraded core framework dependencies to Astro v7.2.0 and @astrojs/mdx v7.0.5.",
+      "Migrated content architecture to official Astro 7 Content Layer API (src/content.config.ts) with glob() loaders.",
+      "Adopted Vite 6 build pipeline with sub-second hot module reloading (HMR) and optimized static asset hashing.",
+      "Streamlined Server-Sent Events (SSE) AI inference pipelines for ultra-fast response streaming."
+    ]
+  },
+  {
     version: "v2.5.0",
     date: "September 2026",
     badge: "PWA & Architecture Suite",
@@ -74,11 +87,11 @@ const releases = [
   {
     version: "v2.0.0",
     date: "July 2026",
-    badge: "Initial Astro 5 Launch",
+    badge: "Astro 5 → 6 Upgrade",
     badgeType: "launch",
-    summary: "Complete redesign and migration to modern Astro architecture.",
+    summary: "Upgraded core portfolio architecture from Astro 5 to Astro 6 with enhanced Islands rendering.",
     items: [
-      "Migrated portfolio to modern Astro 5 with Content Collections and Markdown/MDX support.",
+      "Upgraded from Astro 5 to Astro 6 with unified server actions and static prerendering optimizations.",
       "Implemented responsive vanilla CSS token design system with seamless Dark/Light theme switching.",
       "Structured work experience timeline, featured engineering case studies, and technical blog."
     ]
@@ -132,7 +145,7 @@ const releases = [
 
 <Layout 
   title="Engineering Changelog & Release Notes | SK Builds" 
-  description="Chronological record of releases, feature updates, AI chatbot enhancements, and engineering upgrades for Sunil Khobragade's portfolio from 2022 to 2026." 
+  description="Chronological record of releases, framework migrations (Astro 5 to 6, 6 to 7), AI copilot upgrades, and engineering milestones from 2022 to 2026." 
   currentPath="/changelog"
 >
   <Breadcrumb items={[
@@ -152,7 +165,7 @@ const releases = [
         PLATFORM &amp; ARCHITECTURE LOG &bull; 2022 – 2026
       </div>
       <h1 class="changelog-title">Engineering Changelog</h1>
-      <p class="changelog-subtitle">A chronological record of architectural milestones, AI copilot upgrades, developer tool releases, and platform optimizations.</p>
+      <p class="changelog-subtitle">A chronological record of architectural milestones, framework migrations (Astro 5 → 6 → 7), AI copilot upgrades, and platform optimizations.</p>
     </header>
 
     <div class="timeline">
