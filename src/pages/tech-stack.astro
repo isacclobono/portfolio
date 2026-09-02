@@ -5,210 +5,307 @@ import Button from '../components/Button.astro';
 import { SITE } from '../data/site';
 
 const stats = [
-  { label: "Engineering Experience", value: "6+ Years", highlight: "Full-Stack & AI" },
+  { label: "Engineering Career", value: "6+ Years", highlight: "Full-Stack & AI Systems" },
   { label: "Type Safety Standard", value: "100%", highlight: "End-to-End TypeScript" },
-  { label: "Global Edge Latency", value: "< 25ms", highlight: "Cloudflare Edge" },
-  { label: "AI Inference Velocity", value: "~300 tok/s", highlight: "Groq Cloud LPU" }
+  { label: "Edge Delivery Latency", value: "< 25ms", highlight: "Cloudflare 300+ PoPs" },
+  { label: "AI Inference Velocity", value: "300+ tok/s", highlight: "Groq Cloud LPU" }
 ];
 
 const categories = [
   {
-    id: "ai-systems",
-    categoryName: "AI Models, LLMs & Agent Frameworks",
+    id: "ai-agents",
+    categoryName: "AI Models, LLMs & Multi-Agent Frameworks",
     categoryIconType: "bot",
-    categoryDesc: "Production AI inference engines, agent orchestration pipelines, and vector databases.",
+    categoryDesc: "Production AI inference engines, multi-agent orchestration graphs, and high-density vector retrieval.",
     items: [
       {
         name: "Groq Cloud LPU API",
         url: "https://groq.com",
         tag: "Inference Engine",
-        role: "Powers real-time streaming AI responses (300+ tok/s) using openai/gpt-oss-120b and qwen/qwen3.8-27b."
+        level: "Daily Driver",
+        usedIn: "Pulse Chat & AI Copilot",
+        role: "Powers sub-120ms TTFT streaming AI inference (300+ tokens/sec) using Llama 3.3, Qwen 2.5, and DeepSeek models."
       },
       {
         name: "LangGraph & CrewAI",
         url: "https://www.langchain.com/langgraph",
         tag: "Agentic Systems",
-        role: "Orchestrates multi-agent state machines, memory retention, tool calling, and automated copilots."
+        level: "Advanced",
+        usedIn: "AI-Enabled LMS",
+        role: "Orchestrates cyclic multi-agent state machines, self-correction reasoning loops, memory retention, and tool calling."
       },
       {
         name: "pgvector & Pinecone",
         url: "https://github.com/pgvector/pgvector",
-        tag: "Vector DB",
-        role: "Indexes high-density embeddings for enterprise Retrieval-Augmented Generation (RAG) knowledge retrieval."
+        tag: "Vector Database",
+        level: "Production",
+        usedIn: "Enterprise RAG",
+        role: "Indexes high-density embeddings (HNSW cosine distance) for hybrid BM25 + dense vector semantic retrieval."
       },
       {
-        name: "FastAPI (Python 3.12)",
-        url: "https://fastapi.tiangolo.com",
-        tag: "AI Microservices",
-        role: "High-throughput asynchronous REST and WebSocket backend services for LLM pipelines and data ingestion."
+        name: "Google Vertex AI & Gemini",
+        url: "https://cloud.google.com/vertex-ai",
+        tag: "Foundation Models",
+        level: "Certified",
+        usedIn: "AI-Enabled LMS",
+        role: "APAC GenAI Academy certified integration for multimodal processing, document embeddings, and context caching."
+      },
+      {
+        name: "Ollama & Local LLMs",
+        url: "https://ollama.com",
+        tag: "Local Inference",
+        level: "Prototyping",
+        usedIn: "Private Workflows",
+        role: "On-premise model execution (Qwen, Mistral, Llama) for privacy-first benchmarking and zero-egress workflows."
       }
     ]
   },
   {
-    id: "external-apis",
-    categoryName: "External APIs & Cloud Protocols",
-    categoryIconType: "plug",
-    categoryDesc: "Third-party developer APIs, video conferencing, and client-side storage protocols.",
+    id: "backend-languages",
+    categoryName: "Backend Runtimes, Languages & Microservices",
+    categoryIconType: "server",
+    categoryDesc: "High-throughput asynchronous runtimes, strictly typed APIs, and event-driven microservice backends.",
     items: [
       {
-        name: "Google Calendar API (v3)",
-        url: "https://developers.google.com/calendar",
-        tag: "Scheduling API",
-        role: "Dynamically books 1:1 architecture discovery sessions with UTC timestamp validation."
+        name: "Node.js (v20+ LTS)",
+        url: "https://nodejs.org",
+        tag: "Runtime",
+        level: "6+ Yrs Exp",
+        usedIn: "Pulse Chat & Booking",
+        role: "Event-loop backend architectures, streaming REST microservices, WebSocket clustering, and background job queues."
       },
       {
-        name: "Google Meet",
-        url: "https://meet.google.com",
-        tag: "Video Rooms",
-        role: "Attaches instant video conferencing rooms directly to confirmed client calendar invites."
-      },
-      {
-        name: "iCalendar (.ICS Standard)",
-        url: "https://icalendar.org",
-        tag: "RFC 5545 Spec",
-        role: "Generates offline calendar files compatible with Apple Calendar, Microsoft Outlook, and Thunderbird."
-      },
-      {
-        name: "Web Speech API",
-        url: "https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API",
-        tag: "Browser API",
-        role: "Provides zero-dependency speech-to-text voice recognition for the SK Agent AI assistant."
-      },
-      {
-        name: "IndexedDB API",
-        url: "https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API",
-        tag: "Client Storage",
-        role: "Private client-side database (SK_Portfolio_ChatDB) persisting conversation history locally."
-      }
-    ]
-  },
-  {
-    id: "frontend-frameworks",
-    categoryName: "Core Web Frameworks & Build Tools",
-    categoryIconType: "zap",
-    categoryDesc: "High-speed static site generators, component libraries, and CSS compilers.",
-    items: [
-      {
-        name: "Astro 7 (v7.2+)",
-        url: "https://astro.build",
-        tag: "Next-Gen SSG",
-        role: "Next-generation content-driven architecture with Content Layer, Vite 8 engine, Rust compiler, and zero-JS baseline."
+        name: "Python (3.12)",
+        url: "https://www.python.org",
+        tag: "Language",
+        level: "Advanced",
+        usedIn: "FastAPI & AI Pipelines",
+        role: "Asynchronous REST backends, LangChain agent harnesses, data transformation pipelines, and ML inference services."
       },
       {
         name: "TypeScript (Strict Mode)",
         url: "https://www.typescriptlang.org",
-        tag: "Language",
-        role: "Strictly typed end-to-end schemas across backend microservices and client interfaces."
+        tag: "Core Standard",
+        level: "100% Strict",
+        usedIn: "All Projects",
+        role: "Zero-any policy, end-to-end schema validation (Zod), and type-safe contract interfaces between client and server."
+      },
+      {
+        name: "FastAPI & Fastify",
+        url: "https://fastapi.tiangolo.com",
+        tag: "API Framework",
+        level: "Production",
+        usedIn: "Microservices",
+        role: "Low-overhead asynchronous HTTP/WebSocket services with automatic OpenAPI docs and high-throughput serialization."
+      },
+      {
+        name: "Laravel (PHP 8.3)",
+        url: "https://laravel.com",
+        tag: "MVC Framework",
+        level: "Enterprise",
+        usedIn: "E-Commerce Platform",
+        role: "Robust MVC architecture, Eloquent ORM, database migrations, queue workers, and multi-gateway billing logic."
+      }
+    ]
+  },
+  {
+    id: "data-storage",
+    categoryName: "Databases, Caching & Message Brokers",
+    categoryIconType: "database",
+    categoryDesc: "ACID transactional databases, in-memory distributed locks, and message queue backbones.",
+    items: [
+      {
+        name: "PostgreSQL 16",
+        url: "https://www.postgresql.org",
+        tag: "Relational DB",
+        level: "Core Standard",
+        usedIn: "All Production Apps",
+        role: "Row-Level Security (RLS) multi-tenancy, JSONB querying, B-tree/GIN indexing, and ACID transaction guarantees."
+      },
+      {
+        name: "Redis (Cluster & Redlock)",
+        url: "https://redis.io",
+        tag: "In-Memory DB",
+        level: "Production",
+        usedIn: "Appointment Booking",
+        role: "Sub-millisecond caching, rate-limiting, session management, Pub/Sub channels, and Redlock distributed mutexes."
+      },
+      {
+        name: "RabbitMQ",
+        url: "https://www.rabbitmq.com",
+        tag: "Message Broker",
+        level: "Architectural",
+        usedIn: "Event-Driven Services",
+        role: "Topic/Direct exchange routing topologies, dead-letter queues (DLQ), and consumer backpressure flow control."
+      },
+      {
+        name: "MongoDB",
+        url: "https://www.mongodb.com",
+        tag: "NoSQL DB",
+        level: "Production",
+        usedIn: "Chat Telemetry",
+        role: "Flexible document store for chat transcripts, event audit logs, and high-velocity unstructured payloads."
+      }
+    ]
+  },
+  {
+    id: "frontend-web",
+    categoryName: "Frontend Engines, Browsers & Web APIs",
+    categoryIconType: "zap",
+    categoryDesc: "Zero-JS static site generators, component frameworks, client-side storage, and native browser APIs.",
+    items: [
+      {
+        name: "Astro 7 (v7.2+)",
+        url: "https://astro.build",
+        tag: "Static & SSR",
+        level: "Daily Driver",
+        usedIn: "Portfolio & Docs",
+        role: "Islands architecture with Content Layer API, Vite 8 build engine, native Rust compiler, and zero-JS baseline."
+      },
+      {
+        name: "React 19 & Next.js 15",
+        url: "https://react.dev",
+        tag: "UI Library",
+        level: "5+ Yrs Exp",
+        usedIn: "Pulse Chat & LMS",
+        role: "Server Components, optimistic UI mutations, concurrent mode, and interactive real-time client dashboards."
       },
       {
         name: "TailwindCSS (v4 / Vite)",
         url: "https://tailwindcss.com",
         tag: "Styling Engine",
-        role: "Modern atomic CSS compilation with CSS custom property tokens for adaptive Dark/Light themes."
+        level: "Standard",
+        usedIn: "Modern UIs",
+        role: "Atomic utility compilation with CSS custom property tokens powering fluid Dark and Light theme adaptability."
       },
       {
-        name: "Shiki Syntax Highlighter",
-        url: "https://shiki.style",
-        tag: "Code Blocks",
-        role: "Server-side Dracula syntax highlighting without client-side bundle weight penalties."
+        name: "Web Speech API",
+        url: "https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API",
+        tag: "Browser Audio",
+        level: "Native API",
+        usedIn: "SK Agent Voice",
+        role: "Continuous hands-free speech-to-text transcription streaming live directly inside the chatbot input field."
       },
       {
-        name: "@astrojs/mdx",
-        url: "https://docs.astro.build/en/guides/integrations-guide/mdx/",
-        tag: "Content Engine",
-        role: "Interactive MDX component authoring for technical architecture breakdowns and blog posts."
+        name: "IndexedDB API",
+        url: "https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API",
+        tag: "Client Storage",
+        level: "Native API",
+        usedIn: "Offline ChatDB",
+        role: "Client-side private database storing chat history, modal dimension states, and offline telemetry locally."
       }
     ]
   },
   {
     id: "cloud-devops",
-    categoryName: "Cloud Infrastructure, DevOps & Edge CDN",
+    categoryName: "Cloud Infrastructure, DevOps & Security",
     categoryIconType: "cloud",
-    categoryDesc: "Global edge deployment networks, container runtimes, and continuous integration.",
+    categoryDesc: "Global edge CDN delivery, Docker containerization, CI/CD automation, and cybersecurity protocols.",
     items: [
       {
-        name: "Cloudflare Pages & Workers",
+        name: "Cloudflare Pages & Edge Workers",
         url: "https://pages.cloudflare.com",
-        tag: "Edge CDN",
-        role: "Worldwide edge network deployment with HTTP/3, TLS 1.3, and sub-25ms global TTFB."
+        tag: "Global Edge CDN",
+        level: "Production",
+        usedIn: "Portfolio & Edge APIs",
+        role: "Sub-25ms global TTFB across 300+ edge Points of Presence (PoPs) with HTTP/3, TLS 1.3, and DDoS mitigation."
       },
       {
         name: "Docker & Docker Compose",
         url: "https://www.docker.com",
         tag: "Containers",
-        role: "Reproducible containerized environments for full-stack microservices and database clustering."
+        level: "Standard",
+        usedIn: "Microservices",
+        role: "Multi-stage reproducible container builds, service network isolation, and local development clusters."
       },
       {
         name: "Amazon Web Services (AWS)",
         url: "https://aws.amazon.com",
-        tag: "Cloud Services",
-        role: "S3 object storage, EC2 compute instances, RDS PostgreSQL, and Lambda serverless functions."
+        tag: "Cloud Provider",
+        level: "Production",
+        usedIn: "Enterprise Storage",
+        role: "S3 asset buckets, EC2 compute instances, RDS PostgreSQL multi-AZ deployments, and IAM least-privilege security."
       },
       {
-        name: "GitHub Actions",
+        name: "GitHub Actions CI/CD",
         url: "https://github.com/features/actions",
-        tag: "CI/CD Pipeline",
-        role: "Automated linting, test suites, static build verification, and zero-downtime CD triggers."
-      }
-    ]
-  },
-  {
-    id: "databases-storage",
-    categoryName: "Databases, Caching & Message Queues",
-    categoryIconType: "database",
-    categoryDesc: "Data persistence engines, in-memory caches, and document stores.",
-    items: [
-      {
-        name: "PostgreSQL (v16)",
-        url: "https://www.postgresql.org",
-        tag: "Relational DB",
-        role: "ACID transactional database for high-concurrency booking schemas, financial records, and audits."
+        tag: "Automation",
+        level: "Standard",
+        usedIn: "All Repositories",
+        role: "Automated linting, TypeScript type-checking, container security vulnerability scanning, and blue-green releases."
       },
       {
-        name: "Redis",
-        url: "https://redis.io",
-        tag: "In-Memory Cache",
-        role: "Sub-millisecond caching, rate-limiting, session management, and distributed mutex locks."
-      },
-      {
-        name: "MongoDB",
-        url: "https://www.mongodb.com",
-        tag: "Document Store",
-        role: "High-flexibility NoSQL document storage for event streams and real-time chat telemetry."
+        name: "Information Security (OWASP)",
+        url: "https://owasp.org",
+        tag: "Security Standard",
+        level: "M.Sc. Specialized",
+        usedIn: "All Architectures",
+        role: "Specialized in Cryptography, HMAC webhook signature verification, JWT claims sanitization, and RBAC audits."
       }
     ]
   },
   {
     id: "workstation-gear",
-    categoryName: "Workstation Hardware & Peripherals",
+    categoryName: "Workstation Hardware, OS & Developer Tooling",
     categoryIconType: "monitor",
-    categoryDesc: "Physical workstation hardware optimized for engineering focus and ergonomics.",
+    categoryDesc: "Physical workstation hardware, terminal setup, and development ergonomics for peak productivity.",
     items: [
       {
         name: "High-Performance Workstation",
         url: "https://www.intel.com",
-        tag: "Compute Rig",
-        role: "Multi-core processor with 32GB high-speed RAM and NVMe PCIe 4.0 SSD storage."
+        tag: "Rig Hardware",
+        level: "32GB RAM",
+        usedIn: "Local Engineering",
+        role: "Multi-core processor with 32GB high-speed memory and NVMe PCIe 4.0 SSD for sub-second builds and Docker clusters."
       },
       {
         name: "Dual 4K IPS Displays",
         url: "https://www.lg.com",
-        tag: "Displays",
-        role: "Multi-monitor desktop setup for concurrent IDE authoring, terminal monitoring, and live preview."
+        tag: "Display Setup",
+        level: "3840x2160",
+        usedIn: "Multi-Window Flow",
+        role: "Split layout for concurrent IDE coding, live terminal tracing, and browser responsive viewport previews."
       },
       {
         name: "Keychron Mechanical Keyboard",
         url: "https://www.keychron.com",
         tag: "Peripherals",
-        role: "Tactile mechanical switches optimized for high-speed, fatigue-free programming sessions."
+        level: "Tactile",
+        usedIn: "Daily Driver",
+        role: "Tactile mechanical switches tuned for high-speed typing accuracy, code navigation, and ergonomic endurance."
       },
       {
         name: "Logitech MX Master 3S",
         url: "https://www.logitech.com",
         tag: "Ergonomics",
-        role: "Precision wireless mouse with electromagnetic MagSpeed scrolling and custom gesture triggers."
+        level: "MagSpeed",
+        usedIn: "Daily Driver",
+        role: "Quiet-click electromagnetic scrolling mouse with custom workspace switching gestures."
       }
     ]
+  }
+];
+
+const architecturePrinciples = [
+  {
+    icon: "shield",
+    title: "100% Strict Type Safety",
+    desc: "End-to-end TypeScript interfaces and Zod runtime schema validation eliminate whole classes of production runtime exceptions before deployment."
+  },
+  {
+    icon: "zap",
+    title: "Zero-JS Baseline & Edge Delivery",
+    desc: "Ship zero client-side JavaScript by default via Astro 7 Islands, serving pre-rendered HTML from 300+ Cloudflare edge PoPs in under 25ms."
+  },
+  {
+    icon: "lock",
+    title: "Concurrency-Safe Data Mutation",
+    desc: "Distributed Redis Redlock mutexes and PostgreSQL SELECT FOR UPDATE locks guarantee zero double-bookings or race conditions under high concurrent loads."
+  },
+  {
+    icon: "layers",
+    title: "Dual-Write Atomicity Guarantees",
+    desc: "Transactional Outbox pattern combined with Change Data Capture (CDC) ensures database state and event-stream brokers remain perfectly synchronized."
   }
 ];
 ---
@@ -233,7 +330,7 @@ const categories = [
     <header class="stack-hero-header">
       <div class="hero-badge-pill">
         <span class="badge-dot"></span>
-        ENGINEERING BLUEPRINT &bull; TOOLING &bull; 2026
+        ENGINEERING BLUEPRINT &bull; PRODUCTION TECH &bull; 2026
       </div>
       <h1 class="stack-main-title">Tech Stack &amp; Architecture</h1>
       <p class="stack-hero-subtitle">
@@ -252,10 +349,39 @@ const categories = [
       ))}
     </div>
 
+    <!-- Interactive Filter & Live Search Bar -->
+    <div class="stack-interactive-bar">
+      <!-- Category Filter Tabs -->
+      <div class="stack-filter-tabs" id="stack-tabs" role="tablist">
+        <button type="button" class="stack-tab active" data-filter="all">All ({categories.reduce((acc, c) => acc + c.items.length, 0)})</button>
+        <button type="button" class="stack-tab" data-filter="ai-agents">AI &amp; Agents</button>
+        <button type="button" class="stack-tab" data-filter="backend-languages">Backend &amp; APIs</button>
+        <button type="button" class="stack-tab" data-filter="data-storage">Databases &amp; Queues</button>
+        <button type="button" class="stack-tab" data-filter="frontend-web">Frontend &amp; Web</button>
+        <button type="button" class="stack-tab" data-filter="cloud-devops">Cloud &amp; Security</button>
+        <button type="button" class="stack-tab" data-filter="workstation-gear">Workstation</button>
+      </div>
+
+      <!-- Quick Search Filter Input -->
+      <div class="stack-search-wrap">
+        <svg class="stack-search-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input 
+          type="text" 
+          id="stack-search-input" 
+          class="stack-search-input" 
+          placeholder="Filter tech by name, tag, or project..." 
+          autocomplete="off"
+        />
+      </div>
+    </div>
+
     <!-- Architectural Categories Breakdown -->
-    <div class="categories-stream">
+    <div class="categories-stream" id="categories-container">
       {categories.map((cat) => (
-        <section class="category-block" id={cat.id}>
+        <section class="category-block" id={cat.id} data-category-id={cat.id}>
           <!-- Category Header -->
           <div class="category-header-row">
             <span class="category-icon-container">
@@ -264,9 +390,9 @@ const categories = [
                   <path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/>
                 </svg>
               )}
-              {cat.categoryIconType === 'plug' && (
+              {cat.categoryIconType === 'server' && (
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/>
+                  <rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/>
                 </svg>
               )}
               {cat.categoryIconType === 'zap' && (
@@ -304,7 +430,11 @@ const categories = [
                 target="_blank" 
                 rel="noopener noreferrer" 
                 class="tech-row-card"
-                title={`Visit official ${item.name} website`}
+                data-tech-name={item.name.toLowerCase()}
+                data-tech-tag={item.tag.toLowerCase()}
+                data-tech-role={item.role.toLowerCase()}
+                data-tech-used={item.usedIn.toLowerCase()}
+                title={`Visit official ${item.name} documentation`}
               >
                 <!-- Left: Name + External Link Icon + Tag Badge -->
                 <div class="tech-left-column">
@@ -314,6 +444,12 @@ const categories = [
                     <polyline points="7 7 17 7 17 17"></polyline>
                   </svg>
                   <span class="tech-tag-pill">{item.tag}</span>
+                  {item.usedIn && (
+                    <span class="tech-used-pill">
+                      <span class="used-dot"></span>
+                      {item.usedIn}
+                    </span>
+                  )}
                 </div>
 
                 <!-- Right: Technical Role / Description -->
@@ -325,17 +461,55 @@ const categories = [
       ))}
     </div>
 
-    <!-- Architectural Philosophy Callout -->
-    <section class="philosophy-card">
-      <div class="philosophy-header">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
-        </svg>
-        <h3 class="philosophy-title">Architectural Philosophy</h3>
+    <!-- Core Architecture Principles Grid -->
+    <section class="principles-section">
+      <div class="principles-section-header">
+        <h2 class="principles-section-title">Architectural Principles &amp; Standards</h2>
+        <p class="principles-section-desc">Core engineering decisions governing every distributed system and application I build.</p>
       </div>
-      <p class="philosophy-body">
-        I prioritize <strong>strict type-safety</strong>, <strong>minimal client-side JavaScript execution</strong>, and <strong>low-latency edge delivery</strong>. Every technology in this stack is chosen for high maintainability, predictable scaling under load, and rock-solid developer experience.
-      </p>
+
+      <div class="principles-grid">
+        {architecturePrinciples.map((p) => (
+          <div class="principle-card">
+            <div class="principle-icon-row">
+              <span class="principle-icon-box">
+                {p.icon === 'shield' && (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                )}
+                {p.icon === 'zap' && (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                )}
+                {p.icon === 'lock' && (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                )}
+                {p.icon === 'layers' && (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                )}
+              </span>
+              <h3 class="principle-title">{p.title}</h3>
+            </div>
+            <p class="principle-desc">{p.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Architecture CTA Section -->
+    <section class="stack-cta-card">
+      <div class="stack-cta-content">
+        <h3 class="stack-cta-title">Need custom architecture or high-scale system design?</h3>
+        <p class="stack-cta-desc">
+          I design and deliver distributed web systems, AI multi-agent pipelines, and cloud microservices tailored for performance and high concurrency.
+        </p>
+      </div>
+      <div class="stack-cta-actions">
+        <Button href="/tools/appointment" variant="primary" size="md">
+          Book 1:1 Consultation &rarr;
+        </Button>
+        <Button href="/tools/estimator" variant="secondary" size="md">
+          Estimate Architecture Cost
+        </Button>
+      </div>
     </section>
   </article>
 </Layout>
@@ -413,6 +587,12 @@ const categories = [
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+
+  .stat-card:hover {
+    border-color: #3b82f6;
+    transform: translateY(-2px);
   }
 
   .stat-label {
@@ -436,6 +616,83 @@ const categories = [
     font-weight: 600;
   }
 
+  /* Interactive Bar: Filter Tabs + Live Search */
+  .stack-interactive-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+  }
+
+  .stack-filter-tabs {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+
+  .stack-filter-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .stack-tab {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    padding: 5px 12px;
+    font-size: 0.775rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+  }
+
+  .stack-tab:hover {
+    color: var(--text-primary);
+    background: var(--bg-pill, rgba(255, 255, 255, 0.08));
+  }
+
+  .stack-tab.active {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.35);
+    color: #3b82f6;
+  }
+
+  .stack-search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .stack-search-icon {
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  .stack-search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    font-family: inherit;
+  }
+
+  .stack-search-input::placeholder {
+    color: var(--text-muted);
+  }
+
   /* Categories Stream */
   .categories-stream {
     display: flex;
@@ -447,6 +704,11 @@ const categories = [
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    transition: opacity 0.2s ease;
+  }
+
+  .category-block.is-hidden {
+    display: none !important;
   }
 
   .category-header-row {
@@ -459,8 +721,8 @@ const categories = [
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border-radius: 8px;
     background: rgba(59, 130, 246, 0.1);
     color: #3b82f6;
@@ -508,6 +770,10 @@ const categories = [
     gap: 1.5rem;
     text-decoration: none !important;
     transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+  }
+
+  .tech-row-card.is-hidden {
+    display: none !important;
   }
 
   .tech-row-card:hover {
@@ -558,6 +824,27 @@ const categories = [
     white-space: nowrap;
   }
 
+  .tech-used-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.675rem;
+    font-weight: 600;
+    background: rgba(59, 130, 246, 0.08);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .used-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #3b82f6;
+  }
+
   .tech-right-role {
     font-size: 0.85rem;
     color: var(--text-secondary);
@@ -567,39 +854,128 @@ const categories = [
     text-decoration: none !important;
   }
 
-  /* Philosophy Callout */
-  .philosophy-card {
-    background: rgba(59, 130, 246, 0.05);
-    border: 1px solid rgba(59, 130, 246, 0.2);
-    border-radius: 0.85rem;
-    padding: 1.4rem 1.6rem;
+  /* Architectural Principles Section */
+  .principles-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .principles-section-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .principles-section-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.02em;
+  }
+
+  .principles-section-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .principles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .principle-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 12px;
+    padding: 1.35rem;
     display: flex;
     flex-direction: column;
     gap: 0.65rem;
+    transition: border-color 0.15s ease, transform 0.15s ease;
   }
 
-  .philosophy-header {
+  .principle-card:hover {
+    border-color: #3b82f6;
+    transform: translateY(-2px);
+  }
+
+  .principle-icon-row {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.65rem;
   }
 
-  .philosophy-title {
-    font-size: 1.05rem;
+  .principle-icon-box {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(59, 130, 246, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .principle-title {
+    font-size: 0.95rem;
     font-weight: 700;
     color: var(--text-primary);
     margin: 0;
   }
 
-  .philosophy-body {
-    font-size: 0.9rem;
+  .principle-desc {
+    font-size: 0.825rem;
     color: var(--text-secondary);
     margin: 0;
-    line-height: 1.6;
+    line-height: 1.55;
   }
 
-  .philosophy-body strong {
+  /* Stack CTA Section */
+  .stack-cta-card {
+    background: rgba(59, 130, 246, 0.05);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 14px;
+    padding: 1.75rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .stack-cta-content {
+    flex: 1;
+    min-width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .stack-cta-title {
+    font-size: 1.15rem;
+    font-weight: 700;
     color: var(--text-primary);
+    margin: 0;
+  }
+
+  .stack-cta-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .stack-cta-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
   }
 
   @media (max-width: 680px) {
@@ -617,5 +993,94 @@ const categories = [
     .tech-right-role {
       text-align: left;
     }
+
+    .stack-cta-card {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1.35rem;
+    }
+
+    .stack-cta-actions {
+      width: 100%;
+    }
   }
 </style>
+
+<script is:inline>
+  function setupTechStackInteractions() {
+    const tabs = document.querySelectorAll('.stack-tab');
+    const searchInput = document.getElementById('stack-search-input');
+    const categories = document.querySelectorAll('.category-block');
+    const techCards = document.querySelectorAll('.tech-row-card');
+
+    if (!tabs || !categories.length) return;
+
+    let currentFilter = 'all';
+
+    function filterTechItems() {
+      const query = (searchInput ? searchInput.value : '').trim().toLowerCase();
+
+      categories.forEach((cat) => {
+        const catId = cat.getAttribute('data-category-id') || '';
+        const matchesCategory = currentFilter === 'all' || currentFilter === catId;
+
+        if (!matchesCategory) {
+          cat.classList.add('is-hidden');
+          return;
+        }
+
+        let hasVisibleCards = false;
+        const cards = cat.querySelectorAll('.tech-row-card');
+
+        cards.forEach((card) => {
+          if (!query) {
+            card.classList.remove('is-hidden');
+            hasVisibleCards = true;
+            return;
+          }
+
+          const name = card.getAttribute('data-tech-name') || '';
+          const tag = card.getAttribute('data-tech-tag') || '';
+          const role = card.getAttribute('data-tech-role') || '';
+          const used = card.getAttribute('data-tech-used') || '';
+          const combined = `${name} ${tag} ${role} ${used}`;
+
+          if (combined.includes(query)) {
+            card.classList.remove('is-hidden');
+            hasVisibleCards = true;
+          } else {
+            card.classList.add('is-hidden');
+          }
+        });
+
+        if (hasVisibleCards) {
+          cat.classList.remove('is-hidden');
+        } else {
+          cat.classList.add('is-hidden');
+        }
+      });
+    }
+
+    // Category Tabs click
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach((t) => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentFilter = tab.getAttribute('data-filter') || 'all';
+        filterTechItems();
+      });
+    });
+
+    // Live search input
+    if (searchInput) {
+      searchInput.addEventListener('input', filterTechItems);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupTechStackInteractions);
+  } else {
+    setupTechStackInteractions();
+  }
+  document.addEventListener('astro:after-swap', setupTechStackInteractions);
+</script>
