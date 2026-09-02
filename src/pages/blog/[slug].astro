@@ -23,9 +23,10 @@ const formatDate = (date: Date) => {
 <Layout 
   title={post.data.title} 
   description={post.data.description} 
-  currentPath="/blog"
+  currentPath={`/blog/${post.slug || post.id}`}
   type="article"
   publishDate={post.data.date}
+  tags={post.data.tags}
 >
   <!-- Breadcrumb Navigation -->
   <Breadcrumb items={[

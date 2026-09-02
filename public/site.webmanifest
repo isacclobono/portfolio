@@ -1,0 +1,17 @@
+{
+  "name": "Sunil Khobragade — Senior Full-Stack Developer & Cloud Architect",
+  "short_name": "SK Builds",
+  "description": "Portfolio, scalable projects, architecture blogs, and developer tools by Sunil Khobragade.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#121214",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

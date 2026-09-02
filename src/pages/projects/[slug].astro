@@ -23,8 +23,9 @@ const formatDate = (date: Date) => {
 <Layout 
   title={project.data.title} 
   description={project.data.description} 
-  currentPath="/projects"
+  currentPath={`/projects/${project.slug || project.id}`}
   publishDate={project.data.date}
+  tags={project.data.tags}
 >
   <!-- Breadcrumb Navigation -->
   <Breadcrumb items={[

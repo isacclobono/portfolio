@@ -1,7 +1,8 @@
 import type { APIRoute } from 'astro';
+import { SITE } from '../data/site';
 
 export const GET: APIRoute = ({ site }) => {
-  const siteUrl = site ? site.toString().replace(/\/$/, '') : 'https://sk-builds.vercel.app';
+  const siteUrl = (site ? site.toString() : SITE.URL).replace(/\/$/, '');
 
   const content = `# SK Builds (Sunil Khobragade)
 
@@ -15,6 +16,8 @@ export const GET: APIRoute = ({ site }) => {
 - [Blog & Technical Articles](${siteUrl}/blog): In-depth writeups on system architecture, database optimization, CI/CD, microservices, and modern web development.
 - [Education & Certifications](${siteUrl}/education): Academic background in computer engineering, industry certifications, and continuous technical training.
 - [Freelance Estimator & Booking Tools](${siteUrl}/tools): Interactive project cost & architecture estimator and Google Calendar consultation scheduler.
+- [RSS Feed](${siteUrl}/rss.xml): Syndication feed for latest technical blog articles and architectural case studies.
+- [XML Sitemap](${siteUrl}/sitemap-index.xml): Full XML sitemap index for search crawlers.
 
 ## Technical Expertise
 
