@@ -1833,12 +1833,20 @@ Feel free to ask about Sunil's <a href="/projects">Projects</a>, <a href="/tech-
       }
     }
 
-    // Initialize on DOM load and Astro page transitions
+    // Initialize on Idle to preserve 100/100 Core Web Vitals & sub-1.2s LCP
+    const runOnIdle = () => {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(initLinkMateChatbot, { timeout: 2000 });
+      } else {
+        setTimeout(initLinkMateChatbot, 1000);
+      }
+    };
+
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initLinkMateChatbot);
+      document.addEventListener('DOMContentLoaded', runOnIdle);
     } else {
-      initLinkMateChatbot();
+      runOnIdle();
     }
-    document.addEventListener('astro:after-swap', initLinkMateChatbot);
+    document.addEventListener('astro:after-swap', runOnIdle);
   })();
 </script>
