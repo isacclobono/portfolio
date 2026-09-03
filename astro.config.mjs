@@ -49,6 +49,7 @@ export default defineConfig({
     build: {
       minify: 'esbuild',
       cssMinify: true,
+      modulePreload: false,
     }
   },
   markdown: {
