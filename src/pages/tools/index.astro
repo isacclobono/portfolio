@@ -37,6 +37,12 @@ import Card from '../../components/Card.astro';
         tags={["TypeScript", "JSON", "Types", "Formatter"]}
       />
       <Card 
+        href="/tools/url-parser"
+        title="URL Parser & Query Parameters Builder"
+        description="Inspect, decompose, and construct complex URLs and query strings with real-time bidirectional editing and JSON export."
+        tags={["URL", "Query Params", "Parser", "REST"]}
+      />
+      <Card 
         href="/tools/jwt-decoder"
         title="JWT Token Decoder & Inspector"
         description="Client-side JSON Web Token debugger and payload inspector with expiration verification and zero tracking."
@@ -53,6 +59,46 @@ import Card from '../../components/Card.astro';
         title="Code & Text Diff Inspector"
         description="Semantic side-by-side and inline line diff comparison for code snippets, JSON objects, and SQL scripts."
         tags={["Diff", "Code Review", "Comparison"]}
+      />
+    </div>
+  </section>
+
+  <!-- Frontend, CSS & Content Design -->
+  <section style="margin-bottom: 2.75rem;">
+    <h2 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.45rem;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: #a855f7;">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="m4.93 4.93 4.24 4.24"></path>
+        <path d="m14.83 9.17 4.24-4.24"></path>
+        <path d="m14.83 14.83 4.24 4.24"></path>
+        <path d="m9.17 14.83-4.24 4.24"></path>
+      </svg>
+      <span>Frontend, Design &amp; Content Tools</span>
+    </h2>
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+      <Card 
+        href="/tools/markdown-editor"
+        title="Markdown Editor & Live HTML Preview"
+        description="Write, format, and preview Markdown in real-time with zero latency. Export clean HTML or download markdown files."
+        tags={["Markdown", "HTML", "WYSIWYG", "Content"]}
+      />
+      <Card 
+        href="/tools/box-shadow-generator"
+        title="CSS Box Shadow & Glassmorphism Generator"
+        description="Design sleek multi-layered shadows, elevation presets, and frosted glassmorphic UI cards visually with instant CSS export."
+        tags={["CSS", "Glassmorphism", "Box Shadow", "UI Design"]}
+      />
+      <Card 
+        href="/tools/color-contrast"
+        title="WCAG Color Contrast & Accessibility Checker"
+        description="Verify WCAG 2.1 AA & AAA compliance ratios for text, buttons, and UI components in real-time."
+        tags={["WCAG 2.1", "Accessibility", "Color Contrast", "UI/UX"]}
+      />
+      <Card 
+        href="/tools/svg-optimizer"
+        title="SVG to CSS Data URI & React JSX Converter"
+        description="Convert raw SVGs into optimized CSS background data-URIs, Base64 strings, and typed React / Next.js JSX components."
+        tags={["SVG", "React", "TSX", "Data URI", "CSS"]}
       />
     </div>
   </section>
