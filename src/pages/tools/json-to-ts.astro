@@ -1,0 +1,406 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Button from '../../components/Button.astro';
+---
+
+<Layout 
+  title="JSON to TypeScript Interface Generator | SK Builds" 
+  description="Instant client-side JSON to TypeScript interface converter, type generator, and JSON beautifier with 100% browser-local privacy." 
+  currentPath="/tools/json-to-ts"
+>
+  <Breadcrumb items={[
+    { label: 'Tools', href: '/tools' },
+    { label: 'JSON to TypeScript' }
+  ]} />
+
+  <Button href="/tools" variant="back" size="sm">
+    Back to tools
+  </Button>
+
+  <div style="margin: 1.5rem 0 2rem;">
+    <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem;">
+      JSON to TypeScript Generator
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+      Convert raw JSON, API responses, or payloads into clean, strictly-typed TypeScript interfaces and types. Processed 100% locally in your browser.
+    </p>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-controls-bar">
+      <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+        <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 0.35rem;">
+          <span>Root Interface:</span>
+          <input 
+            type="text" 
+            id="root-interface-name" 
+            value="RootResponse" 
+            class="cal-input-field" 
+            style="width: 140px; padding: 0.25rem 0.5rem; font-family: var(--font-mono); font-size: 0.8rem;"
+          />
+        </label>
+
+        <label style="font-size: 0.8rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.35rem; cursor: pointer;">
+          <input type="checkbox" id="opt-export" checked />
+          <span>Add <code>export</code></span>
+        </label>
+
+        <label style="font-size: 0.8rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.35rem; cursor: pointer;">
+          <input type="checkbox" id="opt-readonly" />
+          <span>Readonly fields</span>
+        </label>
+      </div>
+
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <button type="button" id="load-sample-json" class="action-btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">
+          Load Sample
+        </button>
+        <button type="button" id="format-json-btn" class="action-btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">
+          Beautify JSON
+        </button>
+        <button type="button" id="clear-json-btn" class="action-btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">
+          Clear
+        </button>
+      </div>
+    </div>
+
+    <!-- Dual Workspace Grid -->
+    <div class="tool-dual-grid">
+      <!-- Input JSON -->
+      <div class="code-box-wrapper">
+        <div class="code-box-header">
+          <span class="code-box-title">JSON Input</span>
+          <span id="json-status" class="status-pill status-ready">Valid JSON</span>
+        </div>
+        <textarea 
+          id="json-input" 
+          class="code-textarea"
+          placeholder='{\n  "status": "success",\n  "data": {\n    "id": "usr_9481",\n    "name": "Sunil Khobragade",\n    "isVerified": true,\n    "skills": ["TypeScript", "Node.js", "Python"],\n    "stats": { "rating": 4.9, "projects": 42 }\n  }\n}'
+          spellcheck="false"
+        ></textarea>
+      </div>
+
+      <!-- Output TypeScript -->
+      <div class="code-box-wrapper">
+        <div class="code-box-header">
+          <span class="code-box-title">Generated TypeScript</span>
+          <button type="button" id="copy-ts-btn" class="copy-pill-btn cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+            </svg>
+            <span id="copy-ts-text">Copy TypeScript</span>
+          </button>
+        </div>
+        <pre id="ts-output" class="code-pre"><code>// Generated TypeScript interfaces will appear here...</code></pre>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .tool-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .tool-controls-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .tool-dual-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .tool-dual-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .code-box-wrapper {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .code-box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.85rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border-card);
+  }
+
+  [data-theme="light"] .code-box-header {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .code-box-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+  }
+
+  .status-pill {
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  .status-ready {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.25);
+  }
+
+  .status-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+  }
+
+  .code-textarea {
+    width: 100%;
+    height: 380px;
+    background: transparent;
+    border: none;
+    padding: 0.85rem;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.825rem;
+    line-height: 1.5;
+    outline: none;
+    resize: vertical;
+    box-sizing: border-box;
+  }
+
+  .code-pre {
+    width: 100%;
+    height: 380px;
+    overflow: auto;
+    margin: 0;
+    padding: 0.85rem;
+    font-family: var(--font-mono);
+    font-size: 0.825rem;
+    line-height: 1.5;
+    color: #38bdf8;
+    box-sizing: border-box;
+  }
+
+  [data-theme="light"] .code-pre {
+    color: #0284c7;
+  }
+
+  .copy-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.55rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    font-size: 0.725rem;
+    transition: all var(--transition-fast);
+  }
+
+  .copy-pill-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--border-card-hover);
+  }
+</style>
+
+<script>
+  function setupJsonToTs() {
+    const inputEl = document.getElementById('json-input') as HTMLTextAreaElement | null;
+    const outputEl = document.getElementById('ts-output') as HTMLElement | null;
+    const rootNameEl = document.getElementById('root-interface-name') as HTMLInputElement | null;
+    const optExport = document.getElementById('opt-export') as HTMLInputElement | null;
+    const optReadonly = document.getElementById('opt-readonly') as HTMLInputElement | null;
+    const statusEl = document.getElementById('json-status');
+    const loadSampleBtn = document.getElementById('load-sample-json');
+    const formatBtn = document.getElementById('format-json-btn');
+    const clearBtn = document.getElementById('clear-json-btn');
+    const copyBtn = document.getElementById('copy-ts-btn');
+    const copyText = document.getElementById('copy-ts-text');
+
+    if (!inputEl || !outputEl) return;
+
+    function toPascalCase(str: string): string {
+      return str.replace(/(^\w|[_\-\s]\w)/g, (match) => match.replace(/[_\-\s]/, '').toUpperCase());
+    }
+
+    function generateTsType(obj: any, interfaceName: string, isExport: boolean, isReadonly: boolean): { main: string; extra: string[] } {
+      const extraInterfaces: string[] = [];
+      const prefix = isExport ? 'export ' : '';
+      const readonlyPrefix = isReadonly ? 'readonly ' : '';
+
+      if (obj === null) return { main: 'any', extra: [] };
+      if (Array.isArray(obj)) {
+        if (obj.length === 0) return { main: 'any[]', extra: [] };
+        const itemType = generateTsType(obj[0], `${interfaceName}Item`, isExport, isReadonly);
+        extraInterfaces.push(...itemType.extra);
+        if (typeof obj[0] === 'object' && obj[0] !== null) {
+          return { main: `${interfaceName}Item[]`, extra: [itemType.main, ...extraInterfaces] };
+        }
+        return { main: `${itemType.main}[]`, extra: extraInterfaces };
+      }
+
+      if (typeof obj === 'object') {
+        const lines: string[] = [];
+        lines.push(`${prefix}interface ${interfaceName} {`);
+
+        for (const [key, val] of Object.entries(obj)) {
+          const safeKey = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key) ? key : JSON.stringify(key);
+          if (val === null) {
+            lines.push(`  ${readonlyPrefix}${safeKey}: any;`);
+          } else if (Array.isArray(val)) {
+            if (val.length === 0) {
+              lines.push(`  ${readonlyPrefix}${safeKey}: any[];`);
+            } else if (typeof val[0] === 'object' && val[0] !== null) {
+              const nestedName = `${toPascalCase(interfaceName)}${toPascalCase(key)}Item`;
+              const nested = generateTsType(val[0], nestedName, isExport, isReadonly);
+              extraInterfaces.push(nested.main, ...nested.extra);
+              lines.push(`  ${readonlyPrefix}${safeKey}: ${nestedName}[];`);
+            } else {
+              lines.push(`  ${readonlyPrefix}${safeKey}: ${typeof val[0]}[];`);
+            }
+          } else if (typeof val === 'object') {
+            const nestedName = `${toPascalCase(interfaceName)}${toPascalCase(key)}`;
+            const nested = generateTsType(val, nestedName, isExport, isReadonly);
+            extraInterfaces.push(nested.main, ...nested.extra);
+            lines.push(`  ${readonlyPrefix}${safeKey}: ${nestedName};`);
+          } else {
+            lines.push(`  ${readonlyPrefix}${safeKey}: ${typeof val};`);
+          }
+        }
+
+        lines.push('}');
+        return { main: lines.join('\n'), extra: extraInterfaces };
+      }
+
+      return { main: typeof obj, extra: [] };
+    }
+
+    function convert() {
+      const raw = inputEl.value.trim();
+      if (!raw) {
+        outputEl.innerHTML = '<code>// Paste or type JSON on the left to see TypeScript output...</code>';
+        if (statusEl) {
+          statusEl.textContent = 'Empty';
+          statusEl.className = 'status-pill status-ready';
+        }
+        return;
+      }
+
+      try {
+        const parsed = JSON.parse(raw);
+        if (statusEl) {
+          statusEl.textContent = 'Valid JSON';
+          statusEl.className = 'status-pill status-ready';
+        }
+
+        const rootName = (rootNameEl?.value.trim() || 'RootResponse');
+        const isExport = optExport?.checked ?? true;
+        const isReadonly = optReadonly?.checked ?? false;
+
+        const result = generateTsType(parsed, rootName, isExport, isReadonly);
+        const fullOutput = [...result.extra, result.main].filter(Boolean).join('\n\n');
+        outputEl.textContent = fullOutput;
+      } catch (err: any) {
+        if (statusEl) {
+          statusEl.textContent = 'Invalid JSON';
+          statusEl.className = 'status-pill status-error';
+        }
+        outputEl.innerHTML = `<code style="color: #ef4444;">// Syntax Error in JSON:\n// ${err.message}</code>`;
+      }
+    }
+
+    const sample = {
+      status: "success",
+      code: 200,
+      timestamp: 1741651200,
+      data: {
+        userId: "usr_ai_883",
+        username: "sunilkhobragade",
+        profile: {
+          title: "Senior Full-Stack Developer & AI Solutions Architect",
+          experienceYears: 6,
+          location: "Hyderabad, India",
+          isOpenToContract: true
+        },
+        skills: ["Node.js", "Python", "FastAPI", "TypeScript", "LangGraph", "Docker", "PostgreSQL"],
+        metrics: [
+          { label: "Uptime", value: 99.98, unit: "percent" },
+          { label: "Inference Speed", value: 320, unit: "tokens/sec" }
+        ]
+      }
+    };
+
+    inputEl.addEventListener('input', convert);
+    rootNameEl?.addEventListener('input', convert);
+    optExport?.addEventListener('change', convert);
+    optReadonly?.addEventListener('change', convert);
+
+    loadSampleBtn?.addEventListener('click', () => {
+      inputEl.value = JSON.stringify(sample, null, 2);
+      convert();
+    });
+
+    formatBtn?.addEventListener('click', () => {
+      try {
+        const parsed = JSON.parse(inputEl.value);
+        inputEl.value = JSON.stringify(parsed, null, 2);
+        convert();
+      } catch {}
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      inputEl.value = '';
+      convert();
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      const code = outputEl.textContent || '';
+      if (!code) return;
+      await navigator.clipboard.writeText(code);
+      if (copyText) {
+        const prev = copyText.textContent;
+        copyText.textContent = 'Copied!';
+        setTimeout(() => {
+          copyText.textContent = prev;
+        }, 1600);
+      }
+    });
+
+    // Auto-load sample initially if empty
+    if (!inputEl.value) {
+      inputEl.value = JSON.stringify(sample, null, 2);
+      convert();
+    }
+  }
+
+  setupJsonToTs();
+  document.addEventListener('astro:after-swap', setupJsonToTs);
+</script>

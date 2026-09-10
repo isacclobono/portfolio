@@ -1,0 +1,431 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Button from '../../components/Button.astro';
+---
+
+<Layout 
+  title="Interactive Regex Tester & Visualizer | SK Builds" 
+  description="Client-side regular expression tester, match visualizer, and capture group inspector with instant developer presets." 
+  currentPath="/tools/regex-tester"
+>
+  <Breadcrumb items={[
+    { label: 'Tools', href: '/tools' },
+    { label: 'Regex Tester' }
+  ]} />
+
+  <Button href="/tools" variant="back" size="sm">
+    Back to tools
+  </Button>
+
+  <div style="margin: 1.5rem 0 2rem;">
+    <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem;">
+      Interactive Regex Tester &amp; Visualizer
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+      Test, debug, and inspect regular expressions with real-time match highlighting and capture group extraction. Processed 100% locally in your browser.
+    </p>
+  </div>
+
+  <div class="tool-card">
+    <!-- Preset Selector -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+        <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Common Presets:</span>
+        <select id="regex-preset-select" class="cal-input-field" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">
+          <option value="custom">-- Choose a Preset --</option>
+          <option value="email">Email Address</option>
+          <option value="url">HTTP / HTTPS URL</option>
+          <option value="ipv4">IPv4 Address</option>
+          <option value="uuid">UUID v4</option>
+          <option value="slug">URL Slug</option>
+          <option value="semver">Semantic Versioning (SemVer)</option>
+          <option value="jwt">JWT Token Format</option>
+        </select>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.8rem; color: var(--text-secondary);">
+        <label style="cursor: pointer; display: flex; align-items: center; gap: 0.25rem;">
+          <input type="checkbox" id="flag-g" checked /> <code>g</code> (global)
+        </label>
+        <label style="cursor: pointer; display: flex; align-items: center; gap: 0.25rem;">
+          <input type="checkbox" id="flag-i" checked /> <code>i</code> (case-insensitive)
+        </label>
+        <label style="cursor: pointer; display: flex; align-items: center; gap: 0.25rem;">
+          <input type="checkbox" id="flag-m" checked /> <code>m</code> (multiline)
+        </label>
+        <label style="cursor: pointer; display: flex; align-items: center; gap: 0.25rem;">
+          <input type="checkbox" id="flag-s" /> <code>s</code> (dotAll)
+        </label>
+      </div>
+    </div>
+
+    <!-- Regex Input Box -->
+    <div class="regex-input-row">
+      <span class="regex-slash">/</span>
+      <input 
+        type="text" 
+        id="regex-pattern" 
+        class="regex-input" 
+        placeholder="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+        value="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+      />
+      <span class="regex-slash">/</span>
+      <span id="active-flags-label" class="regex-flags-label">gim</span>
+    </div>
+
+    <div id="regex-error-msg" style="display: none; color: #ef4444; font-size: 0.8rem; font-family: var(--font-mono);"></div>
+
+    <!-- Test String Input -->
+    <div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+        <label style="font-size: 0.825rem; font-weight: 600; color: var(--text-primary);">Test String:</label>
+        <span id="match-stats-badge" class="status-pill status-ready">3 matches found</span>
+      </div>
+      <textarea 
+        id="regex-test-text" 
+        class="code-textarea" 
+        style="height: 140px;"
+        placeholder="Paste text to test against the regular expression..."
+      >Contact our engineering lead at sunilkhobragade@proton.me for architectural design inquiries or reach our team at support@skbuilds.dev and hello@company.io.</textarea>
+    </div>
+
+    <!-- Match Visualizer Box -->
+    <div>
+      <label style="display: block; font-size: 0.825rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">
+        Real-Time Match Highlights:
+      </label>
+      <div id="regex-highlight-box" class="highlight-output-box"></div>
+    </div>
+
+    <!-- Match Breakdown List -->
+    <div>
+      <label style="display: block; font-size: 0.825rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem;">
+        Extracted Matches &amp; Capture Groups:
+      </label>
+      <div id="matches-table-wrapper" style="overflow-x: auto;">
+        <table class="matches-table">
+          <thead>
+            <tr>
+              <th style="width: 50px;">#</th>
+              <th>Matched Value</th>
+              <th style="width: 90px;">Index</th>
+              <th style="width: 80px;">Length</th>
+            </tr>
+          </thead>
+          <tbody id="matches-table-body">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .tool-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .regex-input-row {
+    display: flex;
+    align-items: center;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    padding: 0.4rem 0.75rem;
+    font-family: var(--font-mono);
+  }
+
+  .regex-slash {
+    color: var(--text-muted);
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  .regex-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .regex-flags-label {
+    color: var(--accent-blue);
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .code-textarea {
+    width: 100%;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    padding: 0.85rem;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.825rem;
+    line-height: 1.5;
+    outline: none;
+    resize: vertical;
+    box-sizing: border-box;
+  }
+
+  .highlight-output-box {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    padding: 0.85rem;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.825rem;
+    line-height: 1.6;
+    min-height: 80px;
+    max-height: 220px;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  :global(.regex-match-mark) {
+    background-color: rgba(56, 189, 248, 0.25);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.5);
+    border-radius: 3px;
+    padding: 0 2px;
+    font-weight: 600;
+  }
+
+  [data-theme="light"] :global(.regex-match-mark) {
+    background-color: rgba(2, 132, 199, 0.15);
+    color: #0369a1;
+    border-color: rgba(2, 132, 199, 0.4);
+  }
+
+  .matches-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+  }
+
+  .matches-table th, .matches-table td {
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .matches-table th {
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+  }
+
+  .matches-table td {
+    color: var(--text-primary);
+  }
+
+  .status-pill {
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  .status-ready {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.25);
+  }
+
+  .status-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+  }
+</style>
+
+<script>
+  function setupRegexTester() {
+    const patternInput = document.getElementById('regex-pattern') as HTMLInputElement | null;
+    const testTextInput = document.getElementById('regex-test-text') as HTMLTextAreaElement | null;
+    const highlightBox = document.getElementById('regex-highlight-box');
+    const tableBody = document.getElementById('matches-table-body');
+    const statsBadge = document.getElementById('match-stats-badge');
+    const errorMsg = document.getElementById('regex-error-msg');
+    const flagsLabel = document.getElementById('active-flags-label');
+    const presetSelect = document.getElementById('regex-preset-select') as HTMLSelectElement | null;
+
+    const flagG = document.getElementById('flag-g') as HTMLInputElement | null;
+    const flagI = document.getElementById('flag-i') as HTMLInputElement | null;
+    const flagM = document.getElementById('flag-m') as HTMLInputElement | null;
+    const flagS = document.getElementById('flag-s') as HTMLInputElement | null;
+
+    if (!patternInput || !testTextInput || !highlightBox || !tableBody) return;
+
+    const presets: Record<string, { pattern: string; sample: string }> = {
+      email: {
+        pattern: "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}",
+        sample: "Contact our lead at sunilkhobragade@proton.me or support@skbuilds.dev and hello@company.io."
+      },
+      url: {
+        pattern: "https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)",
+        sample: "Check https://sunilkhobragade.pages.dev and https://github.com/naman-mahi for open source projects."
+      },
+      ipv4: {
+        pattern: "\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b",
+        sample: "Connecting to localhost 127.0.0.1, internal gateway 192.168.1.1 and public DNS 8.8.8.8."
+      },
+      uuid: {
+        pattern: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}",
+        sample: "Record IDs generated: 123e4567-e89b-12d3-a456-426614174000 (v1) and 550e8400-e29b-41d4-a716-446655440000 (v4)."
+      },
+      slug: {
+        pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+        sample: "building-high-throughput-microservices-with-nodejs-and-redis"
+      },
+      semver: {
+        pattern: "v?(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?",
+        sample: "Deploying versions: v1.0.0, 2.3.4-beta.1, and 5.0.0+20130313144700 across environments."
+      },
+      jwt: {
+        pattern: "eyJ[a-zA-Z0-9_-]+\\.eyJ[a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]+",
+        sample: "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgN_p_placeholder"
+      }
+    };
+
+    function escapeHtml(str: string): string {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function runTest() {
+      const patternStr = patternInput.value;
+      const testText = testTextInput.value;
+
+      let flags = '';
+      if (flagG?.checked) flags += 'g';
+      if (flagI?.checked) flags += 'i';
+      if (flagM?.checked) flags += 'm';
+      if (flagS?.checked) flags += 's';
+
+      if (flagsLabel) flagsLabel.textContent = flags || 'none';
+
+      if (!patternStr) {
+        highlightBox.textContent = testText;
+        tableBody.innerHTML = '<tr><td colspan="4" style="color: var(--text-muted); text-align: center;">Enter a regex pattern above...</td></tr>';
+        if (statsBadge) statsBadge.textContent = '0 matches';
+        if (errorMsg) errorMsg.style.display = 'none';
+        return;
+      }
+
+      try {
+        const regex = new RegExp(patternStr, flags);
+        if (errorMsg) errorMsg.style.display = 'none';
+
+        const matches: { text: string; index: number; length: number }[] = [];
+
+        if (flags.includes('g')) {
+          let match;
+          let iterations = 0;
+          while ((match = regex.exec(testText)) !== null) {
+            matches.push({
+              text: match[0],
+              index: match.index,
+              length: match[0].length
+            });
+            if (match[0].length === 0) regex.lastIndex++;
+            if (++iterations > 500) break; // safety guard
+          }
+        } else {
+          const single = regex.exec(testText);
+          if (single) {
+            matches.push({
+              text: single[0],
+              index: single.index,
+              length: single[0].length
+            });
+          }
+        }
+
+        if (statsBadge) {
+          statsBadge.textContent = `${matches.length} ${matches.length === 1 ? 'match' : 'matches'} found`;
+          statsBadge.className = 'status-pill status-ready';
+        }
+
+        // Generate Highlighted HTML
+        if (matches.length === 0) {
+          highlightBox.textContent = testText;
+        } else {
+          let highlighted = '';
+          let lastIndex = 0;
+
+          matches.forEach((m) => {
+            highlighted += escapeHtml(testText.slice(lastIndex, m.index));
+            highlighted += `<mark class="regex-match-mark">${escapeHtml(m.text)}</mark>`;
+            lastIndex = m.index + m.length;
+          });
+
+          highlighted += escapeHtml(testText.slice(lastIndex));
+          highlightBox.innerHTML = highlighted;
+        }
+
+        // Populate Table
+        if (matches.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="4" style="color: var(--text-muted); text-align: center;">No matches found.</td></tr>';
+        } else {
+          tableBody.innerHTML = matches.map((m, idx) => `
+            <tr>
+              <td style="color: var(--text-muted);">${idx + 1}</td>
+              <td style="color: #38bdf8; font-weight: 600;">${escapeHtml(m.text)}</td>
+              <td>${m.index}</td>
+              <td>${m.length}</td>
+            </tr>
+          `).join('');
+        }
+
+      } catch (err: any) {
+        if (errorMsg) {
+          errorMsg.textContent = `Regex Syntax Error: ${err.message}`;
+          errorMsg.style.display = 'block';
+        }
+        if (statsBadge) {
+          statsBadge.textContent = 'Invalid Regex';
+          statsBadge.className = 'status-pill status-error';
+        }
+        highlightBox.textContent = testText;
+        tableBody.innerHTML = '<tr><td colspan="4" style="color: #ef4444; text-align: center;">Invalid regular expression syntax.</td></tr>';
+      }
+    }
+
+    patternInput.addEventListener('input', runTest);
+    testTextInput.addEventListener('input', runTest);
+    flagG?.addEventListener('change', runTest);
+    flagI?.addEventListener('change', runTest);
+    flagM?.addEventListener('change', runTest);
+    flagS?.addEventListener('change', runTest);
+
+    presetSelect?.addEventListener('change', () => {
+      const selected = presetSelect.value;
+      if (presets[selected]) {
+        patternInput.value = presets[selected].pattern;
+        testTextInput.value = presets[selected].sample;
+        runTest();
+      }
+    });
+
+    runTest();
+  }
+
+  setupRegexTester();
+  document.addEventListener('astro:after-swap', setupRegexTester);
+</script>

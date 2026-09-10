@@ -1,0 +1,282 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Button from '../../components/Button.astro';
+---
+
+<Layout 
+  title="UUID & Secure Token Generator | SK Builds" 
+  description="Client-side UUID v4, time-ordered UUID v7, NanoID, and cryptographically secure API key generator." 
+  currentPath="/tools/uuid-generator"
+>
+  <Breadcrumb items={[
+    { label: 'Tools', href: '/tools' },
+    { label: 'UUID & Token Generator' }
+  ]} />
+
+  <Button href="/tools" variant="back" size="sm">
+    Back to tools
+  </Button>
+
+  <div style="margin: 1.5rem 0 2rem;">
+    <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem;">
+      UUID &amp; Cryptographic Token Generator
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+      Generate cryptographically secure UUID v4, time-sortable UUID v7, NanoID strings, and random API secret keys directly in your browser.
+    </p>
+  </div>
+
+  <div class="tool-card">
+    <!-- Configuration Controls -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.25rem;">
+      <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+        <!-- Token Type -->
+        <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 0.4rem;">
+          <span>Type:</span>
+          <select id="token-type-select" class="cal-input-field" style="padding: 0.35rem 0.65rem; font-size: 0.8rem;">
+            <option value="uuidv4">UUID v4 (Random Crypto)</option>
+            <option value="uuidv7">UUID v7 (Time-Ordered)</option>
+            <option value="nanoid">NanoID (URL-Safe)</option>
+            <option value="apikey">Hex API Key (32-bytes)</option>
+          </select>
+        </label>
+
+        <!-- Count -->
+        <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 0.4rem;">
+          <span>Quantity:</span>
+          <select id="token-count-select" class="cal-input-field" style="padding: 0.35rem 0.65rem; font-size: 0.8rem;">
+            <option value="1">1 ID</option>
+            <option value="5" selected>5 IDs</option>
+            <option value="10">10 IDs</option>
+            <option value="25">25 IDs</option>
+            <option value="50">50 IDs</option>
+          </select>
+        </label>
+
+        <!-- Options -->
+        <label style="font-size: 0.8rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.35rem; cursor: pointer;">
+          <input type="checkbox" id="opt-uppercase" />
+          <span>Uppercase</span>
+        </label>
+
+        <label style="font-size: 0.8rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.35rem; cursor: pointer;">
+          <input type="checkbox" id="opt-hyphens" checked />
+          <span>Hyphens</span>
+        </label>
+      </div>
+
+      <div style="display: flex; gap: 0.5rem;">
+        <button type="button" id="btn-generate-tokens" class="action-btn btn-primary" style="padding: 0.4rem 0.9rem; font-size: 0.8rem;">
+          Generate New
+        </button>
+        <button type="button" id="btn-copy-all-tokens" class="action-btn btn-secondary" style="padding: 0.4rem 0.9rem; font-size: 0.8rem;">
+          Copy All
+        </button>
+      </div>
+    </div>
+
+    <!-- Output List -->
+    <div id="tokens-list-container" style="display: flex; flex-direction: column; gap: 0.5rem;">
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .tool-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .token-row-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    padding: 0.65rem 0.95rem;
+    transition: all var(--transition-fast);
+  }
+
+  .token-row-card:hover {
+    border-color: var(--border-card-hover);
+    background: var(--bg-card-hover);
+  }
+
+  .token-text {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: #38bdf8;
+    user-select: all;
+    word-break: break-all;
+  }
+
+  [data-theme="light"] .token-text {
+    color: #0284c7;
+  }
+
+  .token-copy-icon-btn {
+    background: transparent;
+    border: 1px solid var(--border-card);
+    border-radius: 4px;
+    color: var(--text-muted);
+    padding: 4px 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.725rem;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+  }
+
+  .token-copy-icon-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--border-card-hover);
+    background: var(--bg-card);
+  }
+</style>
+
+<script>
+  function setupUuidGenerator() {
+    const typeSelect = document.getElementById('token-type-select') as HTMLSelectElement | null;
+    const countSelect = document.getElementById('token-count-select') as HTMLSelectElement | null;
+    const uppercaseCheck = document.getElementById('opt-uppercase') as HTMLInputElement | null;
+    const hyphensCheck = document.getElementById('opt-hyphens') as HTMLInputElement | null;
+
+    const generateBtn = document.getElementById('btn-generate-tokens');
+    const copyAllBtn = document.getElementById('btn-copy-all-tokens');
+    const container = document.getElementById('tokens-list-container');
+
+    if (!container) return;
+
+    function generateUuidV4(): string {
+      if (crypto.randomUUID) {
+        return crypto.randomUUID();
+      }
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        const r = (Math.random() * 16) | 0;
+        const v = c === 'x' ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      });
+    }
+
+    function generateUuidV7(): string {
+      const now = Date.now();
+      const bytes = new Uint8Array(16);
+      crypto.getRandomValues(bytes);
+
+      // Timestamp in first 48 bits
+      bytes[0] = (now / 0x10000000000) & 0xff;
+      bytes[1] = (now / 0x100000000) & 0xff;
+      bytes[2] = (now / 0x1000000) & 0xff;
+      bytes[3] = (now / 0x10000) & 0xff;
+      bytes[4] = (now / 0x100) & 0xff;
+      bytes[5] = now & 0xff;
+
+      // Version 7 in high nibble of byte 6
+      bytes[6] = 0x70 | (bytes[6] & 0x0f);
+      // Variant 1 in high bits of byte 8
+      bytes[8] = 0x80 | (bytes[8] & 0x3f);
+
+      const hex = Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
+      return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20, 32)}`;
+    }
+
+    function generateNanoId(length = 21): string {
+      const alphabet = 'useandom-26T1983_40STFnveciglhTrZyPQ48+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      const bytes = new Uint8Array(length);
+      crypto.getRandomValues(bytes);
+      let id = '';
+      for (let i = 0; i < length; i++) {
+        id += alphabet[bytes[i] % alphabet.length];
+      }
+      return id;
+    }
+
+    function generateApiKey(byteLength = 32): string {
+      const bytes = new Uint8Array(byteLength);
+      crypto.getRandomValues(bytes);
+      return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function generateTokens() {
+      const type = typeSelect?.value || 'uuidv4';
+      const count = parseInt(countSelect?.value || '5', 10);
+      const isUpper = uppercaseCheck?.checked ?? false;
+      const hasHyphens = hyphensCheck?.checked ?? true;
+
+      const tokens: string[] = [];
+
+      for (let i = 0; i < count; i++) {
+        let token = '';
+        if (type === 'uuidv4') token = generateUuidV4();
+        else if (type === 'uuidv7') token = generateUuidV7();
+        else if (type === 'nanoid') token = generateNanoId(21);
+        else if (type === 'apikey') token = `sk_live_${generateApiKey(24)}`;
+
+        if (!hasHyphens && (type === 'uuidv4' || type === 'uuidv7')) {
+          token = token.replace(/-/g, '');
+        }
+
+        if (isUpper) {
+          token = token.toUpperCase();
+        }
+
+        tokens.push(token);
+      }
+
+      container.innerHTML = tokens.map((t, idx) => `
+        <div class="token-row-card">
+          <span class="token-text" id="token-val-${idx}">${t}</span>
+          <button type="button" class="token-copy-icon-btn" data-token="${t}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+            </svg>
+            <span class="copy-lbl">Copy</span>
+          </button>
+        </div>
+      `).join('');
+
+      container.querySelectorAll('.token-copy-icon-btn').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const val = btn.getAttribute('data-token') || '';
+          await navigator.clipboard.writeText(val);
+          const lbl = btn.querySelector('.copy-lbl');
+          if (lbl) {
+            lbl.textContent = 'Copied!';
+            setTimeout(() => { lbl.textContent = 'Copy'; }, 1500);
+          }
+        });
+      });
+    }
+
+    generateBtn?.addEventListener('click', generateTokens);
+    typeSelect?.addEventListener('change', generateTokens);
+    countSelect?.addEventListener('change', generateTokens);
+    uppercaseCheck?.addEventListener('change', generateTokens);
+    hyphensCheck?.addEventListener('change', generateTokens);
+
+    copyAllBtn?.addEventListener('click', async () => {
+      const allTokens = Array.from(container.querySelectorAll('.token-text')).map(el => el.textContent).join('\n');
+      if (!allTokens) return;
+      await navigator.clipboard.writeText(allTokens);
+      const prev = copyAllBtn.textContent;
+      copyAllBtn.textContent = 'Copied All!';
+      setTimeout(() => { copyAllBtn.textContent = prev; }, 1600);
+    });
+
+    generateTokens();
+  }
+
+  setupUuidGenerator();
+  document.addEventListener('astro:after-swap', setupUuidGenerator);
+</script>

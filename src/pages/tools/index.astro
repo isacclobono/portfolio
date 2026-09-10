@@ -5,60 +5,118 @@ import Card from '../../components/Card.astro';
 ---
 
 <Layout 
-  title="Developer & Freelance Tools" 
-  description="Collection of interactive developer tools, architecture scope calculators, and consultation booking by Sunil Khobragade." 
+  title="Developer Utilities & Architecture Suite | SK Builds" 
+  description="Collection of interactive developer tools, JSON to TypeScript generators, Regex visualizers, UUID generators, and system calculators by Sunil Khobragade." 
   currentPath="/tools"
 >
   <Breadcrumb items={[{ label: 'Tools' }]} />
 
   <div style="margin-bottom: 2.25rem;">
-    <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem;">
-      Developer &amp; Freelance Tools
+    <h1 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.025em;">
+      Developer Utilities &amp; Architecture Tools
     </h1>
     <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
-      Interactive utilities for software engineers, startup founders, and technical clients.
+      High-utility interactive tools for software engineers, full-stack architects, and startup founders. 100% client-side privacy.
     </p>
   </div>
 
-  <!-- Client & Project Planning Tools -->
+  <!-- Data, Types & Parsing -->
+  <section style="margin-bottom: 2.75rem;">
+    <h2 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.45rem;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-blue);">
+        <polyline points="16 18 22 12 16 6"></polyline>
+        <polyline points="8 6 2 12 8 18"></polyline>
+      </svg>
+      <span>Data, Types &amp; Query Utilities</span>
+    </h2>
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+      <Card 
+        href="/tools/json-to-ts"
+        title="JSON to TypeScript Interface Generator"
+        description="Convert raw JSON or API payloads into strictly typed TypeScript interfaces and types with instant export and formatting."
+        tags={["TypeScript", "JSON", "Types", "Formatter"]}
+      />
+      <Card 
+        href="/tools/jwt-decoder"
+        title="JWT Token Decoder & Inspector"
+        description="Client-side JSON Web Token debugger and payload inspector with expiration verification and zero tracking."
+        tags={["JWT", "Auth", "Security", "Claims"]}
+      />
+      <Card 
+        href="/tools/sql-formatter"
+        title="SQL Formatter & Query Optimizer"
+        description="Beautify and capitalize raw SQL queries with instant index and query performance recommendations."
+        tags={["SQL", "PostgreSQL", "Optimization"]}
+      />
+      <Card 
+        href="/tools/diff-viewer"
+        title="Code & Text Diff Inspector"
+        description="Semantic side-by-side and inline line diff comparison for code snippets, JSON objects, and SQL scripts."
+        tags={["Diff", "Code Review", "Comparison"]}
+      />
+    </div>
+  </section>
+
+  <!-- Cryptography, Tokens & Regex -->
+  <section style="margin-bottom: 2.75rem;">
+    <h2 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.45rem;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-green);">
+        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+      </svg>
+      <span>Cryptography, Regex &amp; Background Workers</span>
+    </h2>
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+      <Card 
+        href="/tools/regex-tester"
+        title="Interactive Regex Tester & Visualizer"
+        description="Test, debug, and inspect regular expressions with real-time match highlighting, group capture, and developer presets."
+        tags={["Regex", "Patterns", "Validation"]}
+      />
+      <Card 
+        href="/tools/base64-encoder"
+        title="Base64, URL & Hash Swiss-Army Utility"
+        description="Encode/decode Base64 and URLs, and compute hardware-accelerated SHA-256 and SHA-512 hashes via WebCrypto."
+        tags={["Base64", "SHA-256", "Crypto", "URL"]}
+      />
+      <Card 
+        href="/tools/uuid-generator"
+        title="UUID & Cryptographic Token Generator"
+        description="Generate cryptographically secure UUID v4, time-ordered UUID v7, NanoIDs, and API secret keys in bulk."
+        tags={["UUID v4", "UUID v7", "NanoID", "API Keys"]}
+      />
+      <Card 
+        href="/tools/cron-generator"
+        title="Cron Schedule Generator & Translator"
+        description="Construct standard cron schedule expressions with human-readable explanations for background workers and schedulers."
+        tags={["Cron", "DevOps", "Background Jobs"]}
+      />
+    </div>
+  </section>
+
+  <!-- Project Planning & Architecture Consultation -->
   <section style="margin-bottom: 2.5rem;">
-    <h2 style="font-size: 1.15rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary);">
-      Project Planning &amp; Consultation
+    <h2 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.45rem;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-purple);">
+        <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+      <span>Project Planning &amp; Architecture Consultation</span>
     </h2>
     <div style="display: flex; flex-direction: column; gap: 0.75rem;">
       <Card 
         href="/tools/estimator"
         title="Project Scope & Architecture Estimator"
         description="Interactive calculator to plan your web app's architecture, choose tech stacks, estimate delivery timelines, and generate a freelance proposal."
+        tags={["Architecture", "Scope", "Timeline", "Cost"]}
       />
       <Card 
         href="/tools/appointment"
         title="Book 1:1 Consultation (Google Calendar)"
         description="Schedule a 1:1 system design, architecture discovery, or code review video call with automatic Google Calendar integration."
-      />
-    </div>
-  </section>
-
-  <!-- Engineering & Utility Tools -->
-  <section style="margin-bottom: 2.5rem;">
-    <h2 style="font-size: 1.15rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary);">
-      Developer Utilities
-    </h2>
-    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-      <Card 
-        href="/tools/jwt-decoder"
-        title="JWT Token Decoder & Inspector"
-        description="Client-side JSON Web Token debugger and payload inspector with expiration verification and zero tracking."
-      />
-      <Card 
-        href="/tools/sql-formatter"
-        title="SQL Formatter & Query Optimizer"
-        description="Beautify and capitalize raw SQL queries with instant index and query performance recommendations."
-      />
-      <Card 
-        href="/tools/cron-generator"
-        title="Cron Schedule Generator & Translator"
-        description="Construct standard cron schedule expressions with human-readable explanations for background workers and schedulers."
+        tags={["Consultation", "1:1 Call", "System Design"]}
       />
     </div>
   </section>

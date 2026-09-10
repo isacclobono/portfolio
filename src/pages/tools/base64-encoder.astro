@@ -1,0 +1,364 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Button from '../../components/Button.astro';
+---
+
+<Layout 
+  title="Base64, URL Encoder & Hash Utility | SK Builds" 
+  description="Client-side Base64 encoder/decoder, URL percent-encoding, and cryptographic SHA-256/SHA-512 hash generator." 
+  currentPath="/tools/base64-encoder"
+>
+  <Breadcrumb items={[
+    { label: 'Tools', href: '/tools' },
+    { label: 'Base64 & Hash Generator' }
+  ]} />
+
+  <Button href="/tools" variant="back" size="sm">
+    Back to tools
+  </Button>
+
+  <div style="margin: 1.5rem 0 2rem;">
+    <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem;">
+      Base64, URL &amp; Cryptographic Hash Utility
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+      Encode and decode Base64, URL strings, and compute hardware-accelerated SHA-256, SHA-384, and SHA-512 hashes using browser WebCrypto APIs.
+    </p>
+  </div>
+
+  <div class="tool-card">
+    <!-- Mode Switcher -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem;">
+      <div class="filter-pill-bar" id="converter-modes" style="margin-bottom: 0;">
+        <button type="button" class="filter-pill-btn active" data-mode="base64">Base64</button>
+        <button type="button" class="filter-pill-btn" data-mode="url">URL Encode / Decode</button>
+        <button type="button" class="filter-pill-btn" data-mode="hash">Crypto Hash (SHA-256 / 512)</button>
+      </div>
+
+      <div id="base64-actions-row" style="display: flex; gap: 0.5rem;">
+        <button type="button" id="btn-action-encode" class="action-btn btn-primary" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">
+          Encode
+        </button>
+        <button type="button" id="btn-action-decode" class="action-btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">
+          Decode
+        </button>
+      </div>
+    </div>
+
+    <!-- Dual Workspace Grid -->
+    <div class="tool-dual-grid">
+      <!-- Input -->
+      <div class="code-box-wrapper">
+        <div class="code-box-header">
+          <span class="code-box-title" id="input-box-title">Raw Text Input</span>
+          <span id="input-stats" class="status-pill status-ready">0 chars &bull; 0 bytes</span>
+        </div>
+        <textarea 
+          id="crypto-input" 
+          class="code-textarea"
+          placeholder="Type or paste text here to encode or hash..."
+          spellcheck="false"
+        >Hello, Sunil Khobragade — Senior Full-Stack Developer & AI Architect!</textarea>
+      </div>
+
+      <!-- Output -->
+      <div class="code-box-wrapper">
+        <div class="code-box-header">
+          <span class="code-box-title" id="output-box-title">Encoded Output</span>
+          <button type="button" id="copy-crypto-btn" class="copy-pill-btn cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+            </svg>
+            <span id="copy-crypto-text">Copy Output</span>
+          </button>
+        </div>
+        <textarea 
+          id="crypto-output" 
+          class="code-textarea" 
+          readonly 
+          style="color: #38bdf8;"
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- Hash Breakdown Cards (Visible in Hash Mode) -->
+    <div id="hashes-breakdown-box" style="display: none; flex-direction: column; gap: 0.75rem;">
+      <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">WebCrypto Digests:</span>
+      
+      <div class="hash-result-card">
+        <div class="hash-name">SHA-256 (32 bytes / 256 bits):</div>
+        <div id="hash-sha256" class="hash-val">Computing...</div>
+      </div>
+
+      <div class="hash-result-card">
+        <div class="hash-name">SHA-384 (48 bytes / 384 bits):</div>
+        <div id="hash-sha384" class="hash-val">Computing...</div>
+      </div>
+
+      <div class="hash-result-card">
+        <div class="hash-name">SHA-512 (64 bytes / 512 bits):</div>
+        <div id="hash-sha512" class="hash-val">Computing...</div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .tool-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .tool-dual-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .tool-dual-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .code-box-wrapper {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .code-box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.85rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border-card);
+  }
+
+  [data-theme="light"] .code-box-header {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .code-box-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+  }
+
+  .status-pill {
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: rgba(56, 189, 248, 0.1);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.25);
+  }
+
+  .code-textarea {
+    width: 100%;
+    height: 240px;
+    background: transparent;
+    border: none;
+    padding: 0.85rem;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.825rem;
+    line-height: 1.5;
+    outline: none;
+    resize: vertical;
+    box-sizing: border-box;
+  }
+
+  .hash-result-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    padding: 0.65rem 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .hash-name {
+    font-size: 0.725rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+  }
+
+  .hash-val {
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+    color: #38bdf8;
+    word-break: break-all;
+    user-select: all;
+  }
+
+  .copy-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.55rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    font-size: 0.725rem;
+    transition: all var(--transition-fast);
+  }
+
+  .copy-pill-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--border-card-hover);
+  }
+</style>
+
+<script>
+  function setupBase64HashTool() {
+    const inputEl = document.getElementById('crypto-input') as HTMLTextAreaElement | null;
+    const outputEl = document.getElementById('crypto-output') as HTMLTextAreaElement | null;
+    const statsEl = document.getElementById('input-stats');
+    const hashesBox = document.getElementById('hashes-breakdown-box');
+    const actionsRow = document.getElementById('base64-actions-row');
+    const copyBtn = document.getElementById('copy-crypto-btn');
+    const copyText = document.getElementById('copy-crypto-text');
+
+    const encodeBtn = document.getElementById('btn-action-encode');
+    const decodeBtn = document.getElementById('btn-action-decode');
+
+    const sha256El = document.getElementById('hash-sha256');
+    const sha384El = document.getElementById('hash-sha384');
+    const sha512El = document.getElementById('hash-sha512');
+
+    const modeButtons = document.querySelectorAll('#converter-modes .filter-pill-btn');
+
+    if (!inputEl || !outputEl) return;
+
+    let currentMode = 'base64';
+    let currentDirection: 'encode' | 'decode' = 'encode';
+
+    async function computeHash(algorithm: string, text: string): Promise<string> {
+      const msgBuffer = new TextEncoder().encode(text);
+      const hashBuffer = await crypto.subtle.digest(algorithm, msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function process() {
+      const val = inputEl.value;
+      const bytes = new TextEncoder().encode(val).length;
+      if (statsEl) statsEl.textContent = `${val.length} chars • ${bytes} bytes`;
+
+      if (currentMode === 'base64') {
+        if (actionsRow) actionsRow.style.display = 'flex';
+        if (hashesBox) hashesBox.style.display = 'none';
+
+        if (currentDirection === 'encode') {
+          try {
+            outputEl.value = btoa(unescape(encodeURIComponent(val)));
+          } catch (err: any) {
+            outputEl.value = `Encoding Error: ${err.message}`;
+          }
+        } else {
+          try {
+            outputEl.value = decodeURIComponent(escape(atob(val.trim())));
+          } catch (err: any) {
+            outputEl.value = `Invalid Base64 string: ${err.message}`;
+          }
+        }
+      } else if (currentMode === 'url') {
+        if (actionsRow) actionsRow.style.display = 'flex';
+        if (hashesBox) hashesBox.style.display = 'none';
+
+        if (currentDirection === 'encode') {
+          outputEl.value = encodeURIComponent(val);
+        } else {
+          try {
+            outputEl.value = decodeURIComponent(val);
+          } catch (err: any) {
+            outputEl.value = `URI Malformed: ${err.message}`;
+          }
+        }
+      } else if (currentMode === 'hash') {
+        if (actionsRow) actionsRow.style.display = 'none';
+        if (hashesBox) hashesBox.style.display = 'flex';
+
+        if (!val) {
+          outputEl.value = '';
+          if (sha256El) sha256El.textContent = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 (empty string)';
+          if (sha384El) sha384El.textContent = '38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b';
+          if (sha512El) sha512El.textContent = 'cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e';
+          return;
+        }
+
+        const [h256, h384, h512] = await Promise.all([
+          computeHash('SHA-256', val),
+          computeHash('SHA-384', val),
+          computeHash('SHA-512', val),
+        ]);
+
+        outputEl.value = h256;
+        if (sha256El) sha256El.textContent = h256;
+        if (sha384El) sha384El.textContent = h384;
+        if (sha512El) sha512El.textContent = h512;
+      }
+    }
+
+    modeButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        modeButtons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentMode = btn.getAttribute('data-mode') || 'base64';
+        process();
+      });
+    });
+
+    encodeBtn?.addEventListener('click', () => {
+      currentDirection = 'encode';
+      encodeBtn.className = 'action-btn btn-primary';
+      if (decodeBtn) decodeBtn.className = 'action-btn btn-secondary';
+      process();
+    });
+
+    decodeBtn?.addEventListener('click', () => {
+      currentDirection = 'decode';
+      decodeBtn.className = 'action-btn btn-primary';
+      if (encodeBtn) encodeBtn.className = 'action-btn btn-secondary';
+      process();
+    });
+
+    inputEl.addEventListener('input', process);
+
+    copyBtn?.addEventListener('click', async () => {
+      const val = outputEl.value;
+      if (!val) return;
+      await navigator.clipboard.writeText(val);
+      if (copyText) {
+        const prev = copyText.textContent;
+        copyText.textContent = 'Copied!';
+        setTimeout(() => {
+          copyText.textContent = prev;
+        }, 1600);
+      }
+    });
+
+    process();
+  }
+
+  setupBase64HashTool();
+  document.addEventListener('astro:after-swap', setupBase64HashTool);
+</script>
