@@ -122,8 +122,16 @@
     left: 18px;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 9990;
+    z-index: 40;
     pointer-events: auto;
+  }
+
+  @media (max-width: 1024px) {
+    .sk-floating-search-dock {
+      display: none !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
   }
 
   .sk-floating-search-btn {
@@ -542,25 +550,16 @@
     color: var(--text-secondary);
   }
 
-  .footer-count {
-    font-family: var(--font-mono, monospace);
-    font-size: 0.7rem;
+  body.mobile-menu-open .sk-floating-search-dock {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 
   /* Mobile Responsive */
   @media (max-width: 768px) {
     .sk-floating-search-dock {
-      left: 12px;
-      top: 45%;
-    }
-
-    .sk-floating-search-btn {
-      padding: 6px;
-      border-radius: 50%;
-    }
-
-    .sk-search-pill-label {
-      display: none;
+      display: none !important;
     }
 
     .search-modal-backdrop {
@@ -995,7 +994,6 @@
     // 🔍 Search Controller & Modal State
     // ==========================================
     function initGlobalSearch() {
-      const triggerBtn = document.getElementById('global-search-trigger');
       const modal = document.getElementById('global-search-modal');
       const input = document.getElementById('global-search-input');
       const clearBtn = document.getElementById('global-search-clear-btn');
@@ -1038,9 +1036,13 @@
         if (clearBtn) clearBtn.style.display = 'none';
       }
 
-      if (triggerBtn) {
-        triggerBtn.addEventListener('click', openModal);
-      }
+      // Bind all search trigger buttons across Header, Drawer, and Floating Dock
+      document.querySelectorAll('#global-search-trigger, .js-search-trigger, [data-open-search]').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          openModal();
+        });
+      });
 
       if (closeBtn) {
         closeBtn.addEventListener('click', closeModal);

@@ -23,42 +23,84 @@ const navItems = [
 
 <div class="site-header-sticky-wrapper">
   <header class="site-header">
-    <a href="/" class="brand-link">
+    <a href="/" class="brand-link" aria-label={`${SITE.AUTHOR} - Home`}>
       <span class="brand-sk-badge">SK</span>
-      <span>{SITE.AUTHOR}</span>
+      <span class="brand-name">{SITE.AUTHOR}</span>
     </a>
 
-    <!-- Desktop Navigation (Hidden on Mobile) -->
-    <nav class="nav-links desktop-nav" aria-label="Main Navigation">
-      {navItems.map((item, index) => (
-        <>
-          <a href={item.href} class:list={["nav-link", { active: isActive(item.href) }]}>
-            {item.label}
-          </a>
-          {index < navItems.length - 1 && <span class="nav-separator">/</span>}
-        </>
-      ))}
-    </nav>
+    <div class="header-right-group">
+      <!-- Desktop Navigation Links -->
+      <nav class="nav-links desktop-nav" aria-label="Main Navigation">
+        {navItems.map((item, index) => (
+          <>
+            <a href={item.href} class:list={["nav-link", { active: isActive(item.href) }]}>
+              {item.label}
+            </a>
+            {index < navItems.length - 1 && <span class="nav-separator">/</span>}
+          </>
+        ))}
+      </nav>
 
-    <!-- Mobile Hamburger Menu Button -->
-    <button 
-      type="button" 
-      id="mobile-menu-toggle" 
-      class="mobile-toggle-btn"
-      aria-label="Toggle navigation menu"
-      aria-expanded="false"
-      aria-controls="mobile-menu-drawer"
-    >
-      <svg class="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line class="line-1" x1="4" y1="6" x2="20" y2="6"></line>
-        <line class="line-2" x1="4" y1="12" x2="20" y2="12"></line>
-        <line class="line-3" x1="4" y1="18" x2="20" y2="18"></line>
-      </svg>
-    </button>
+      <div class="header-action-buttons">
+        <!-- Global Search Trigger in Header -->
+        <button 
+          type="button" 
+          class="header-search-btn js-search-trigger"
+          aria-label="Search site (Ctrl+K)"
+          title="Search pages, projects, blogs, tools (Ctrl+K)"
+        >
+          <svg class="search-svg-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span class="desktop-search-pill">
+            <span class="search-word">Search</span>
+            <span class="search-key-badges">
+              <kbd class="kbd-key">Ctrl</kbd>
+              <kbd class="kbd-key">K</kbd>
+            </span>
+          </span>
+        </button>
+
+        <!-- Mobile Hamburger Menu Button -->
+        <button 
+          type="button" 
+          id="mobile-menu-toggle" 
+          class="mobile-toggle-btn"
+          aria-label="Toggle navigation menu"
+          aria-expanded="false"
+          aria-controls="mobile-menu-drawer"
+        >
+          <svg class="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line class="line-1" x1="4" y1="6" x2="20" y2="6"></line>
+            <line class="line-2" x1="4" y1="12" x2="20" y2="12"></line>
+            <line class="line-3" x1="4" y1="18" x2="20" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
   </header>
 
   <!-- Mobile Navigation Drawer Dropdown -->
   <div id="mobile-menu-drawer" class="mobile-drawer" aria-hidden="true">
+    <!-- Quick Search Launch Bar in Mobile Drawer -->
+    <button 
+      type="button" 
+      class="drawer-search-bar js-search-trigger"
+      aria-label="Search articles, projects, tools"
+    >
+      <div class="drawer-search-left">
+        <svg class="drawer-search-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <span class="drawer-search-label">Search pages, tools, blog...</span>
+      </div>
+      <kbd class="drawer-search-kbd">Ctrl K</kbd>
+    </button>
+
+    <div class="drawer-divider"></div>
+
     <nav class="mobile-nav-list" aria-label="Mobile Navigation">
       {navItems.map((item) => (
         <a 
@@ -66,7 +108,7 @@ const navItems = [
           class:list={["mobile-nav-link", { active: isActive(item.href) }]}
         >
           <span>{item.label}</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mobile-link-arrow">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mobile-link-arrow">
             <path d="m9 18 6-6-6-6"></path>
           </svg>
         </a>
@@ -76,8 +118,18 @@ const navItems = [
 </div>
 
 <style>
-  .site-header {
+  .site-header-sticky-wrapper {
     position: relative;
+    z-index: 50;
+    margin-bottom: 1.5rem;
+  }
+
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    gap: 0.75rem;
   }
 
   .brand-link {
@@ -90,6 +142,7 @@ const navItems = [
     color: var(--text-primary);
     letter-spacing: -0.01em;
     transition: color var(--transition-fast);
+    flex-shrink: 0;
   }
 
   .brand-link:hover {
@@ -117,13 +170,114 @@ const navItems = [
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
   }
 
-  /* Desktop vs Mobile Toggle */
+  .brand-name {
+    white-space: nowrap;
+  }
+
+  .header-right-group {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .header-action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.925rem;
+  }
+
+  .nav-link {
+    text-decoration: none;
+    color: var(--text-secondary);
+    transition: color var(--transition-fast);
+    font-weight: 500;
+  }
+
+  .nav-link:hover {
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .nav-link.active {
+    color: var(--text-primary);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .nav-separator {
+    color: var(--text-muted);
+    user-select: none;
+  }
+
+  /* Header Search Trigger Button */
+  .header-search-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: transparent;
+    border: 1px solid var(--border-card);
+    color: var(--text-secondary);
+    padding: 0.35rem 0.55rem;
+    height: 32px;
+    border-radius: var(--radius-md, 8px);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+  }
+
+  .header-search-btn:hover {
+    background-color: var(--bg-card-hover);
+    border-color: var(--border-card-hover);
+    color: var(--text-primary);
+  }
+
+  .search-svg-icon {
+    color: var(--accent-blue, #38bdf8);
+    flex-shrink: 0;
+  }
+
+  .desktop-search-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  .search-key-badges {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .kbd-key {
+    background: var(--bg-pill, rgba(255, 255, 255, 0.08));
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.625rem;
+    font-weight: 700;
+    padding: 1px 4px;
+    color: var(--text-muted);
+  }
+
+  /* Mobile Hamburger Toggle */
   .mobile-toggle-btn {
     display: none;
     background: transparent;
     border: 1px solid var(--border-card);
     color: var(--text-primary);
-    padding: 0.4rem 0.5rem;
+    width: 32px;
+    height: 32px;
+    padding: 0;
     border-radius: var(--radius-md, 8px);
     cursor: pointer;
     align-items: center;
@@ -136,22 +290,25 @@ const navItems = [
     border-color: var(--border-card-hover);
   }
 
+  /* Mobile Drawer */
   .mobile-drawer {
     display: none;
-    margin-top: -2rem;
-    margin-bottom: 2.5rem;
+    margin-top: 0.45rem;
+    margin-bottom: 0.25rem;
     background-color: var(--bg-card);
     border: 1px solid var(--border-card);
     border-radius: var(--radius-lg, 12px);
-    padding: 0.6rem;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-    animation: drawerSlideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    padding: 0.45rem;
+    box-shadow: 0 14px 35px -6px rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    animation: drawerSlideDown 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   @keyframes drawerSlideDown {
     from {
       opacity: 0;
-      transform: translateY(-8px);
+      transform: translateY(-6px);
     }
     to {
       opacity: 1;
@@ -163,18 +320,81 @@ const navItems = [
     display: block;
   }
 
+  /* Drawer Search Bar */
+  .drawer-search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md, 8px);
+    color: var(--text-muted);
+    font-size: 0.825rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all var(--transition-fast);
+    box-sizing: border-box;
+  }
+
+  .drawer-search-bar:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-card-hover);
+    color: var(--text-primary);
+  }
+
+  .drawer-search-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .drawer-search-icon {
+    color: var(--accent-blue, #38bdf8);
+    flex-shrink: 0;
+  }
+
+  .drawer-search-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-muted);
+  }
+
+  .drawer-search-kbd {
+    background: var(--bg-pill, rgba(255, 255, 255, 0.08));
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 1px 5px;
+    color: var(--text-muted);
+    margin-left: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .drawer-divider {
+    height: 1px;
+    background: var(--border-subtle);
+    margin: 0.4rem 0.25rem;
+  }
+
   .mobile-nav-list {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.2rem;
   }
 
   .mobile-nav-link {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.65rem 0.9rem;
-    font-size: 0.95rem;
+    padding: 0.55rem 0.85rem;
+    font-size: 0.9rem;
     font-weight: 500;
     color: var(--text-secondary);
     text-decoration: none;
@@ -227,13 +447,46 @@ const navItems = [
     transform: translateY(-6px) rotate(-45deg);
   }
 
+  @media (max-width: 768px) and (min-width: 641px) {
+    .nav-links {
+      gap: 0.35rem;
+      font-size: 0.85rem;
+    }
+    .brand-link {
+      font-size: 0.925rem;
+    }
+  }
+
   @media (max-width: 640px) {
     .desktop-nav {
       display: none !important;
     }
 
+    .desktop-search-pill {
+      display: none !important;
+    }
+
+    .header-search-btn {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .mobile-toggle-btn {
       display: inline-flex;
+    }
+
+    .brand-link {
+      font-size: 0.925rem;
+    }
+
+    .brand-sk-badge {
+      width: 20px;
+      height: 20px;
+      font-size: 0.625rem;
     }
   }
 </style>
@@ -244,18 +497,28 @@ const navItems = [
     const drawer = document.getElementById('mobile-menu-drawer');
     if (!toggleBtn || !drawer) return;
 
+    function closeMenu() {
+      drawer.classList.remove('open');
+      drawer.setAttribute('aria-hidden', 'true');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+      toggleBtn.classList.remove('is-active');
+      document.body.classList.remove('mobile-menu-open');
+    }
+
+    function openMenu() {
+      drawer.classList.add('open');
+      drawer.setAttribute('aria-hidden', 'false');
+      toggleBtn.setAttribute('aria-expanded', 'true');
+      toggleBtn.classList.add('is-active');
+      document.body.classList.add('mobile-menu-open');
+    }
+
     function toggleMenu() {
       const isOpen = drawer.classList.contains('open');
       if (isOpen) {
-        drawer.classList.remove('open');
-        drawer.setAttribute('aria-hidden', 'true');
-        toggleBtn.setAttribute('aria-expanded', 'false');
-        toggleBtn.classList.remove('is-active');
+        closeMenu();
       } else {
-        drawer.classList.add('open');
-        drawer.setAttribute('aria-hidden', 'false');
-        toggleBtn.setAttribute('aria-expanded', 'true');
-        toggleBtn.classList.add('is-active');
+        openMenu();
       }
     }
 
@@ -264,23 +527,25 @@ const navItems = [
       toggleMenu();
     });
 
+    // Close on clicking links or search triggers inside drawer
+    drawer.querySelectorAll('a, .js-search-trigger').forEach((el) => {
+      el.addEventListener('click', () => {
+        closeMenu();
+      });
+    });
+
     // Close on clicking outside
     document.addEventListener('click', (e) => {
-      if (drawer.classList.contains('open') && !drawer.contains(e.target) && !toggleBtn.contains(e.target)) {
-        drawer.classList.remove('open');
-        drawer.setAttribute('aria-hidden', 'true');
-        toggleBtn.setAttribute('aria-expanded', 'false');
-        toggleBtn.classList.remove('is-active');
+      const target = e.target as HTMLElement;
+      if (drawer.classList.contains('open') && !drawer.contains(target) && !toggleBtn.contains(target)) {
+        closeMenu();
       }
     });
 
     // Close on Escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && drawer.classList.contains('open')) {
-        drawer.classList.remove('open');
-        drawer.setAttribute('aria-hidden', 'true');
-        toggleBtn.setAttribute('aria-expanded', 'false');
-        toggleBtn.classList.remove('is-active');
+        closeMenu();
         toggleBtn.focus();
       }
     });
