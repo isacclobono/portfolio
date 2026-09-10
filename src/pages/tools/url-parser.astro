@@ -1,0 +1,399 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Button from '../../components/Button.astro';
+---
+
+<Layout 
+  title="URL Parser & Query Parameters Builder | SK Builds" 
+  description="Client-side URL visual breakdown, query parameter parser, search string builder, and encoder." 
+  currentPath="/tools/url-parser"
+>
+  <Breadcrumb items={[
+    { label: 'Tools', href: '/tools' },
+    { label: 'URL Parser' }
+  ]} />
+
+  <Button href="/tools" variant="back" size="sm">
+    Back to tools
+  </Button>
+
+  <div style="margin: 1.5rem 0 2rem;">
+    <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem;">
+      URL Parser &amp; Query Parameters Builder
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+      Inspect, decompose, and construct complex URLs and query strings with real-time bidirectional editing. 100% private in your browser.
+    </p>
+  </div>
+
+  <div class="tool-card">
+    <!-- URL Input -->
+    <div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+        <label style="font-size: 0.825rem; font-weight: 600; color: var(--text-primary);">Target URL:</label>
+        <div style="display: flex; gap: 0.4rem;">
+          <button type="button" id="btn-load-sample-url" class="action-btn btn-secondary" style="padding: 0.25rem 0.65rem; font-size: 0.725rem;">
+            Load API Sample
+          </button>
+          <button type="button" id="btn-clear-url" class="action-btn btn-secondary" style="padding: 0.25rem 0.65rem; font-size: 0.725rem;">
+            Clear
+          </button>
+        </div>
+      </div>
+      <textarea 
+        id="raw-url-input" 
+        class="code-textarea" 
+        style="height: 70px;"
+        placeholder="https://api.skbuilds.dev/v1/inference?model=llama-3.3-70b&temperature=0.7&stream=true&limit=50#response"
+        spellcheck="false"
+      ></textarea>
+    </div>
+
+    <!-- URL Component Badges -->
+    <div class="url-parts-grid">
+      <div class="url-part-box">
+        <span class="part-label">Protocol</span>
+        <span id="part-protocol" class="part-value">https:</span>
+      </div>
+      <div class="url-part-box">
+        <span class="part-label">Host / Domain</span>
+        <span id="part-host" class="part-value">api.skbuilds.dev</span>
+      </div>
+      <div class="url-part-box">
+        <span class="part-label">Pathname</span>
+        <span id="part-path" class="part-value">/v1/inference</span>
+      </div>
+      <div class="url-part-box">
+        <span class="part-label">Hash</span>
+        <span id="part-hash" class="part-value">#response</span>
+      </div>
+    </div>
+
+    <!-- Query Parameters Interactive Table -->
+    <div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary);">Query Parameters</span>
+          <span id="params-count-badge" class="status-pill status-ready">4 params</span>
+        </div>
+        <div style="display: flex; gap: 0.4rem;">
+          <button type="button" id="btn-add-param" class="action-btn btn-primary" style="padding: 0.3rem 0.75rem; font-size: 0.75rem;">
+            + Add Parameter
+          </button>
+          <button type="button" id="btn-copy-params-json" class="action-btn btn-secondary" style="padding: 0.3rem 0.75rem; font-size: 0.75rem;">
+            Copy as JSON
+          </button>
+        </div>
+      </div>
+
+      <div class="params-table-wrapper">
+        <table class="params-table">
+          <thead>
+            <tr>
+              <th style="width: 35%;">Key</th>
+              <th style="width: 55%;">Value</th>
+              <th style="width: 10%; text-align: center;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="params-table-body">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .tool-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .url-parts-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.65rem;
+  }
+
+  @media (max-width: 640px) {
+    .url-parts-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .url-part-box {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .part-label {
+    font-size: 0.675rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+  }
+
+  .part-value {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    word-break: break-all;
+  }
+
+  .params-table-wrapper {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .params-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+
+  .params-table th {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.5rem 0.85rem;
+    text-align: left;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border-card);
+  }
+
+  [data-theme="light"] .params-table th {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .params-table td {
+    padding: 0.4rem 0.85rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .param-input {
+    width: 100%;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 0.3rem 0.45rem;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    outline: none;
+    transition: all var(--transition-fast);
+  }
+
+  .param-input:focus {
+    border-color: var(--border-card-hover);
+    background: var(--bg-card);
+  }
+
+  .param-delete-btn {
+    background: transparent;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .param-delete-btn:hover {
+    background: rgba(239, 68, 68, 0.15);
+  }
+
+  .code-textarea {
+    width: 100%;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    padding: 0.65rem 0.85rem;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.825rem;
+    line-height: 1.45;
+    outline: none;
+    resize: vertical;
+    box-sizing: border-box;
+  }
+
+  .status-pill {
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  .status-ready {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.25);
+  }
+</style>
+
+<script>
+  function setupUrlParser() {
+    const urlInput = document.getElementById('raw-url-input') as HTMLTextAreaElement | null;
+    const protocolEl = document.getElementById('part-protocol');
+    const hostEl = document.getElementById('part-host');
+    const pathEl = document.getElementById('part-path');
+    const hashEl = document.getElementById('part-hash');
+
+    const tableBody = document.getElementById('params-table-body');
+    const paramsCount = document.getElementById('params-count-badge');
+    const addParamBtn = document.getElementById('btn-add-param');
+    const copyJsonBtn = document.getElementById('btn-copy-params-json');
+    const sampleBtn = document.getElementById('btn-load-sample-url');
+    const clearBtn = document.getElementById('btn-clear-url');
+
+    if (!urlInput || !tableBody) return;
+
+    let parsedUrl: URL | null = null;
+
+    function parseFromInput() {
+      const raw = urlInput.value.trim();
+      if (!raw) {
+        if (protocolEl) protocolEl.textContent = '-';
+        if (hostEl) hostEl.textContent = '-';
+        if (pathEl) pathEl.textContent = '-';
+        if (hashEl) hashEl.textContent = '-';
+        tableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-muted); padding: 1rem;">Enter a URL above to inspect parameters...</td></tr>';
+        if (paramsCount) paramsCount.textContent = '0 params';
+        return;
+      }
+
+      try {
+        const full = raw.startsWith('http://') || raw.startsWith('https://') ? raw : `https://${raw}`;
+        parsedUrl = new URL(full);
+
+        if (protocolEl) protocolEl.textContent = parsedUrl.protocol;
+        if (hostEl) hostEl.textContent = parsedUrl.host;
+        if (pathEl) pathEl.textContent = parsedUrl.pathname;
+        if (hashEl) hashEl.textContent = parsedUrl.hash || '-';
+
+        renderTable();
+      } catch {
+        if (protocolEl) protocolEl.textContent = 'Invalid';
+        if (hostEl) hostEl.textContent = 'Invalid URL';
+      }
+    }
+
+    function renderTable() {
+      if (!parsedUrl) return;
+
+      const entries = Array.from(parsedUrl.searchParams.entries());
+      if (paramsCount) paramsCount.textContent = `${entries.length} params`;
+
+      if (entries.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-muted); padding: 1rem;">No query parameters in this URL. Click "+ Add Parameter" to create one.</td></tr>';
+        return;
+      }
+
+      tableBody.innerHTML = entries.map(([key, val], idx) => `
+        <tr data-index="${idx}">
+          <td><input type="text" class="param-input param-key" value="${key}" /></td>
+          <td><input type="text" class="param-input param-val" value="${val}" /></td>
+          <td style="text-align: center;">
+            <button type="button" class="param-delete-btn" data-key="${key}" title="Delete param">&times;</button>
+          </td>
+        </tr>
+      `).join('');
+
+      tableBody.querySelectorAll('.param-key').forEach((input, idx) => {
+        input.addEventListener('change', () => syncFromTable());
+      });
+
+      tableBody.querySelectorAll('.param-val').forEach((input, idx) => {
+        input.addEventListener('input', () => syncFromTable());
+      });
+
+      tableBody.querySelectorAll('.param-delete-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const row = btn.closest('tr');
+          row?.remove();
+          syncFromTable();
+        });
+      });
+    }
+
+    function syncFromTable() {
+      if (!parsedUrl) return;
+
+      const newParams = new URLSearchParams();
+      const rows = tableBody.querySelectorAll('tr');
+
+      rows.forEach((row) => {
+        const k = (row.querySelector('.param-key') as HTMLInputElement)?.value.trim();
+        const v = (row.querySelector('.param-val') as HTMLInputElement)?.value;
+        if (k) newParams.append(k, v || '');
+      });
+
+      parsedUrl.search = newParams.toString();
+      urlInput.value = parsedUrl.toString();
+
+      if (paramsCount) paramsCount.textContent = `${newParams.size} params`;
+    }
+
+    urlInput.addEventListener('input', parseFromInput);
+
+    addParamBtn?.addEventListener('click', () => {
+      if (!parsedUrl) {
+        urlInput.value = 'https://api.skbuilds.dev/v1/search?query=new';
+        parseFromInput();
+      } else {
+        parsedUrl.searchParams.append('newParam', 'value');
+        urlInput.value = parsedUrl.toString();
+        renderTable();
+      }
+    });
+
+    copyJsonBtn?.addEventListener('click', async () => {
+      if (!parsedUrl) return;
+      const obj: Record<string, string> = {};
+      parsedUrl.searchParams.forEach((v, k) => {
+        obj[k] = v;
+      });
+      await navigator.clipboard.writeText(JSON.stringify(obj, null, 2));
+      const prev = copyJsonBtn.textContent;
+      copyJsonBtn.textContent = 'JSON Copied!';
+      setTimeout(() => { copyJsonBtn.textContent = prev; }, 1600);
+    });
+
+    const sampleUrl = 'https://api.skbuilds.dev/v1/agent-inference?model=llama-3.3-70b-versatile&temperature=0.7&maxTokens=4096&stream=true&systemPrompt=architect#response-stream';
+
+    sampleBtn?.addEventListener('click', () => {
+      urlInput.value = sampleUrl;
+      parseFromInput();
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      urlInput.value = '';
+      parseFromInput();
+    });
+
+    urlInput.value = sampleUrl;
+    parseFromInput();
+  }
+
+  setupUrlParser();
+  document.addEventListener('astro:after-swap', setupUrlParser);
+</script>

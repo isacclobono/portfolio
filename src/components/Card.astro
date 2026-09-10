@@ -8,12 +8,25 @@ interface Props {
   metric?: string;
   demoUrl?: string;
   repoUrl?: string;
+  target?: string;
+  rel?: string;
 }
 
-const { href, title, description, date, tags = [], metric, demoUrl, repoUrl } = Astro.props;
+const { 
+  href, 
+  title, 
+  description, 
+  date, 
+  tags = [], 
+  metric, 
+  demoUrl, 
+  repoUrl,
+  target = "_blank",
+  rel = "noopener noreferrer"
+} = Astro.props;
 ---
 
-<a href={href} class="card-link group">
+<a href={href} class="card-link group" target={target} rel={rel}>
   <div class="card-content">
     <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
       <div class="card-title">{title}</div>

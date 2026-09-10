@@ -97,7 +97,7 @@ const blogCategories = [
               }
 
               return (
-                <a href={`/blog/${post.id}`} class="post-card" data-category={category}>
+                <a href={`/blog/${post.id}`} class="post-card" data-category={category} target="_blank" rel="noopener noreferrer">
                   <div class="post-main-content">
                     <div class="post-meta-row">
                       <span class="post-date">{formatDate(post.data.date)}</span>

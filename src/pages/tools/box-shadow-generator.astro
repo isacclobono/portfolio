@@ -1,0 +1,380 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Button from '../../components/Button.astro';
+---
+
+<Layout 
+  title="CSS Box Shadow & Glassmorphism Generator | SK Builds" 
+  description="Visual CSS box-shadow, glassmorphism, and elevation generator with real-time preview and instant code copy." 
+  currentPath="/tools/box-shadow-generator"
+>
+  <Breadcrumb items={[
+    { label: 'Tools', href: '/tools' },
+    { label: 'Box Shadow Generator' }
+  ]} />
+
+  <Button href="/tools" variant="back" size="sm">
+    Back to tools
+  </Button>
+
+  <div style="margin: 1.5rem 0 2rem;">
+    <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem;">
+      CSS Box Shadow &amp; Glassmorphism Generator
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+      Design sleek shadows, multi-layered elevation, and modern frosted glassmorphic UI elements visually with instant CSS export.
+    </p>
+  </div>
+
+  <div class="tool-card">
+    <!-- Presets -->
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+        <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Presets:</span>
+        <button type="button" class="filter-pill-btn active preset-btn" data-preset="soft">Soft Lift</button>
+        <button type="button" class="filter-pill-btn preset-btn" data-preset="glass">Frosted Glass</button>
+        <button type="button" class="filter-pill-btn preset-btn" data-preset="glow">Cyan Glow</button>
+        <button type="button" class="filter-pill-btn preset-btn" data-preset="floating">Deep Floating</button>
+        <button type="button" class="filter-pill-btn preset-btn" data-preset="inset">Inset Soft</button>
+      </div>
+
+      <button type="button" id="copy-shadow-css" class="action-btn btn-primary" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;">
+        Copy CSS
+      </button>
+    </div>
+
+    <!-- Workspace: Controls Left, Live Preview Right -->
+    <div class="shadow-workspace-grid">
+      <!-- Sliders Panel -->
+      <div class="controls-panel">
+        <div class="control-row">
+          <div class="control-label-row">
+            <span>X Offset:</span>
+            <span id="lbl-offset-x">0px</span>
+          </div>
+          <input type="range" id="slider-offset-x" min="-50" max="50" value="0" class="range-slider" />
+        </div>
+
+        <div class="control-row">
+          <div class="control-label-row">
+            <span>Y Offset:</span>
+            <span id="lbl-offset-y">10px</span>
+          </div>
+          <input type="range" id="slider-offset-y" min="-50" max="50" value="10" class="range-slider" />
+        </div>
+
+        <div class="control-row">
+          <div class="control-label-row">
+            <span>Blur Radius:</span>
+            <span id="lbl-blur">25px</span>
+          </div>
+          <input type="range" id="slider-blur" min="0" max="100" value="25" class="range-slider" />
+        </div>
+
+        <div class="control-row">
+          <div class="control-label-row">
+            <span>Spread Radius:</span>
+            <span id="lbl-spread">-5px</span>
+          </div>
+          <input type="range" id="slider-spread" min="-50" max="50" value="-5" class="range-slider" />
+        </div>
+
+        <div class="control-row">
+          <div class="control-label-row">
+            <span>Shadow Opacity:</span>
+            <span id="lbl-opacity">25%</span>
+          </div>
+          <input type="range" id="slider-opacity" min="0" max="100" value="25" class="range-slider" />
+        </div>
+
+        <div class="control-row">
+          <div class="control-label-row">
+            <span>Glass Backdrop Blur:</span>
+            <span id="lbl-backdrop">12px</span>
+          </div>
+          <input type="range" id="slider-backdrop" min="0" max="40" value="12" class="range-slider" />
+        </div>
+
+        <div style="display: flex; gap: 1rem; align-items: center; margin-top: 0.5rem;">
+          <label style="font-size: 0.8rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.35rem; cursor: pointer;">
+            <input type="checkbox" id="check-inset" />
+            <span>Inset Shadow</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Preview Canvas & Code Output -->
+      <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <div class="preview-canvas">
+          <div id="preview-target-box" class="preview-box">
+            <span style="font-weight: 700; font-size: 1rem; color: var(--text-primary);">Preview Element</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">SK Builds UI Studio</span>
+          </div>
+        </div>
+
+        <!-- Generated CSS Pre -->
+        <div class="code-box-wrapper">
+          <div class="code-box-header">
+            <span class="code-box-title">Generated CSS Code</span>
+          </div>
+          <pre id="shadow-css-output" class="code-pre" style="height: 140px;"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .tool-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .shadow-workspace-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .shadow-workspace-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .controls-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    padding: 1.15rem;
+  }
+
+  .control-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .control-label-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.775rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+  }
+
+  .range-slider {
+    width: 100%;
+    accent-color: var(--accent-blue);
+    cursor: pointer;
+  }
+
+  .preview-canvas {
+    background: radial-gradient(circle at center, rgba(56, 189, 248, 0.08), transparent 70%), var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    min-height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .preview-box {
+    width: 200px;
+    height: 120px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    transition: all 0.15s ease;
+  }
+
+  .code-box-wrapper {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .code-box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.85rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border-card);
+  }
+
+  [data-theme="light"] .code-box-header {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .code-box-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+  }
+
+  .code-pre {
+    margin: 0;
+    padding: 0.85rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: #38bdf8;
+    overflow: auto;
+  }
+
+  [data-theme="light"] .code-pre {
+    color: #0284c7;
+  }
+</style>
+
+<script>
+  function setupBoxShadowGenerator() {
+    const sliderX = document.getElementById('slider-offset-x') as HTMLInputElement | null;
+    const sliderY = document.getElementById('slider-offset-y') as HTMLInputElement | null;
+    const sliderBlur = document.getElementById('slider-blur') as HTMLInputElement | null;
+    const sliderSpread = document.getElementById('slider-spread') as HTMLInputElement | null;
+    const sliderOpacity = document.getElementById('slider-opacity') as HTMLInputElement | null;
+    const sliderBackdrop = document.getElementById('slider-backdrop') as HTMLInputElement | null;
+    const checkInset = document.getElementById('check-inset') as HTMLInputElement | null;
+
+    const lblX = document.getElementById('lbl-offset-x');
+    const lblY = document.getElementById('lbl-offset-y');
+    const lblBlur = document.getElementById('lbl-blur');
+    const lblSpread = document.getElementById('lbl-spread');
+    const lblOpacity = document.getElementById('lbl-opacity');
+    const lblBackdrop = document.getElementById('lbl-backdrop');
+
+    const previewBox = document.getElementById('preview-target-box');
+    const cssOutput = document.getElementById('shadow-css-output');
+    const copyBtn = document.getElementById('copy-shadow-css');
+    const presetBtns = document.querySelectorAll('.preset-btn');
+
+    if (!sliderX || !previewBox || !cssOutput) return;
+
+    function update() {
+      const x = sliderX?.value || '0';
+      const y = sliderY?.value || '10';
+      const blur = sliderBlur?.value || '25';
+      const spread = sliderSpread?.value || '-5';
+      const opacity = (parseInt(sliderOpacity?.value || '25', 10) / 100).toFixed(2);
+      const backdrop = sliderBackdrop?.value || '12';
+      const isInset = checkInset?.checked ? 'inset ' : '';
+
+      if (lblX) lblX.textContent = `${x}px`;
+      if (lblY) lblY.textContent = `${y}px`;
+      if (lblBlur) lblBlur.textContent = `${blur}px`;
+      if (lblSpread) lblSpread.textContent = `${spread}px`;
+      if (lblOpacity) lblOpacity.textContent = `${sliderOpacity?.value}%`;
+      if (lblBackdrop) lblBackdrop.textContent = `${backdrop}px`;
+
+      const shadowVal = `${isInset}${x}px ${y}px ${blur}px ${spread}px rgba(0, 0, 0, ${opacity})`;
+      const bgVal = `rgba(28, 28, 32, 0.75)`;
+      const borderVal = `1px solid rgba(255, 255, 255, 0.12)`;
+      const backdropFilterVal = `blur(${backdrop}px)`;
+
+      previewBox.style.boxShadow = shadowVal;
+      previewBox.style.backgroundColor = bgVal;
+      previewBox.style.border = borderVal;
+      previewBox.style.backdropFilter = backdropFilterVal;
+
+      const code = `/* SK Builds Custom Elevation */
+box-shadow: ${shadowVal};
+background: ${bgVal};
+backdrop-filter: ${backdropFilterVal};
+-webkit-backdrop-filter: ${backdropFilterVal};
+border: ${borderVal};
+border-radius: 12px;`;
+
+      cssOutput.textContent = code;
+    }
+
+    [sliderX, sliderY, sliderBlur, sliderSpread, sliderOpacity, sliderBackdrop].forEach((el) => {
+      el?.addEventListener('input', update);
+    });
+    checkInset?.addEventListener('change', update);
+
+    presetBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        presetBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const preset = btn.getAttribute('data-preset');
+        if (preset === 'soft') {
+          sliderX.value = '0';
+          sliderY.value = '8';
+          sliderBlur.value = '20';
+          sliderSpread.value = '-4';
+          sliderOpacity.value = '20';
+          sliderBackdrop.value = '8';
+          checkInset.checked = false;
+        } else if (preset === 'glass') {
+          sliderX.value = '0';
+          sliderY.value = '15';
+          sliderBlur.value = '35';
+          sliderSpread.value = '0';
+          sliderOpacity.value = '35';
+          sliderBackdrop.value = '20';
+          checkInset.checked = false;
+        } else if (preset === 'glow') {
+          sliderX.value = '0';
+          sliderY.value = '0';
+          sliderBlur.value = '30';
+          sliderSpread.value = '2';
+          sliderOpacity.value = '45';
+          sliderBackdrop.value = '10';
+          checkInset.checked = false;
+        } else if (preset === 'floating') {
+          sliderX.value = '0';
+          sliderY.value = '25';
+          sliderBlur.value = '50';
+          sliderSpread.value = '-10';
+          sliderOpacity.value = '50';
+          sliderBackdrop.value = '14';
+          checkInset.checked = false;
+        } else if (preset === 'inset') {
+          sliderX.value = '2';
+          sliderY.value = '4';
+          sliderBlur.value = '12';
+          sliderSpread.value = '0';
+          sliderOpacity.value = '35';
+          sliderBackdrop.value = '4';
+          checkInset.checked = true;
+        }
+        update();
+      });
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      const code = cssOutput.textContent || '';
+      if (!code) return;
+      await navigator.clipboard.writeText(code);
+      const prev = copyBtn.textContent;
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => { copyBtn.textContent = prev; }, 1600);
+    });
+
+    update();
+  }
+
+  setupBoxShadowGenerator();
+  document.addEventListener('astro:after-swap', setupBoxShadowGenerator);
+</script>

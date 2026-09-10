@@ -1,0 +1,397 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Button from '../../components/Button.astro';
+---
+
+<Layout 
+  title="WCAG Color Contrast & Accessibility Checker | SK Builds" 
+  description="Client-side WCAG 2.1 accessibility color contrast ratio calculator, AA/AAA compliance tester, and color previewer." 
+  currentPath="/tools/color-contrast"
+>
+  <Breadcrumb items={[
+    { label: 'Tools', href: '/tools' },
+    { label: 'Color Contrast Checker' }
+  ]} />
+
+  <Button href="/tools" variant="back" size="sm">
+    Back to tools
+  </Button>
+
+  <div style="margin: 1.5rem 0 2rem;">
+    <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem;">
+      WCAG Color Contrast &amp; Accessibility Checker
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+      Verify WCAG 2.1 AA &amp; AAA compliance ratios for text, buttons, and UI components in real-time with zero latency.
+    </p>
+  </div>
+
+  <div class="tool-card">
+    <!-- Presets & Quick Actions -->
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+        <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Presets:</span>
+        <button type="button" class="filter-pill-btn active preset-btn" data-fg="#fafafa" data-bg="#121214">Warm Dark</button>
+        <button type="button" class="filter-pill-btn preset-btn" data-fg="#38bdf8" data-bg="#09090b">Cyan Obsidian</button>
+        <button type="button" class="filter-pill-btn preset-btn" data-fg="#22c55e" data-bg="#18181b">Neon Green</button>
+        <button type="button" class="filter-pill-btn preset-btn" data-fg="#09090b" data-bg="#fafaf9">Clean Light</button>
+      </div>
+
+      <button type="button" id="btn-swap-colors" class="action-btn btn-secondary" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;">
+        Swap Colors
+      </button>
+    </div>
+
+    <!-- Inputs & Ratio Header -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 1rem;" class="contrast-config-grid">
+      <!-- Foreground Color -->
+      <div class="color-picker-card">
+        <label class="color-label">Foreground (Text / Icon)</label>
+        <div class="color-input-row">
+          <input type="color" id="fg-color-picker" value="#38bdf8" class="color-swatch-input" />
+          <input type="text" id="fg-hex-input" value="#38bdf8" class="cal-input-field color-hex-text" maxlength="9" />
+        </div>
+      </div>
+
+      <!-- Background Color -->
+      <div class="color-picker-card">
+        <label class="color-label">Background (Surface)</label>
+        <div class="color-input-row">
+          <input type="color" id="bg-color-picker" value="#121214" class="color-swatch-input" />
+          <input type="text" id="bg-hex-input" value="#121214" class="cal-input-field color-hex-text" maxlength="9" />
+        </div>
+      </div>
+
+      <!-- Contrast Score Card -->
+      <div class="score-card">
+        <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Contrast Ratio</span>
+        <div id="contrast-ratio-display" class="contrast-number">12.4 : 1</div>
+        <div id="overall-verdict-badge" class="status-pill status-ready" style="font-size: 0.8rem; font-weight: 700;">
+          Passes All Standards
+        </div>
+      </div>
+    </div>
+
+    <!-- WCAG Matrix Table -->
+    <div class="wcag-compliance-grid">
+      <div class="wcag-box" id="box-aa-normal">
+        <div class="wcag-title">Normal Text AA (4.5:1)</div>
+        <div class="wcag-badge pass">PASS</div>
+      </div>
+      <div class="wcag-box" id="box-aaa-normal">
+        <div class="wcag-title">Normal Text AAA (7.0:1)</div>
+        <div class="wcag-badge pass">PASS</div>
+      </div>
+      <div class="wcag-box" id="box-aa-large">
+        <div class="wcag-title">Large Text AA (3.0:1)</div>
+        <div class="wcag-badge pass">PASS</div>
+      </div>
+      <div class="wcag-box" id="box-aaa-large">
+        <div class="wcag-title">Large Text AAA (4.5:1)</div>
+        <div class="wcag-badge pass">PASS</div>
+      </div>
+      <div class="wcag-box" id="box-ui">
+        <div class="wcag-title">UI &amp; Icons (3.0:1)</div>
+        <div class="wcag-badge pass">PASS</div>
+      </div>
+    </div>
+
+    <!-- Live Typography Preview Canvas -->
+    <div>
+      <label style="display: block; font-size: 0.825rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">
+        Live Accessibility Typography Preview:
+      </label>
+      <div id="live-contrast-preview" class="live-preview-surface">
+        <h2 style="margin: 0 0 0.5rem 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em;">
+          Engineering Accessible Distributed Systems
+        </h2>
+        <p style="margin: 0 0 1rem 0; font-size: 0.95rem; line-height: 1.6;">
+          High-performance web platforms and AI agents must meet strict WCAG AAA guidelines to ensure effortless readability across all display conditions and low-light environments.
+        </p>
+        <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+          <span style="font-family: var(--font-mono); font-size: 0.8rem; padding: 4px 10px; border-radius: 6px; border: 1px solid currentColor;">
+            Interactive Pill Badge
+          </span>
+          <span style="font-size: 0.8rem; font-weight: 600;">
+            18pt Large Bold Sample
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .tool-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .contrast-config-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.2fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .contrast-config-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .color-picker-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .color-label {
+    font-size: 0.775rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .color-input-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .color-swatch-input {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: transparent;
+    padding: 0;
+  }
+
+  .color-hex-text {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .score-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25rem;
+    text-align: center;
+  }
+
+  .contrast-number {
+    font-family: var(--font-mono);
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.1;
+  }
+
+  .wcag-compliance-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.6rem;
+  }
+
+  @media (max-width: 640px) {
+    .wcag-compliance-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .wcag-box {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-sm);
+    padding: 0.65rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    text-align: center;
+  }
+
+  .wcag-title {
+    font-size: 0.675rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .wcag-badge {
+    font-size: 0.75rem;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .wcag-badge.pass {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.35);
+  }
+
+  .wcag-badge.fail {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.35);
+  }
+
+  .live-preview-surface {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-card);
+    padding: 1.5rem;
+    transition: all 0.15s ease;
+  }
+</style>
+
+<script>
+  function setupColorContrastChecker() {
+    const fgPicker = document.getElementById('fg-color-picker') as HTMLInputElement | null;
+    const bgPicker = document.getElementById('bg-color-picker') as HTMLInputElement | null;
+    const fgInput = document.getElementById('fg-hex-input') as HTMLInputElement | null;
+    const bgInput = document.getElementById('bg-hex-input') as HTMLInputElement | null;
+
+    const ratioDisplay = document.getElementById('contrast-ratio-display');
+    const verdictBadge = document.getElementById('overall-verdict-badge');
+    const previewSurface = document.getElementById('live-contrast-preview');
+    const swapBtn = document.getElementById('btn-swap-colors');
+    const presetBtns = document.querySelectorAll('.preset-btn');
+
+    if (!fgPicker || !bgPicker || !ratioDisplay || !previewSurface) return;
+
+    function hexToRgb(hex: string): [number, number, number] | null {
+      hex = hex.replace(/^#/, '');
+      if (hex.length === 3) {
+        hex = hex.split('').map(c => c + c).join('');
+      }
+      if (hex.length !== 6) return null;
+      const num = parseInt(hex, 16);
+      return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
+    }
+
+    function getLuminance(r: number, g: number, b: number): number {
+      const a = [r, g, b].map((v) => {
+        v /= 255;
+        return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+      });
+      return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+    }
+
+    function calculateRatio(hex1: string, hex2: string): number {
+      const rgb1 = hexToRgb(hex1) || [0, 0, 0];
+      const rgb2 = hexToRgb(hex2) || [255, 255, 255];
+      const lum1 = getLuminance(rgb1[0], rgb1[1], rgb1[2]);
+      const lum2 = getLuminance(rgb2[0], rgb2[1], rgb2[2]);
+      const brightest = Math.max(lum1, lum2);
+      const darkest = Math.min(lum1, lum2);
+      return (brightest + 0.05) / (darkest + 0.05);
+    }
+
+    function setBadge(id: string, passes: boolean) {
+      const el = document.querySelector(`#${id} .wcag-badge`);
+      if (el) {
+        el.textContent = passes ? 'PASS' : 'FAIL';
+        el.className = `wcag-badge ${passes ? 'pass' : 'fail'}`;
+      }
+    }
+
+    function update() {
+      const fgHex = fgInput?.value.trim() || '#38bdf8';
+      const bgHex = bgInput?.value.trim() || '#121214';
+
+      if (fgPicker && hexToRgb(fgHex)) fgPicker.value = fgHex.slice(0, 7);
+      if (bgPicker && hexToRgb(bgHex)) bgPicker.value = bgHex.slice(0, 7);
+
+      const ratio = calculateRatio(fgHex, bgHex);
+      const formatted = ratio.toFixed(2);
+
+      ratioDisplay.textContent = `${formatted} : 1`;
+
+      previewSurface.style.color = fgHex;
+      previewSurface.style.backgroundColor = bgHex;
+
+      const aaNormal = ratio >= 4.5;
+      const aaaNormal = ratio >= 7.0;
+      const aaLarge = ratio >= 3.0;
+      const aaaLarge = ratio >= 4.5;
+      const uiPass = ratio >= 3.0;
+
+      setBadge('box-aa-normal', aaNormal);
+      setBadge('box-aaa-normal', aaaNormal);
+      setBadge('box-aa-large', aaLarge);
+      setBadge('box-aaa-large', aaaLarge);
+      setBadge('box-ui', uiPass);
+
+      if (verdictBadge) {
+        if (aaaNormal) {
+          verdictBadge.textContent = 'WCAG AAA Enhanced';
+          verdictBadge.className = 'status-pill status-ready';
+        } else if (aaNormal) {
+          verdictBadge.textContent = 'WCAG AA Standard';
+          verdictBadge.className = 'status-pill status-ready';
+        } else {
+          verdictBadge.textContent = 'Fails Normal Text';
+          verdictBadge.className = 'status-pill status-error';
+        }
+      }
+    }
+
+    fgPicker.addEventListener('input', () => {
+      if (fgInput) fgInput.value = fgPicker.value;
+      update();
+    });
+
+    bgPicker.addEventListener('input', () => {
+      if (bgInput) bgInput.value = bgPicker.value;
+      update();
+    });
+
+    fgInput?.addEventListener('input', update);
+    bgInput?.addEventListener('input', update);
+
+    swapBtn?.addEventListener('click', () => {
+      const temp = fgInput.value;
+      fgInput.value = bgInput.value;
+      bgInput.value = temp;
+      update();
+    });
+
+    presetBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        presetBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const fg = btn.getAttribute('data-fg');
+        const bg = btn.getAttribute('data-bg');
+        if (fg && bg && fgInput && bgInput) {
+          fgInput.value = fg;
+          bgInput.value = bg;
+          update();
+        }
+      });
+    });
+
+    update();
+  }
+
+  setupColorContrastChecker();
+  document.addEventListener('astro:after-swap', setupColorContrastChecker);
+</script>

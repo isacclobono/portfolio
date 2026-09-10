@@ -1,0 +1,281 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Button from '../../components/Button.astro';
+---
+
+<Layout 
+  title="SVG to CSS Data URI & React JSX Converter | SK Builds" 
+  description="Client-side SVG optimizer, CSS data-uri encoder, and React/Next.js JSX component generator." 
+  currentPath="/tools/svg-optimizer"
+>
+  <Breadcrumb items={[
+    { label: 'Tools', href: '/tools' },
+    { label: 'SVG Converter' }
+  ]} />
+
+  <Button href="/tools" variant="back" size="sm">
+    Back to tools
+  </Button>
+
+  <div style="margin: 1.5rem 0 2rem;">
+    <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem;">
+      SVG to CSS Data URI &amp; React JSX Converter
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+      Convert raw SVGs into optimized CSS background data-URIs, Base64 strings, and typed React / Next.js JSX components. Processed 100% locally.
+    </p>
+  </div>
+
+  <div class="tool-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+        <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary);">Sample SVGs:</span>
+        <button type="button" class="filter-pill-btn active svg-sample-btn" data-svg="sparkle">Sparkle AI</button>
+        <button type="button" class="filter-pill-btn svg-sample-btn" data-svg="shield">Shield</button>
+        <button type="button" class="filter-pill-btn svg-sample-btn" data-svg="code">Code</button>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span id="svg-size-badge" class="status-pill status-ready">Saved 28%</span>
+        <button type="button" id="btn-copy-output" class="action-btn btn-primary" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;">
+          Copy Code
+        </button>
+      </div>
+    </div>
+
+    <!-- Dual Workspace Grid -->
+    <div class="tool-dual-grid">
+      <!-- Input -->
+      <div class="code-box-wrapper">
+        <div class="code-box-header">
+          <span class="code-box-title">Raw SVG Code</span>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <div id="svg-live-preview" style="width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: var(--accent-blue);"></div>
+          </div>
+        </div>
+        <textarea 
+          id="raw-svg-input" 
+          class="code-textarea" 
+          style="height: 340px;"
+          placeholder="<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'>...</svg>"
+          spellcheck="false"
+        ></textarea>
+      </div>
+
+      <!-- Converted Outputs -->
+      <div class="code-box-wrapper">
+        <div class="code-box-header" style="padding: 0.35rem 0.65rem;">
+          <div class="filter-pill-bar" id="svg-output-tabs" style="margin-bottom: 0;">
+            <button type="button" class="filter-pill-btn active" data-tab="css" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">CSS Data URI</button>
+            <button type="button" class="filter-pill-btn" data-tab="jsx" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">React / TSX</button>
+            <button type="button" class="filter-pill-btn" data-tab="base64" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">Base64 URI</button>
+          </div>
+        </div>
+        <textarea 
+          id="converted-svg-output" 
+          class="code-textarea" 
+          readonly 
+          style="height: 340px; color: #38bdf8;"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .tool-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .tool-dual-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .tool-dual-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .code-box-wrapper {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .code-box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.85rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border-card);
+  }
+
+  [data-theme="light"] .code-box-header {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .code-box-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+  }
+
+  .code-textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 0.85rem;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.825rem;
+    line-height: 1.5;
+    outline: none;
+    resize: vertical;
+    box-sizing: border-box;
+  }
+
+  .status-pill {
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  .status-ready {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.25);
+  }
+</style>
+
+<script>
+  function setupSvgOptimizer() {
+    const inputEl = document.getElementById('raw-svg-input') as HTMLTextAreaElement | null;
+    const outputEl = document.getElementById('converted-svg-output') as HTMLTextAreaElement | null;
+    const previewEl = document.getElementById('svg-live-preview');
+    const sizeBadge = document.getElementById('svg-size-badge');
+    const copyBtn = document.getElementById('btn-copy-output');
+    const sampleBtns = document.querySelectorAll('.svg-sample-btn');
+    const tabBtns = document.querySelectorAll('#svg-output-tabs .filter-pill-btn');
+
+    if (!inputEl || !outputEl) return;
+
+    let currentTab = 'css';
+
+    const samples: Record<string, string> = {
+      sparkle: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>\n</svg>`,
+      shield: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>\n</svg>`,
+      code: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">\n  <polyline points="16 18 22 12 16 6"/>\n  <polyline points="8 6 2 12 8 18"/>\n</svg>`
+    };
+
+    function encodeSvg(svg: string): string {
+      return svg
+        .replace(/"/g, "'")
+        .replace(/%/g, '%25')
+        .replace(/#/g, '%23')
+        .replace(/{/g, '%7B')
+        .replace(/}/g, '%7D')
+        .replace(/</g, '%3C')
+        .replace(/>/g, '%3E')
+        .replace(/\s+/g, ' ');
+    }
+
+    function toReactJsx(svg: string): string {
+      let jsx = svg
+        .replace(/stroke-width/g, 'strokeWidth')
+        .replace(/stroke-linecap/g, 'strokeLinecap')
+        .replace(/stroke-linejoin/g, 'strokeLinejoin')
+        .replace(/fill-rule/g, 'fillRule')
+        .replace(/clip-rule/g, 'clipRule')
+        .replace(/class=/g, 'className=');
+
+      return `import React from 'react';\n\nexport function CustomIcon(props: React.SVGProps<SVGSVGElement>) {\n  return (\n    ${jsx.trim()}\n  );\n}`;
+    }
+
+    function convert() {
+      const raw = inputEl.value.trim();
+      if (!raw) {
+        outputEl.value = '';
+        if (previewEl) previewEl.innerHTML = '';
+        return;
+      }
+
+      if (previewEl) {
+        previewEl.innerHTML = raw;
+      }
+
+      if (currentTab === 'css') {
+        const encoded = encodeSvg(raw);
+        outputEl.value = `background-image: url("data:image/svg+xml,${encoded}");\nbackground-repeat: no-repeat;\nbackground-size: contain;`;
+      } else if (currentTab === 'jsx') {
+        outputEl.value = toReactJsx(raw);
+      } else if (currentTab === 'base64') {
+        try {
+          const b64 = btoa(unescape(encodeURIComponent(raw)));
+          outputEl.value = `data:image/svg+xml;base64,${b64}`;
+        } catch {
+          outputEl.value = 'Error encoding to Base64';
+        }
+      }
+
+      if (sizeBadge) {
+        const origBytes = new TextEncoder().encode(raw).length;
+        const outBytes = new TextEncoder().encode(outputEl.value).length;
+        sizeBadge.textContent = `${origBytes} bytes input`;
+      }
+    }
+
+    inputEl.addEventListener('input', convert);
+
+    tabBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentTab = btn.getAttribute('data-tab') || 'css';
+        convert();
+      });
+    });
+
+    sampleBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        sampleBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const key = btn.getAttribute('data-svg') || 'sparkle';
+        if (samples[key]) {
+          inputEl.value = samples[key];
+          convert();
+        }
+      });
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      const val = outputEl.value;
+      if (!val) return;
+      await navigator.clipboard.writeText(val);
+      const prev = copyBtn.textContent;
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => { copyBtn.textContent = prev; }, 1600);
+    });
+
+    inputEl.value = samples.sparkle;
+    convert();
+  }
+
+  setupSvgOptimizer();
+  document.addEventListener('astro:after-swap', setupSvgOptimizer);
+</script>
