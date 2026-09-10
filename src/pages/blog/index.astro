@@ -20,6 +20,14 @@ const years = Object.keys(postsByYear).sort((a, b) => b.localeCompare(a));
 const formatDate = (date: Date) => {
   return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(date);
 };
+
+const blogCategories = [
+  { label: 'All Articles', key: 'all' },
+  { label: 'AI & LLMs', key: 'ai' },
+  { label: 'Distributed Systems & Microservices', key: 'microservices' },
+  { label: 'Databases & Performance', key: 'database' },
+  { label: 'Edge & Web Architecture', key: 'web' },
+];
 ---
 
 <Layout 
@@ -48,42 +56,73 @@ const formatDate = (date: Date) => {
       </p>
     </header>
 
+    <!-- Interactive Category Filter Bar -->
+    <div class="filter-pill-bar" id="blog-filters">
+      {blogCategories.map((cat, idx) => (
+        <button 
+          type="button" 
+          class:list={["filter-pill-btn", { active: idx === 0 }]}
+          data-filter={cat.key}
+        >
+          {cat.label}
+        </button>
+      ))}
+    </div>
+
     <!-- Articles Grouped by Year -->
-    <div class="years-stream">
+    <div class="years-stream" id="blog-years-stream">
       {years.map((year) => (
-        <section class="year-block">
+        <section class="year-block" data-year={year}>
           <div class="year-header">
             <h2 class="year-title">{year}</h2>
             <span class="year-count">{postsByYear[year].length} {postsByYear[year].length === 1 ? 'Article' : 'Articles'}</span>
           </div>
 
           <div class="posts-list">
-            {postsByYear[year].map((post) => (
-              <a href={`/blog/${post.id}`} class="post-card">
-                <div class="post-main-content">
-                  <div class="post-meta-row">
-                    <span class="post-date">{formatDate(post.data.date)}</span>
-                    {post.data.tags && post.data.tags.length > 0 && (
-                      <div class="post-tags-inline">
-                        {post.data.tags.slice(0, 3).map((tag) => (
-                          <span class="post-tag-pill">{tag}</span>
-                        ))}
-                      </div>
-                    )}
+            {postsByYear[year].map((post) => {
+              const tags = post.data.tags || [];
+              const tagsString = (tags.join(' ') + ' ' + post.data.title).toLowerCase();
+              let category = 'all';
+              if (tagsString.includes('ai') || tagsString.includes('llm') || tagsString.includes('groq') || tagsString.includes('agent') || tagsString.includes('langgraph') || tagsString.includes('rag')) {
+                category += ' ai';
+              }
+              if (tagsString.includes('microservice') || tagsString.includes('redis') || tagsString.includes('rabbitmq') || tagsString.includes('booking') || tagsString.includes('websocket') || tagsString.includes('outbox')) {
+                category += ' microservices';
+              }
+              if (tagsString.includes('postgresql') || tagsString.includes('pgvector') || tagsString.includes('database') || tagsString.includes('query') || tagsString.includes('multi-tenant')) {
+                category += ' database';
+              }
+              if (tagsString.includes('astro') || tagsString.includes('edge') || tagsString.includes('cloudflare') || tagsString.includes('zero-js') || tagsString.includes('web') || tagsString.includes('payment') || tagsString.includes('docker')) {
+                category += ' web';
+              }
+
+              return (
+                <a href={`/blog/${post.id}`} class="post-card" data-category={category}>
+                  <div class="post-main-content">
+                    <div class="post-meta-row">
+                      <span class="post-date">{formatDate(post.data.date)}</span>
+                      {post.data.tags && post.data.tags.length > 0 && (
+                        <div class="post-tags-inline">
+                          {post.data.tags.slice(0, 3).map((tag) => (
+                            <span class="post-tag-pill">{tag}</span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <h3 class="post-title">{post.data.title}</h3>
+                    <p class="post-desc">{post.data.description}</p>
                   </div>
 
-                  <h3 class="post-title">{post.data.title}</h3>
-                  <p class="post-desc">{post.data.description}</p>
-                </div>
-
-                <div class="post-arrow-box" aria-hidden="true">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                </div>
-              </a>
-            ))}
+                  <div class="post-arrow-box" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </div>
+                </a>
+              );
+            })}
           </div>
         </section>
       ))}
@@ -286,3 +325,42 @@ const formatDate = (date: Date) => {
     }
   }
 </style>
+
+<script>
+  function setupBlogFilters() {
+    const filterButtons = document.querySelectorAll('#blog-filters .filter-pill-btn');
+    const postCards = document.querySelectorAll('#blog-years-stream .post-card') as NodeListOf<HTMLElement>;
+    const yearBlocks = document.querySelectorAll('#blog-years-stream .year-block') as NodeListOf<HTMLElement>;
+
+    filterButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.getAttribute('data-filter') || 'all';
+
+        postCards.forEach((card) => {
+          const category = card.getAttribute('data-category') || '';
+          if (filter === 'all' || category.includes(filter)) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        // Hide year blocks if all children are hidden
+        yearBlocks.forEach((block) => {
+          const visiblePosts = block.querySelectorAll('.post-card:not([style*="display: none"])');
+          if (visiblePosts.length === 0) {
+            block.style.display = 'none';
+          } else {
+            block.style.display = 'flex';
+          }
+        });
+      });
+    });
+  }
+
+  setupBlogFilters();
+  document.addEventListener('astro:after-swap', setupBlogFilters);
+</script>

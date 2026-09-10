@@ -4,19 +4,41 @@ interface Props {
   title: string;
   description?: string;
   date?: string;
+  tags?: string[];
+  metric?: string;
+  demoUrl?: string;
+  repoUrl?: string;
 }
 
-const { href, title, description, date } = Astro.props;
+const { href, title, description, date, tags = [], metric, demoUrl, repoUrl } = Astro.props;
 ---
 
 <a href={href} class="card-link group">
   <div class="card-content">
-    <div class="card-title">{title}</div>
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+      <div class="card-title">{title}</div>
+      {metric && (
+        <span style="font-family: var(--font-mono); font-size: 0.725rem; font-weight: 600; color: #22c55e; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.25); padding: 1px 6px; border-radius: 4px;">
+          {metric}
+        </span>
+      )}
+    </div>
+
     {description && <p class="card-description">{description}</p>}
+
+    {tags && tags.length > 0 && (
+      <div class="card-tags-list">
+        {tags.slice(0, 4).map((tag) => (
+          <span class="card-tag-pill">{tag}</span>
+        ))}
+      </div>
+    )}
   </div>
+
   <div class="card-arrow" aria-hidden="true">
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="m9 18 6-6-6-6"/>
     </svg>
   </div>
 </a>
+

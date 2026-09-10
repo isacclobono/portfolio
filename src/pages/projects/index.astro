@@ -6,20 +6,95 @@ import Breadcrumb from '../../components/Breadcrumb.astro';
 
 const projects = (await getCollection('projects', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const filterCategories = [
+  { label: 'All Projects', key: 'all' },
+  { label: 'AI & Generative Systems', key: 'ai' },
+  { label: 'Backend & Microservices', key: 'backend' },
+  { label: 'Full-Stack Platforms', key: 'fullstack' },
+];
 ---
 
-<Layout title="Projects" description="Explore full-stack and cloud projects built by Sunil Khobragade." currentPath="/projects">
+<Layout 
+  title="Projects & Architecture Case Studies | SK Builds" 
+  description="Explore production full-stack systems, AI agents, real-time microservices, and distributed cloud applications built by Sunil Khobragade." 
+  currentPath="/projects"
+>
   <Breadcrumb items={[{ label: 'projects' }]} />
 
-  <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 2rem;">Projects</h1>
+  <div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.025em;">
+      Projects &amp; Architecture
+    </h1>
+    <p style="color: var(--text-secondary); margin: 0; font-size: 0.95rem;">
+      Production full-stack platforms, autonomous AI multi-agent workflows, real-time microservices, and cloud-native infrastructure.
+    </p>
+  </div>
 
-  <div class="projects-list">
-    {projects.map((project) => (
-      <Card 
-        href={`/projects/${project.id}`}
-        title={project.data.title}
-        description={project.data.description}
-      />
+  <!-- Interactive Category Filter Pill Bar -->
+  <div class="filter-pill-bar" id="project-filters">
+    {filterCategories.map((cat, idx) => (
+      <button 
+        type="button" 
+        class:list={["filter-pill-btn", { active: idx === 0 }]}
+        data-filter={cat.key}
+      >
+        {cat.label}
+      </button>
     ))}
   </div>
+
+  <!-- Projects List with Category Tags -->
+  <div class="projects-list" id="projects-container">
+    {projects.map((project) => {
+      const tags = project.data.tags || [];
+      const tagsString = tags.join(' ').toLowerCase();
+      let category = 'fullstack';
+      if (tagsString.includes('ai') || tagsString.includes('vertex') || tagsString.includes('groq') || tagsString.includes('python')) {
+        category = 'ai fullstack';
+      }
+      if (tagsString.includes('redis') || tagsString.includes('node') || tagsString.includes('docker') || tagsString.includes('postgresql')) {
+        category += ' backend';
+      }
+
+      return (
+        <div class="project-item-wrapper" data-category={category}>
+          <Card 
+            href={`/projects/${project.id}`}
+            title={project.data.title}
+            description={project.data.description}
+            tags={project.data.tags}
+          />
+        </div>
+      );
+    })}
+  </div>
 </Layout>
+
+<script>
+  function setupProjectFilters() {
+    const filterButtons = document.querySelectorAll('#project-filters .filter-pill-btn');
+    const projectCards = document.querySelectorAll('#projects-container .project-item-wrapper') as NodeListOf<HTMLElement>;
+
+    filterButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.getAttribute('data-filter') || 'all';
+
+        projectCards.forEach((card) => {
+          const category = card.getAttribute('data-category') || '';
+          if (filter === 'all' || category.includes(filter)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  }
+
+  setupProjectFilters();
+  document.addEventListener('astro:after-swap', setupProjectFilters);
+</script>

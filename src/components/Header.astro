@@ -18,59 +18,62 @@ const navItems = [
   { label: 'Projects', href: '/projects' },
   { label: 'Education', href: '/education' },
   { label: 'Tools', href: '/tools' },
+  { label: 'Resume', href: '/resume' },
 ];
 ---
 
-<header class="site-header">
-  <a href="/" class="brand-link">
-    <span class="brand-sk-badge">SK</span>
-    <span>{SITE.AUTHOR}</span>
-  </a>
+<div class="site-header-sticky-wrapper">
+  <header class="site-header">
+    <a href="/" class="brand-link">
+      <span class="brand-sk-badge">SK</span>
+      <span>{SITE.AUTHOR}</span>
+    </a>
 
-  <!-- Desktop Navigation (Hidden on Mobile) -->
-  <nav class="nav-links desktop-nav" aria-label="Main Navigation">
-    {navItems.map((item, index) => (
-      <>
-        <a href={item.href} class:list={["nav-link", { active: isActive(item.href) }]}>
-          {item.label}
+    <!-- Desktop Navigation (Hidden on Mobile) -->
+    <nav class="nav-links desktop-nav" aria-label="Main Navigation">
+      {navItems.map((item, index) => (
+        <>
+          <a href={item.href} class:list={["nav-link", { active: isActive(item.href) }]}>
+            {item.label}
+          </a>
+          {index < navItems.length - 1 && <span class="nav-separator">/</span>}
+        </>
+      ))}
+    </nav>
+
+    <!-- Mobile Hamburger Menu Button -->
+    <button 
+      type="button" 
+      id="mobile-menu-toggle" 
+      class="mobile-toggle-btn"
+      aria-label="Toggle navigation menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu-drawer"
+    >
+      <svg class="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line class="line-1" x1="4" y1="6" x2="20" y2="6"></line>
+        <line class="line-2" x1="4" y1="12" x2="20" y2="12"></line>
+        <line class="line-3" x1="4" y1="18" x2="20" y2="18"></line>
+      </svg>
+    </button>
+  </header>
+
+  <!-- Mobile Navigation Drawer Dropdown -->
+  <div id="mobile-menu-drawer" class="mobile-drawer" aria-hidden="true">
+    <nav class="mobile-nav-list" aria-label="Mobile Navigation">
+      {navItems.map((item) => (
+        <a 
+          href={item.href} 
+          class:list={["mobile-nav-link", { active: isActive(item.href) }]}
+        >
+          <span>{item.label}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mobile-link-arrow">
+            <path d="m9 18 6-6-6-6"></path>
+          </svg>
         </a>
-        {index < navItems.length - 1 && <span class="nav-separator">/</span>}
-      </>
-    ))}
-  </nav>
-
-  <!-- Mobile Hamburger Menu Button -->
-  <button 
-    type="button" 
-    id="mobile-menu-toggle" 
-    class="mobile-toggle-btn"
-    aria-label="Toggle navigation menu"
-    aria-expanded="false"
-    aria-controls="mobile-menu-drawer"
-  >
-    <svg class="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <line class="line-1" x1="4" y1="6" x2="20" y2="6"></line>
-      <line class="line-2" x1="4" y1="12" x2="20" y2="12"></line>
-      <line class="line-3" x1="4" y1="18" x2="20" y2="18"></line>
-    </svg>
-  </button>
-</header>
-
-<!-- Mobile Navigation Drawer Dropdown -->
-<div id="mobile-menu-drawer" class="mobile-drawer" aria-hidden="true">
-  <nav class="mobile-nav-list" aria-label="Mobile Navigation">
-    {navItems.map((item) => (
-      <a 
-        href={item.href} 
-        class:list={["mobile-nav-link", { active: isActive(item.href) }]}
-      >
-        <span>{item.label}</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mobile-link-arrow">
-          <path d="m9 18 6-6-6-6"></path>
-        </svg>
-      </a>
-    ))}
-  </nav>
+      ))}
+    </nav>
+  </div>
 </div>
 
 <style>

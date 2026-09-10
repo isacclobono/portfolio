@@ -21,19 +21,81 @@ const workEntries = (await getCollection('work'))
 
 <Layout title={SITE.AUTHOR} currentPath="/">
   <!-- Introduction Hero Section -->
-  <section style="margin-bottom: 2rem;">
-    <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.025em;">
-      Hi, I'm Sunil Khobragade
+  <section class="hero-section" style="margin-bottom: 2rem;">
+    <!-- Live Availability Badge -->
+    <div class="availability-badge">
+      <span class="beacon-pulse" aria-hidden="true"></span>
+      <span>Available for AI Architecture &amp; Senior Engineering</span>
+    </div>
+
+    <h1 style="font-size: 2.15rem; font-weight: 800; margin-bottom: 0.4rem; letter-spacing: -0.03em; line-height: 1.2;">
+      Sunil Khobragade
     </h1>
-    <p style="font-size: 1.05rem; color: var(--text-primary); font-weight: 500; margin-bottom: 1rem;">
-      {SITE.ROLE} &bull; {SITE.LOCATION}
+    <p style="font-size: 1.05rem; color: var(--text-primary); font-weight: 600; margin-bottom: 0.85rem; letter-spacing: -0.01em;">
+      {SITE.ROLE} &bull; <span style="color: var(--text-muted); font-weight: 400;">{SITE.LOCATION}</span>
     </p>
-    <p style="margin-bottom: 1.25rem;">
+    <p style="margin-bottom: 1.25rem; font-size: 0.95rem; line-height: 1.65; color: var(--text-secondary);">
       {SITE.BIO}
     </p>
 
     <!-- Sleek Social & Contact Badges -->
     <SocialLinks />
+
+    <!-- Hero Conversion CTA Engine -->
+    <div class="hero-cta-group">
+      <a href="/tools/appointment" class="btn-hero btn-hero-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <span>Book Consultation</span>
+      </a>
+
+      <a href="/resume" class="btn-hero btn-hero-secondary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+          <line x1="10" y1="9" x2="8" y2="9"></line>
+        </svg>
+        <span>View Resume / CV</span>
+      </a>
+
+      <button type="button" id="hero-open-ai-chat" class="btn-hero btn-hero-ai cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 8V4H8"></path>
+          <rect width="16" height="12" x="4" y="8" rx="2"></rect>
+          <path d="M2 14h2"></path>
+          <path d="M20 14h2"></path>
+          <path d="M15 13v2"></path>
+          <path d="M9 13v2"></path>
+        </svg>
+        <span>Ask AI Copilot</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Bento Key Engineering Highlights Grid -->
+  <section class="bento-stats-grid" aria-label="Key Engineering Highlights">
+    <div class="bento-stat-card">
+      <div class="bento-stat-value">6+ Yrs</div>
+      <div class="bento-stat-label">Engineering Exp</div>
+    </div>
+    <div class="bento-stat-card">
+      <div class="bento-stat-value">100%</div>
+      <div class="bento-stat-label">Strict TypeScript</div>
+    </div>
+    <div class="bento-stat-card">
+      <div class="bento-stat-value">&lt; 25ms</div>
+      <div class="bento-stat-label">Edge Latency</div>
+    </div>
+    <div class="bento-stat-card">
+      <div class="bento-stat-value">300+ t/s</div>
+      <div class="bento-stat-label">Groq AI Inference</div>
+    </div>
   </section>
 
   <!-- Technical Skills Section -->
@@ -65,6 +127,7 @@ const workEntries = (await getCollection('work'))
           href={`/projects/${project.id}`}
           title={project.data.title}
           description={project.data.description}
+          tags={project.data.tags}
         />
       ))}
     </div>
@@ -118,6 +181,7 @@ const workEntries = (await getCollection('work'))
           href={`/blog/${b.id}`}
           title={b.data.title}
           description={b.data.description}
+          tags={b.data.tags}
         />
       ))}
     </div>
@@ -150,3 +214,23 @@ const workEntries = (await getCollection('work'))
     </p>
   </section>
 </Layout>
+
+<script>
+  function setupHeroAiTrigger() {
+    const aiBtn = document.getElementById('hero-open-ai-chat');
+    if (!aiBtn) return;
+    aiBtn.addEventListener('click', () => {
+      // Find chatbot trigger and open it
+      const chatbotTrigger = document.querySelector('#chatbot-trigger') as HTMLButtonElement | null;
+      if (chatbotTrigger) {
+        chatbotTrigger.click();
+      } else {
+        const toggleBtn = document.querySelector('.chatbot-toggle-btn') as HTMLButtonElement | null;
+        if (toggleBtn) toggleBtn.click();
+      }
+    });
+  }
+
+  setupHeroAiTrigger();
+  document.addEventListener('astro:after-swap', setupHeroAiTrigger);
+</script>
