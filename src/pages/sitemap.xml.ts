@@ -1,47 +1,60 @@
 import type { APIRoute } from 'astro';
 import { SITE } from '../data/site';
 
-const pages = [
-  '',
-  '/work',
-  '/projects',
-  '/projects/pulse-chat',
-  '/projects/ai-enabled-lms',
-  '/projects/e-commerce-platform',
-  '/projects/real-time-appointment-booking',
-  '/blog',
-  '/blog/designing-event-driven-microservices-rabbitmq-nodejs',
-  '/blog/optimizing-postgresql-queries-high-volume-systems',
-  '/blog/integrating-multi-gateway-payments-clean-architecture',
-  '/blog/building-high-throughput-microservices-with-nodejs-and-redis',
-  '/blog/zero-downtime-deployments-with-docker-and-github-actions',
-  '/blog/outbox-pattern-distributed-transaction-guarantees',
-  '/blog/scaling-websocket-infrastructure-high-concurrency',
-  '/blog/architecting-concurrency-safe-booking-systems',
-  '/blog/multi-tenant-database-isolation-architectures',
-  '/blog/production-rag-pipelines-pgvector-postgresql',
-  '/blog/autonomous-multi-agent-orchestration-langgraph',
-  '/blog/low-latency-edge-computing-cloudflare-astro',
-  '/blog/ultra-fast-llm-inference-groq-lpu-streaming',
-  '/blog/zero-js-baseline-web-applications-astro-5',
-  '/education',
-  '/tools',
-  '/tools/estimator',
-  '/tools/appointment',
-  '/tools/jwt-decoder',
-  '/tools/sql-formatter',
-  '/tools/cron-generator',
-  '/status',
-  '/changelog',
-  '/tech-stack',
-  '/uses',
-  '/privacy',
-  '/terms',
-  '/401',
-  '/403',
-  '/404',
-  '/500',
-  '/503'
+// Canonical, crawlable production routes (Strictly excludes error pages & API endpoints)
+const routes = [
+  // Core Hubs & Pages
+  { path: '', changefreq: 'daily', priority: '1.0' },
+  { path: '/work', changefreq: 'weekly', priority: '0.8' },
+  { path: '/projects', changefreq: 'weekly', priority: '0.9' },
+  { path: '/blog', changefreq: 'daily', priority: '0.9' },
+  { path: '/tools', changefreq: 'daily', priority: '0.9' },
+  { path: '/tech-stack', changefreq: 'weekly', priority: '0.8' },
+  { path: '/education', changefreq: 'monthly', priority: '0.7' },
+  { path: '/changelog', changefreq: 'weekly', priority: '0.75' },
+  { path: '/status', changefreq: 'hourly', priority: '0.7' },
+  { path: '/uses', changefreq: 'monthly', priority: '0.6' },
+  { path: '/privacy', changefreq: 'monthly', priority: '0.5' },
+  { path: '/terms', changefreq: 'monthly', priority: '0.5' },
+
+  // Featured Engineering Projects
+  { path: '/projects/pulse-chat', changefreq: 'weekly', priority: '0.85' },
+  { path: '/projects/ai-enabled-lms', changefreq: 'weekly', priority: '0.85' },
+  { path: '/projects/e-commerce-platform', changefreq: 'weekly', priority: '0.85' },
+  { path: '/projects/real-time-appointment-booking', changefreq: 'weekly', priority: '0.85' },
+
+  // 14 In-Depth Architecture Blog Articles
+  { path: '/blog/autonomous-multi-agent-orchestration-langgraph', changefreq: 'monthly', priority: '0.8' },
+  { path: '/blog/architecting-concurrency-safe-booking-systems', changefreq: 'monthly', priority: '0.8' },
+  { path: '/blog/building-high-throughput-microservices-with-nodejs-and-redis', changefreq: 'monthly', priority: '0.8' },
+  { path: '/blog/designing-event-driven-microservices-rabbitmq-nodejs', changefreq: 'monthly', priority: '0.8' },
+  { path: '/blog/integrating-multi-gateway-payments-clean-architecture', changefreq: 'monthly', priority: '0.8' },
+  { path: '/blog/low-latency-edge-computing-cloudflare-astro', changefreq: 'monthly', priority: '0.8' },
+  { path: '/blog/multi-tenant-database-isolation-architectures', changefreq: 'monthly', priority: '0.8' },
+  { path: '/blog/optimizing-postgresql-queries-high-volume-systems', changefreq: 'monthly', priority: '0.8' },
+  { path: '/blog/outbox-pattern-distributed-transaction-guarantees', changefreq: 'monthly', priority: '0.8' },
+  { path: '/blog/production-rag-pipelines-pgvector-postgresql', changefreq: 'monthly', priority: '0.8' },
+  { path: '/blog/scaling-websocket-infrastructure-high-concurrency', changefreq: 'monthly', priority: '0.8' },
+  { path: '/blog/ultra-fast-llm-inference-groq-lpu-streaming', changefreq: 'monthly', priority: '0.8' },
+  { path: '/blog/zero-downtime-deployments-with-docker-and-github-actions', changefreq: 'monthly', priority: '0.8' },
+  { path: '/blog/zero-js-baseline-web-applications-astro-5', changefreq: 'monthly', priority: '0.8' },
+
+  // Full Suite of 15 Developer Utility Tools
+  { path: '/tools/estimator', changefreq: 'weekly', priority: '0.85' },
+  { path: '/tools/appointment', changefreq: 'weekly', priority: '0.85' },
+  { path: '/tools/json-to-ts', changefreq: 'weekly', priority: '0.85' },
+  { path: '/tools/regex-tester', changefreq: 'weekly', priority: '0.85' },
+  { path: '/tools/base64-encoder', changefreq: 'weekly', priority: '0.85' },
+  { path: '/tools/uuid-generator', changefreq: 'weekly', priority: '0.85' },
+  { path: '/tools/diff-viewer', changefreq: 'weekly', priority: '0.85' },
+  { path: '/tools/markdown-editor', changefreq: 'weekly', priority: '0.85' },
+  { path: '/tools/box-shadow-generator', changefreq: 'weekly', priority: '0.85' },
+  { path: '/tools/color-contrast', changefreq: 'weekly', priority: '0.85' },
+  { path: '/tools/url-parser', changefreq: 'weekly', priority: '0.85' },
+  { path: '/tools/svg-optimizer', changefreq: 'weekly', priority: '0.85' },
+  { path: '/tools/sql-formatter', changefreq: 'weekly', priority: '0.85' },
+  { path: '/tools/jwt-decoder', changefreq: 'weekly', priority: '0.85' },
+  { path: '/tools/cron-generator', changefreq: 'weekly', priority: '0.85' },
 ];
 
 export const GET: APIRoute = async () => {
@@ -50,13 +63,13 @@ export const GET: APIRoute = async () => {
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${pages
+${routes
   .map(
-    (path) => `  <url>
-    <loc>${baseUrl}${path}</loc>
+    (item) => `  <url>
+    <loc>${baseUrl}${item.path}</loc>
     <lastmod>${now}</lastmod>
-    <changefreq>${path === '' || path === '/status' || path === '/changelog' ? 'daily' : 'weekly'}</changefreq>
-    <priority>${path === '' ? '1.0' : path.startsWith('/projects') || path.startsWith('/tools') ? '0.8' : '0.6'}</priority>
+    <changefreq>${item.changefreq}</changefreq>
+    <priority>${item.priority}</priority>
   </url>`
   )
   .join('\n')}
@@ -66,7 +79,7 @@ ${pages
     status: 200,
     headers: {
       'Content-Type': 'application/xml; charset=utf-8',
-      'Cache-Control': 'public, max-age=3600'
-    }
+      'Cache-Control': 'public, max-age=3600',
+    },
   });
 };
