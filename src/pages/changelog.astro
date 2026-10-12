@@ -20,6 +20,33 @@ interface Release {
 
 const releases: Release[] = [
   {
+    version: "v2.9.0",
+    date: "October 2026",
+    badge: "Engineering Publications & System Hardening",
+    badgeType: "launch",
+    summary: "Published 5 advanced engineering deep-dives expanding technical publications to 19 articles, updated global search indexing, and enhanced sitemap coverage.",
+    sections: [
+      {
+        type: "Added",
+        items: [
+          "Published 'Building Resilient AI Agents with Function Calling & Structured JSON Schemas' covering Zod/Pydantic validation, constrained decoding, and reflection loops.",
+          "Published 'Distributed Rate Limiting at Scale: Token Bucket vs. Sliding Window with Redis & Lua' featuring atomic Lua scripts and sub-millisecond edge throttling.",
+          "Published 'Scaling High-Throughput PostgreSQL: Declarative Partitioning & Real-Time CDC with Debezium' detailing range partitioning and zero-impact WAL streaming.",
+          "Published 'Passwordless Authentication with Passkeys and WebAuthn: Complete Implementation Blueprint' covering biometric FIDO2 hardware enclaves and Node.js verification.",
+          "Published 'Kubernetes Canary Deployments with Istio Service Mesh & Automated Prometheus Rollbacks' detailing progressive traffic routing and Flagger automated rollbacks."
+        ]
+      },
+      {
+        type: "Architecture",
+        items: [
+          "Indexed all 19 engineering publications in the Global Command Palette (Ctrl+K) with domain tags, search keywords, and instant navigation.",
+          "Updated XML sitemap (/sitemap.xml) and RSS 2.0 syndication feed (/rss.xml) with the latest publication metadata.",
+          "Synchronized repository release ledger and package specifications to v2.9.0."
+        ]
+      }
+    ]
+  },
+  {
     version: "v2.8.2",
     date: "September 2026",
     badge: "Global Command Palette",

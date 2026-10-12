@@ -23,7 +23,7 @@ const routes = [
   { path: '/projects/e-commerce-platform', changefreq: 'weekly', priority: '0.85' },
   { path: '/projects/real-time-appointment-booking', changefreq: 'weekly', priority: '0.85' },
 
-  // 14 In-Depth Architecture Blog Articles
+  // 19 In-Depth Architecture Blog Articles
   { path: '/blog/autonomous-multi-agent-orchestration-langgraph', changefreq: 'monthly', priority: '0.8' },
   { path: '/blog/architecting-concurrency-safe-booking-systems', changefreq: 'monthly', priority: '0.8' },
   { path: '/blog/building-high-throughput-microservices-with-nodejs-and-redis', changefreq: 'monthly', priority: '0.8' },
@@ -38,6 +38,11 @@ const routes = [
   { path: '/blog/ultra-fast-llm-inference-groq-lpu-streaming', changefreq: 'monthly', priority: '0.8' },
   { path: '/blog/zero-downtime-deployments-with-docker-and-github-actions', changefreq: 'monthly', priority: '0.8' },
   { path: '/blog/zero-js-baseline-web-applications-astro-5', changefreq: 'monthly', priority: '0.8' },
+  { path: '/blog/building-resilient-ai-agents-with-tool-calling-and-structured-outputs', changefreq: 'monthly', priority: '0.8' },
+  { path: '/blog/distributed-rate-limiting-algorithms-token-bucket-redis', changefreq: 'monthly', priority: '0.8' },
+  { path: '/blog/postgresql-table-partitioning-and-cdc-streaming-debezium', changefreq: 'monthly', priority: '0.8' },
+  { path: '/blog/passkeys-and-webauthn-implementation-clean-architecture', changefreq: 'monthly', priority: '0.8' },
+  { path: '/blog/kubernetes-canary-deployments-with-istio-and-prometheus', changefreq: 'monthly', priority: '0.8' },
 
   // Full Suite of 15 Developer Utility Tools
   { path: '/tools/estimator', changefreq: 'weekly', priority: '0.85' },
