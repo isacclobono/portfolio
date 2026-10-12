@@ -318,7 +318,7 @@ import Button from '../../components/Button.astro';
     input?.addEventListener('input', processText);
 
     btnSample?.addEventListener('click', () => {
-      input.value = `<div class="alert-box" id="sec-101">\n  <h3>Warning: & special chars!</h3>\n  <p>Test with "quotes", 'apostrophes' & <script>alert('XSS')</script></p>\n</div>`;
+      input.value = '<div class="alert-box" id="sec-101">\n  <h3>Warning: & special chars!</h3>\n  <p>Test with "quotes", \'apostrophes\' & <scr' + 'ipt>alert(\'XSS\')</scr' + 'ipt></p>\n</div>';
       processText();
     });
 
