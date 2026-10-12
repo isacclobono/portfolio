@@ -20,6 +20,31 @@ interface Release {
 
 const releases: Release[] = [
   {
+    version: "v2.10.10",
+    date: "October 2026",
+    badge: "Card-Free System Status Architecture",
+    badgeType: "launch",
+    summary: "Re-engineered the operational System Status interface (/status) into a fully transparent, card-free telemetry dashboard featuring a live pulsing beacon, borderless performance metrics, and clean service health streams.",
+    sections: [
+      {
+        type: "Changed",
+        items: [
+          "Card Clutter Elimination: Stripped green status hero card boxes, metric card borders, and service card containers in favor of a clean, fully transparent typographic layout.",
+          "Live Beacon Indicator: Integrated an animated green beacon dot with an operational status badge and streamlined headline typography.",
+          "Borderless Telemetry Grid: Converted metrics into a transparent 4-column performance row (Core Web Vitals, Edge Latency, LLM Inference, 90-Day Uptime).",
+          "Service Health Streams: Rendered core infrastructure rows with clean monospace uptime figures and compact operational status badges."
+        ]
+      },
+      {
+        type: "Architecture",
+        items: [
+          "Bumped application release version to v2.10.10 in package.json.",
+          "Synchronized full release ledger across CHANGELOG.md and /changelog."
+        ]
+      }
+    ]
+  },
+  {
     version: "v2.10.9",
     date: "October 2026",
     badge: "Official Contact Email Standardization",

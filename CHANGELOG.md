@@ -3,6 +3,21 @@
 All notable changes to the SK Builds portfolio platform are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.10] - 2026-10-12
+
+### Changed
+- **System Status UI Modernization (`/status`)**: Redesigned the operational status page to eliminate all card clutter, boxed containers, and heavy background fills in favor of a modern, fully transparent, minimalist layout:
+  - Replaced the bulky green hero card with an elegant, glowing beacon pill badge (`All Systems Operational`) and clean header typography.
+  - Converted boxed metric cards into a borderless, transparent 4-column performance strip (`Core Web Vitals`, `Edge Latency`, `LLM Inference`, `Uptime`).
+  - Streamlined the core services list into flat, transparent rows with inline tech stack details, uptime metrics, and compact green operational badges.
+  - Replaced boxed incident history cards with a clean, borderless audit confirmation notice.
+
+### Architecture
+- **Version Bump**: Bumped release version to `2.10.10` in `package.json`.
+- **Documentation**: Synchronized release log in `CHANGELOG.md` and `src/pages/changelog.astro`.
+
+---
+
 ## [2.10.9] - 2026-10-12
 
 ### Changed
