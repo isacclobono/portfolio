@@ -11,10 +11,10 @@
      ========================================================================== */
   --bg-primary: #121214;
   --bg-secondary: #18181b;
-  --bg-surface: #18181f;
-  --bg-surface-hover: #22222b;
-  --bg-card: #1c1c20;
-  --bg-card-hover: #242429;
+  --bg-surface: transparent;
+  --bg-surface-hover: rgba(255, 255, 255, 0.04);
+  --bg-card: transparent;
+  --bg-card-hover: rgba(255, 255, 255, 0.04);
   --bg-code: #161619;
   --bg-pill: rgba(255, 255, 255, 0.08);
 
@@ -166,10 +166,10 @@
 [data-theme="light"] {
   --bg-primary: #fafaf9;
   --bg-secondary: #f4f4f5;
-  --bg-surface: #ffffff;
-  --bg-surface-hover: #f4f4f5;
-  --bg-card: #ffffff;
-  --bg-card-hover: #f5f5f7;
+  --bg-surface: transparent;
+  --bg-surface-hover: rgba(0, 0, 0, 0.04);
+  --bg-card: transparent;
+  --bg-card-hover: rgba(0, 0, 0, 0.04);
   --bg-code: #f4f4f5;
   --bg-pill: rgba(0, 0, 0, 0.06);
 
@@ -782,7 +782,7 @@ td {
 
 /* Lighthouse Score Card */
 .lighthouse-card {
-  background-color: var(--bg-card);
+  background-color: transparent !important;
   border: 1px solid var(--border-card);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
@@ -1061,7 +1061,7 @@ td {
 .cal-booking-card {
   display: grid;
   grid-template-columns: 1.15fr 1fr;
-  background-color: var(--bg-card);
+  background-color: transparent !important;
   border: 1px solid var(--border-card);
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -1074,7 +1074,7 @@ td {
   border-right: 1px solid var(--border-card);
   display: flex;
   flex-direction: column;
-  background-color: var(--bg-card);
+  background-color: transparent !important;
   gap: 0.85rem;
 }
 
@@ -1195,7 +1195,7 @@ td {
   width: 26px;
   height: 26px;
   border-radius: var(--radius-sm);
-  background: var(--bg-card);
+  background: transparent;
   border: 1px solid var(--border-card);
   color: var(--text-secondary);
   display: flex;
@@ -1332,7 +1332,7 @@ td {
   width: 100%;
   padding: 0.45rem 0.2rem;
   text-align: center;
-  background-color: var(--bg-card);
+  background-color: transparent;
   border: 1px solid var(--border-card);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
@@ -1356,7 +1356,7 @@ td {
 
 /* Confirmation Panel on Left Side */
 .cal-confirm-panel {
-  background-color: var(--bg-secondary);
+  background-color: transparent;
   border: 1px solid var(--border-card);
   border-radius: var(--radius-md);
   padding: 0.85rem;
@@ -1616,7 +1616,7 @@ svg {
 }
 
 .btn-hero-secondary {
-  background-color: var(--bg-card);
+  background-color: transparent;
   color: var(--text-primary) !important;
   border-color: var(--border-card);
 }
@@ -1696,7 +1696,7 @@ svg {
 }
 
 .filter-pill-btn {
-  background: var(--bg-card);
+  background: transparent;
   border: 1px solid var(--border-card);
   color: var(--text-secondary);
   font-size: 0.8rem;
@@ -1789,14 +1789,21 @@ svg {
 
 /* Resume Page Specific Styles */
 .resume-sheet {
-  background-color: var(--bg-card);
+  background-color: transparent;
   border: 1px solid var(--border-card);
   border-radius: var(--radius-lg);
   padding: 2.25rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  box-shadow: none !important;
+}
+
+/* Reusable Skill Card */
+.skill-card {
+  background: transparent;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
 }
 
 .resume-header {

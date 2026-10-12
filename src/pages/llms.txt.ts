@@ -16,6 +16,7 @@ export const GET: APIRoute = ({ site }) => {
 - [Blog & Technical Articles](${siteUrl}/blog): In-depth writeups on system architecture, database optimization, CI/CD, microservices, and modern web development.
 - [Education & Certifications](${siteUrl}/education): Academic background in computer engineering, industry certifications, and continuous technical training.
 - [Freelance Estimator & Booking Tools](${siteUrl}/tools): Interactive project cost & architecture estimator and Calendly consultation scheduler.
+- [Frequently Asked Questions (FAQ)](${siteUrl}/faq): Answers regarding hiring Sunil, freelance engagements, technical stack, SaaS MVPs, and project delivery.
 - [RSS Feed](${siteUrl}/rss.xml): Syndication feed for latest technical blog articles and architectural case studies.
 - [XML Sitemap](${siteUrl}/sitemap-index.xml): Full XML sitemap index for search crawlers.
 

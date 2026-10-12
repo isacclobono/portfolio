@@ -15,6 +15,7 @@ const routes = [
   { path: '/download', changefreq: 'weekly', priority: '0.85' },
   { path: '/status', changefreq: 'hourly', priority: '0.7' },
   { path: '/uses', changefreq: 'monthly', priority: '0.6' },
+  { path: '/faq', changefreq: 'weekly', priority: '0.85' },
   { path: '/privacy', changefreq: 'monthly', priority: '0.5' },
   { path: '/terms', changefreq: 'monthly', priority: '0.5' },
 

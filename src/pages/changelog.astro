@@ -20,6 +20,30 @@ interface Release {
 
 const releases: Release[] = [
   {
+    version: "v2.10.14",
+    date: "October 2026",
+    badge: "Card Transparency Audit & Glass Refinement",
+    badgeType: "perf",
+    summary: "Audited all cards and containers across the platform, stripping opaque background fills in favor of clean transparent surfaces with crisp borders.",
+    sections: [
+      {
+        type: "Changed",
+        items: [
+          "Global Token Transparency: Configured --bg-card and --bg-surface to pure transparent in both dark and light modes, paired with subtle 4% opacity hover accents.",
+          "Component Audit: Stripped solid background fills from .lighthouse-card, .stat-card, .principle-card, .stack-interactive-bar, .stack-cta-card, .cal-booking-card, .cal-col-info, .unified-booking-card, .confirmed-meta-box, and all developer tool cards.",
+          "Preserved Visual Definition: Maintained crisp border geometry (var(--border-card)) and accessible text contrast so every transparent card stays razor-sharp."
+        ]
+      },
+      {
+        type: "Architecture",
+        items: [
+          "Bumped application release version to v2.10.14 in package.json.",
+          "Synchronized changelog logs across CHANGELOG.md and /changelog."
+        ]
+      }
+    ]
+  },
+  {
     version: "v2.10.13",
     date: "October 2026",
     badge: "Hero CTA Single Button & Calendly API Engine",
@@ -1035,19 +1059,19 @@ const releases: Release[] = [
   }
 
   .timeline-card {
-    background: var(--bg-card);
+    background: transparent;
     border: 1px solid var(--border-card);
     border-radius: 0.85rem;
     padding: 1.35rem 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 0.85rem;
-    transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+    transition: border-color 0.15s ease, transform 0.15s ease;
   }
 
   .timeline-card:hover {
     border-color: #3b82f6;
-    background: var(--bg-card-hover, var(--bg-card));
+    background: transparent;
     transform: translateY(-1px);
   }
 

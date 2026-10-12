@@ -1,0 +1,694 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import Button from '../components/Button.astro';
+import { SITE } from '../data/site';
+
+interface FAQItem {
+  id: string;
+  category: 'about' | 'freelance' | 'projects' | 'delivery';
+  categoryLabel: string;
+  question: string;
+  answerHtml: string;
+  tags: string[];
+}
+
+const faqs: FAQItem[] = [
+  // 1. ABOUT SUNIL & EXPERTISE
+  {
+    id: 'who-is-sunil',
+    category: 'about',
+    categoryLabel: 'About & Expertise',
+    question: 'Who is Sunil Khobragade, and what is your professional background?',
+    tags: ['Background', 'Experience', 'Full-Stack', 'AI Architect'],
+    answerHtml: `
+      <p class="mb-2">I am <strong>Sunil Khobragade</strong>, a Senior Full-Stack Developer, AI Solutions Architect, and Cloud Specialist with <strong>6+ years of production experience</strong> building resilient web platforms, autonomous AI agent pipelines, and high-concurrency cloud systems.</p>
+      <p class="mb-2">My career spans technical engineering at <strong>IBM</strong>, full-stack product leadership at <strong>Intencode Technologies</strong>, and extensive independent freelance consultancy delivering 10+ turnkey applications across e-commerce, real-time communication, LMS platforms, and distributed reservation engines.</p>
+      <p>I specialize in end-to-end ownership: from database query indexing and concurrency locks down to clean, accessible user interfaces and automated CI/CD deployment pipelines.</p>
+    `
+  },
+  {
+    id: 'core-tech-stack',
+    category: 'about',
+    categoryLabel: 'About & Expertise',
+    question: 'What core technology stack and tools do you specialize in?',
+    tags: ['Tech Stack', 'Node.js', 'Python', 'React', 'PostgreSQL', 'AWS'],
+    answerHtml: `
+      <p class="mb-2">My technical stack is centered around performance, reliability, and maintainability:</p>
+      <ul class="list-disc pl-5 space-y-1 mb-3">
+        <li><strong>Backend &amp; Distributed Systems:</strong> Node.js (TypeScript, Fastify, Express, NestJS), Python (FastAPI, Django), PHP (Laravel), REST APIs, GraphQL, WebSockets, Message Queues (RabbitMQ, Kafka).</li>
+        <li><strong>Frontend &amp; User Experience:</strong> React, Next.js, Astro 5, TypeScript, TailwindCSS, accessible HTML5, responsive UI architectures.</li>
+        <li><strong>AI &amp; Agentic Workflows:</strong> LangGraph, LangChain, LlamaIndex, Multi-agent orchestration, RAG pipelines, Vector Databases (pgvector, Pinecone, Qdrant), Groq LPU inference, tool calling with structured JSON.</li>
+        <li><strong>Databases &amp; Caching:</strong> PostgreSQL (query optimization, table partitioning, CDC), Redis (in-memory caching, Redlock distributed mutex locks, Pub/Sub), MongoDB, MySQL.</li>
+        <li><strong>Cloud &amp; DevOps:</strong> AWS (ECS, Lambda, RDS, S3, CloudFront), Docker, Kubernetes, Cloudflare Pages &amp; Workers, GitHub Actions CI/CD pipelines, Linux/Nginx administration.</li>
+      </ul>
+      <p>Explore the full breakdown on our interactive <a href="/tech-stack" class="text-blue-400 underline font-semibold hover:text-blue-300">Tech Stack Page</a>.</p>
+    `
+  },
+  {
+    id: 'why-hire-sunil',
+    category: 'about',
+    categoryLabel: 'About & Expertise',
+    question: 'What makes you different from traditional software engineers or digital agencies?',
+    tags: ['Value Proposition', 'Senior Ownership', 'AI + Cloud', 'Direct Collaboration'],
+    answerHtml: `
+      <p class="mb-2">Three core factors distinguish my work:</p>
+      <ul class="list-disc pl-5 space-y-1">
+        <li><strong>Direct Senior Ownership:</strong> You work directly with a senior engineer and architect who writes the code, designs the database, and deploys the system. There are no project managers, account executives, or junior developer handoffs.</li>
+        <li><strong>Dual Mastery in Distributed Systems &amp; Modern AI:</strong> Most developers specialize either strictly in backend CRUD or strictly in high-level AI wrappers. I bridge both worlds—building production-grade database systems with Redis locks, PostgreSQL indexing, alongside autonomous LLM agents and deterministic RAG pipelines.</li>
+        <li><strong>Performance First:</strong> Every project targets Lighthouse 100/100, sub-second API responses, and resilient error recovery rather than bloated dependencies.</li>
+      </ul>
+    `
+  },
+  {
+    id: 'location-and-timezone',
+    category: 'about',
+    categoryLabel: 'About & Expertise',
+    question: 'Where are you based, and how do you handle remote time zones?',
+    tags: ['Location', 'Remote', 'Timezone', 'Async Work'],
+    answerHtml: `
+      <p class="mb-2">I am based in <strong>Hyderabad, India (IST &bull; UTC+5:30)</strong>. I work remotely with founders, product teams, and companies worldwide, including clients across the <strong>United States (EST &amp; PST), Europe (GMT &amp; CET), Asia-Pacific, and the Middle East</strong>.</p>
+      <p>I structure communication primarily around disciplined <strong>asynchronous updates</strong> (GitHub PRs, Linear/Jira, Loom video walkthroughs, Slack/Discord) while reserving dedicated overlap hours each day for live syncs, standups, or urgent deployments.</p>
+    `
+  },
+
+  // 2. FREELANCE, CONTRACTING & HIRING
+  {
+    id: 'freelance-project-types',
+    category: 'freelance',
+    categoryLabel: 'Freelancing & Hiring',
+    question: 'What types of freelance and consulting engagements do you take on?',
+    tags: ['SaaS MVP', 'AI Integration', 'Performance Audit', 'API Systems'],
+    answerHtml: `
+      <p class="mb-2">I partner with startups, business founders, and established engineering teams on several types of projects:</p>
+      <ul class="list-disc pl-5 space-y-1">
+        <li><strong>Turnkey SaaS &amp; Web Platform Development:</strong> Taking a product from napkin sketch / Figma designs to a scalable, production-deployed web platform.</li>
+        <li><strong>AI Agent &amp; LLM Automation Pipelines:</strong> Integrating custom RAG knowledge bases, AI copilot assistants, and automated multi-agent workflows into existing software.</li>
+        <li><strong>High-Concurrency Backend Engineering:</strong> Building appointment scheduling systems, real-time messaging, multi-gateway payments (Stripe, Razorpay), and WebSocket infrastructure.</li>
+        <li><strong>Performance Optimization &amp; Architecture Audits:</strong> Eliminating database bottlenecks in PostgreSQL, implementing Redis caching layers, resolving latency, and Dockerizing deployments.</li>
+        <li><strong>Fractional Technical Lead / Advisor:</strong> Guiding early-stage founders on tech stack selection, infrastructure sizing, and hiring strategy.</li>
+      </ul>
+    `
+  },
+  {
+    id: 'pricing-and-engagement-models',
+    category: 'freelance',
+    categoryLabel: 'Freelancing & Hiring',
+    question: 'What are your pricing and engagement models (Fixed-Price vs. Retainer)?',
+    tags: ['Pricing', 'Retainer', 'Milestones', 'Estimator'],
+    answerHtml: `
+      <p class="mb-2">I offer flexible engagement models tailored to your project scope and operational needs:</p>
+      <ul class="list-disc pl-5 space-y-1 mb-3">
+        <li><strong>Milestone-Based (Fixed Scope):</strong> Ideal for well-defined MVPs, specific feature builds, or migrations. We break the project into explicit phases (e.g., 30% kickoff, 40% beta staging delivery, 30% production launch &amp; handoff).</li>
+        <li><strong>Dedicated Monthly Retainer:</strong> Ideal for fast-moving startups needing ongoing senior engineering, weekly sprint delivery, continuous feature shipping, and architecture guidance.</li>
+        <li><strong>Hourly / Architecture Advisory:</strong> For targeted code reviews, system debugging, or one-off architectural consultations.</li>
+      </ul>
+      <p>Generate an instant ballpark budget for your scope using our <a href="/tools/estimator" class="text-blue-400 underline font-semibold hover:text-blue-300">Project Cost Estimator Tool</a>.</p>
+    `
+  },
+  {
+    id: 'project-kickoff-process',
+    category: 'freelance',
+    categoryLabel: 'Freelancing & Hiring',
+    question: 'What is the step-by-step process to kick off a new project?',
+    tags: ['Process', 'Kickoff', 'Discovery', 'Milestones'],
+    answerHtml: `
+      <p class="mb-2">Our engagement follows a transparent, four-step lifecycle:</p>
+      <ol class="list-decimal pl-5 space-y-1">
+        <li><strong>1. Discovery Call:</strong> Schedule a 30-minute technical session via our <a href="/tools/appointment" class="text-blue-400 underline font-semibold hover:text-blue-300">1:1 Consultation Scheduler</a> to discuss product goals, timeline, and tech stack.</li>
+        <li><strong>2. Technical Proposal &amp; Architecture Roadmap:</strong> I deliver a concise proposal specifying scope, architectural diagram, milestone breakdown, and pricing.</li>
+        <li><strong>3. Agreement &amp; Setup:</strong> We execute an NDA and freelance agreement. A private GitHub repo, project board (GitHub Projects / Linear), and shared Slack/Discord channel are established.</li>
+        <li><strong>4. Iterative Sprints &amp; Staging:</strong> Development begins in rapid 1-to-2 week sprints with live staging URLs and Loom video demonstrations at each milestone.</li>
+      </ol>
+    `
+  },
+  {
+    id: 'nda-and-ip-ownership',
+    category: 'freelance',
+    categoryLabel: 'Freelancing & Hiring',
+    question: 'Do you sign NDAs, and do clients retain 100% intellectual property ownership?',
+    tags: ['NDA', 'IP Ownership', 'Contracts', 'Security'],
+    answerHtml: `
+      <p class="mb-2"><strong>Yes, 100%.</strong> Confidentiality and intellectual property rights are standard:</p>
+      <ul class="list-disc pl-5 space-y-1">
+        <li><strong>Non-Disclosure Agreement (NDA):</strong> I am happy to sign a mutual NDA before you share confidential business concepts, proprietary datasets, or technical documentation.</li>
+        <li><strong>Full IP &amp; Code Ownership:</strong> Upon completion of milestones, all source code, database schemas, deployment scripts, and architectural assets belong entirely to you. No proprietary vendor lock-in.</li>
+      </ul>
+    `
+  },
+  {
+    id: 'solo-vs-team-collaboration',
+    category: 'freelance',
+    categoryLabel: 'Freelancing & Hiring',
+    question: 'Can you work with our existing engineering team or do you work independently?',
+    tags: ['Teamwork', 'Solo Builder', 'Git Workflow', 'Code Review'],
+    answerHtml: `
+      <p class="mb-2">I operate comfortably in both environments:</p>
+      <ul class="list-disc pl-5 space-y-1">
+        <li><strong>Solo Full-Stack Builder:</strong> Ideal for non-technical founders or early startups needing someone who can independently design the database, build the backend APIs, craft the frontend UI, and configure cloud infrastructure.</li>
+        <li><strong>Embedded Senior Specialist:</strong> Seamlessly integrating into your existing team, opening clean GitHub Pull Requests, writing unit/integration tests, adhering to your coding standards, and participating in sprint ceremonies.</li>
+      </ul>
+    `
+  },
+
+  // 3. PROJECTS & TECHNICAL ARCHITECTURE
+  {
+    id: 'notable-projects',
+    category: 'projects',
+    categoryLabel: 'Projects & Architecture',
+    question: 'What are some notable real-world systems and projects you have built?',
+    tags: ['Projects', 'Redis Redlock', 'AI LMS', 'Pulse Chat', 'E-Commerce'],
+    answerHtml: `
+      <p class="mb-2">Key featured systems in my portfolio include:</p>
+      <ul class="list-disc pl-5 space-y-1">
+        <li><strong><a href="/projects/real-time-appointment-booking" class="text-blue-400 underline font-semibold hover:text-blue-300">Real-Time Appointment Booking System</a>:</strong> Concurrency-safe scheduling platform built with Fastify, React, PostgreSQL, and Redis Redlock distributed mutex locks that eliminates race conditions and double bookings during viral registration spikes.</li>
+        <li><strong><a href="/projects/ai-enabled-lms" class="text-blue-400 underline font-semibold hover:text-blue-300">AI-Enabled Adaptive LMS</a>:</strong> Scalable educational platform featuring autonomous student AI tutors powered by pgvector RAG, automated rubric grading, and multi-tenant course management.</li>
+        <li><strong><a href="/projects/pulse-chat" class="text-blue-400 underline font-semibold hover:text-blue-300">Pulse Chat Real-Time Messaging</a>:</strong> High-throughput WebSocket communication platform leveraging Redis Pub/Sub for cross-server message fanout, live typing indicators, and end-to-end message delivery receipts.</li>
+        <li><strong><a href="/projects/e-commerce-platform" class="text-blue-400 underline font-semibold hover:text-blue-300">High-Throughput E-Commerce Platform</a>:</strong> Multi-vendor retail engine with atomic inventory reservations, idempotent payment webhooks (Stripe, Razorpay), and sub-second catalog search.</li>
+        <li><strong><a href="/tools" class="text-blue-400 underline font-semibold hover:text-blue-300">Suite of 20+ Developer Utilities</a>:</strong> Browser-based developer tools including JSON-to-TS, Regex Tester, SQL Formatter, JWT Decoder, and Calendly REST API integration.</li>
+      </ul>
+    `
+  },
+  {
+    id: 'concurrency-and-scalability',
+    category: 'projects',
+    categoryLabel: 'Projects & Architecture',
+    question: 'How do you guarantee concurrency safety, zero downtime, and high performance?',
+    tags: ['Distributed Locks', 'Redis', 'PostgreSQL', 'Zero Downtime', 'Docker'],
+    answerHtml: `
+      <p class="mb-2">High performance and resilience are baked into the architecture from day one:</p>
+      <ul class="list-disc pl-5 space-y-1">
+        <li><strong>Distributed Mutex Locking:</strong> Using Redis Redlock algorithms to lock critical resource IDs (e.g. inventory counts, calendar slots, payment states) during concurrent transaction execution, preventing double-allocations.</li>
+        <li><strong>Optimized Database Layer:</strong> Implementing composite B-tree &amp; GIN indexes, transaction isolation levels, connection pooling (PgBouncer), and read/write replicas.</li>
+        <li><strong>Zero-Downtime Deployments:</strong> Dockerized container workloads with health check probes, rolling deployment strategies, and graceful shutdown signal handling (SIGTERM/SIGINT).</li>
+        <li><strong>Multi-Layer Caching:</strong> Edge caching via Cloudflare CDN combined with Redis memory caching for frequently queried payloads with explicit cache invalidation strategies.</li>
+      </ul>
+    `
+  },
+  {
+    id: 'ai-agents-and-rag',
+    category: 'projects',
+    categoryLabel: 'Projects & Architecture',
+    question: 'How do you integrate AI agents, LLMs, and RAG into real SaaS applications without hallucinations?',
+    tags: ['AI Agents', 'RAG', 'Vector Search', 'LangGraph', 'Hallucinations'],
+    answerHtml: `
+      <p class="mb-2">Building reliable AI systems requires rigorous engineering discipline:</p>
+      <ul class="list-disc pl-5 space-y-1">
+        <li><strong>Hybrid Vector &amp; Keyword Retrieval:</strong> Combining semantic dense embeddings (pgvector, Pinecone) with sparse BM25 keyword matching and cross-encoder reranking to ensure only authoritative context reaches the LLM.</li>
+        <li><strong>Strict Structured Output:</strong> Utilizing tool calling and schema validation (Zod, Pydantic) so the model returns strictly validated JSON rather than arbitrary conversational prose.</li>
+        <li><strong>Multi-Agent State Machines:</strong> Using LangGraph to orchestrate multi-step agent workflows with human-in-the-loop checkpoints, deterministic fallback rules, and retry loops.</li>
+        <li><strong>Streaming &amp; Fast Inference:</strong> Integrating Groq LPU streaming or streaming Anthropic/OpenAI APIs to deliver sub-200ms token generation for seamless UI experiences.</li>
+      </ul>
+    `
+  },
+  {
+    id: 'code-quality-and-testing',
+    category: 'projects',
+    categoryLabel: 'Projects & Architecture',
+    question: 'What standards do you follow for code quality, documentation, and testing?',
+    tags: ['Clean Code', 'TypeScript', 'Testing', 'Documentation'],
+    answerHtml: `
+      <p class="mb-2">I treat code as an asset that your team must be able to maintain easily for years:</p>
+      <ul class="list-disc pl-5 space-y-1">
+        <li><strong>Strict TypeScript:</strong> End-to-end type safety eliminating runtime null/undefined surprises.</li>
+        <li><strong>Clean Architecture:</strong> Clear separation of concerns (Controllers, Services, Repositories, Domain Entities) ensuring business logic remains independent of frameworks and database drivers.</li>
+        <li><strong>Automated Testing:</strong> Unit tests for domain logic, integration tests for API endpoints, and CI verification pipelines on every pull request.</li>
+        <li><strong>Comprehensive Documentation:</strong> Every project includes clear README instructions, environment variable schemas (.env.example), API specifications (OpenAPI/Swagger), and architectural decision records (ADRs).</li>
+      </ul>
+    `
+  },
+
+  // 4. DELIVERY, COMMUNICATION & POST-LAUNCH
+  {
+    id: 'communication-and-updates',
+    category: 'delivery',
+    categoryLabel: 'Delivery & Support',
+    question: 'How do you communicate progress during active development sprints?',
+    tags: ['Communication', 'Slack', 'Loom', 'Transparency'],
+    answerHtml: `
+      <p class="mb-2">I prioritize total visibility so you never have to wonder about project status:</p>
+      <ul class="list-disc pl-5 space-y-1">
+        <li><strong>Dedicated Chat Channel:</strong> Real-time messaging via Slack, Discord, Microsoft Teams, or WhatsApp for quick questions and daily updates.</li>
+        <li><strong>Recorded Video Demos:</strong> Short Loom screen recordings demonstrating newly completed features and UI workflows before merging into staging.</li>
+        <li><strong>Live Staging Environment:</strong> Automatically updated staging servers where you and your stakeholders can click through, test, and provide feedback on real builds.</li>
+        <li><strong>Weekly Milestone Sync:</strong> Optional 20-minute video checkpoint to review progress, reprioritize tickets, and align on upcoming goals.</li>
+      </ul>
+    `
+  },
+  {
+    id: 'typical-timelines',
+    category: 'delivery',
+    categoryLabel: 'Delivery & Support',
+    question: 'What is the typical turnaround timeline for an MVP or project?',
+    tags: ['Timeline', 'Turnaround', 'MVP', 'Speed'],
+    answerHtml: `
+      <p class="mb-2">Timelines depend on complexity, but typical delivery speeds are:</p>
+      <ul class="list-disc pl-5 space-y-1">
+        <li><strong>Targeted Feature or API Integration:</strong> 3 &ndash; 7 business days (e.g. payment gateway integration, Redis caching, third-party webhook pipeline).</li>
+        <li><strong>Microservice or Complex Module:</strong> 1 &ndash; 2 weeks (e.g. appointment scheduling engine, authentication system, RAG pipeline).</li>
+        <li><strong>Full SaaS MVP (Zero to Production):</strong> 3 &ndash; 6 weeks for an end-to-end production platform with auth, database, frontend, payment checkout, and cloud infrastructure.</li>
+      </ul>
+    `
+  },
+  {
+    id: 'post-launch-warranty',
+    category: 'delivery',
+    categoryLabel: 'Delivery & Support',
+    question: 'What happens after the project launches? Do you provide post-launch support and warranty?',
+    tags: ['Warranty', 'Support', 'Maintenance', 'Retainer'],
+    answerHtml: `
+      <p class="mb-2">Yes. I stand behind every line of code I deliver:</p>
+      <ul class="list-disc pl-5 space-y-1">
+        <li><strong>30-Day Bug-Fix Guarantee:</strong> Every fixed-scope project includes 30 days of complimentary bug-fix support to address any defects within agreed scope after production deployment.</li>
+        <li><strong>Handoff &amp; Knowledge Transfer:</strong> I conduct a thorough walkthrough session with your technical team or provide video guides explaining architecture, database backups, and environment configurations.</li>
+        <li><strong>Ongoing Retainers:</strong> For clients requiring continued feature iteration, security patching, and infrastructure scaling, monthly maintenance retainers are available.</li>
+      </ul>
+    `
+  },
+  {
+    id: 'how-to-book-call',
+    category: 'delivery',
+    categoryLabel: 'Delivery & Support',
+    question: 'How can I get in touch or book a consultation right now?',
+    tags: ['Booking', 'Contact', 'Email', 'Calendly API'],
+    answerHtml: `
+      <p class="mb-2">You can get in touch through any of the following direct channels:</p>
+      <ul class="list-disc pl-5 space-y-1 mb-2">
+        <li><strong>Book a 1:1 Consultation Call:</strong> Use our integrated <a href="/tools/appointment" class="text-blue-400 underline font-semibold hover:text-blue-300">Appointment Scheduler</a> to pick an open time slot directly on my calendar.</li>
+        <li><strong>Direct Email:</strong> Write to <a href="mailto:${SITE.EMAIL}" class="text-blue-400 underline font-semibold hover:text-blue-300">${SITE.EMAIL}</a> with your project overview, timeline, and questions. I respond within 24 hours.</li>
+        <li><strong>Estimate Your Project:</strong> Calculate preliminary scope and budget on our <a href="/tools/estimator" class="text-blue-400 underline font-semibold hover:text-blue-300">Interactive Estimator Tool</a>.</li>
+        <li><strong>GitHub &amp; LinkedIn:</strong> Connect on <a href="${SITE.GITHUB}" target="_blank" rel="noopener noreferrer" class="text-blue-400 underline font-semibold hover:text-blue-300">GitHub (${SITE.GITHUB.replace('https://github.com/', '')})</a> and <a href="${SITE.LINKEDIN}" target="_blank" rel="noopener noreferrer" class="text-blue-400 underline font-semibold hover:text-blue-300">LinkedIn</a>.</li>
+      </ul>
+    `
+  }
+];
+
+// Schema.org FAQPage Structured Data for Rich Snippets
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map(item => ({
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answerHtml.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+    }
+  }))
+};
+---
+
+<Layout 
+  title="Frequently Asked Questions (FAQ) | Sunil Khobragade — Freelance & Projects" 
+  description="Common questions about hiring Sunil Khobragade, freelance projects, technical architecture, SaaS MVPs, pricing models, and 1:1 consultation." 
+  currentPath="/faq"
+>
+  <!-- Schema.org FAQPage Structured Data -->
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <Breadcrumb items={[
+    { label: 'FAQ' }
+  ]} />
+
+  <!-- TOP BAR -->
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+    <Button href="/" variant="back" size="sm">
+      Back to home
+    </Button>
+
+    <div class="flex items-center gap-2.5">
+      <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-[var(--bg-secondary)] border border-[var(--border-subtle)] text-xs font-semibold text-[var(--text-secondary)]">
+        {faqs.length} Questions Answered
+      </span>
+      <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs font-semibold text-emerald-400">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>Updated for 2026</span>
+      </span>
+    </div>
+  </div>
+
+  <main class="flex flex-col gap-8 w-full max-w-full">
+    <!-- HERO HEADER -->
+    <header class="flex flex-col gap-3">
+      <div class="inline-flex items-center px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider bg-blue-500/10 text-blue-400 border border-blue-500/20 w-fit">
+        Client &amp; Technical Guide
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-[var(--text-primary)] tracking-tight leading-tight m-0">
+        Frequently Asked Questions
+      </h1>
+      <p class="text-base text-[var(--text-secondary)] leading-relaxed max-w-3xl m-0">
+        Everything you need to know about partnering with <strong>Sunil Khobragade</strong> on freelance engineering projects, custom SaaS builds, autonomous AI architectures, pricing models, and project delivery.
+      </p>
+
+      <!-- METRICS HIGHLIGHTS -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-2">
+        <div class="bg-transparent rounded-xl p-3 flex flex-col gap-1 hover:-translate-y-0.5 transition-all">
+          <span class="text-2xl font-black bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">6+</span>
+          <span class="text-xs font-semibold text-[var(--text-muted)]">Years Experience</span>
+        </div>
+        <div class="bg-transparent rounded-xl p-3 flex flex-col gap-1 hover:-translate-y-0.5 transition-all">
+          <span class="text-2xl font-black bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">100%</span>
+          <span class="text-xs font-semibold text-[var(--text-muted)]">Code &amp; IP Ownership</span>
+        </div>
+        <div class="bg-transparent rounded-xl p-3 flex flex-col gap-1 hover:-translate-y-0.5 transition-all">
+          <span class="text-2xl font-black bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">10+</span>
+          <span class="text-xs font-semibold text-[var(--text-muted)]">Production Platforms</span>
+        </div>
+        <div class="bg-transparent rounded-xl p-3 flex flex-col gap-1 hover:-translate-y-0.5 transition-all">
+          <span class="text-2xl font-black bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">30-Day</span>
+          <span class="text-xs font-semibold text-[var(--text-muted)]">Post-Launch Warranty</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- SEARCH & CONTROLS TOOLBAR -->
+    <section class="bg-transparent rounded-xl p-0 sm:py-2 flex flex-col gap-4">
+      <div class="relative flex items-center w-full">
+        <svg class="absolute left-3.5 text-[var(--text-muted)] pointer-events-none w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input 
+          type="text" 
+          id="faq-search-input" 
+          class="w-full pl-10 pr-9 py-2.5 rounded-lg bg-[var(--bg-primary)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all" 
+          placeholder="Search by keyword (e.g. pricing, NDA, Redis, AI, timeline, stack)..."
+          autocomplete="off"
+        />
+        <button type="button" id="faq-search-clear" class="hidden absolute right-3 text-[var(--text-muted)] hover:text-[var(--text-primary)] text-lg leading-none cursor-pointer p-1" aria-label="Clear search">
+          &times;
+        </button>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <!-- Category Filter Tabs -->
+        <div class="flex flex-wrap items-center gap-1.5" id="category-tabs" role="tablist">
+          <button type="button" class="cat-tab px-3 py-1.5 rounded-md text-xs font-semibold border transition-all cursor-pointer bg-blue-600 text-white border-blue-600 shadow-sm" data-cat="all">All ({faqs.length})</button>
+          <button type="button" class="cat-tab px-3 py-1.5 rounded-md text-xs font-semibold border transition-all cursor-pointer bg-[var(--bg-secondary)] text-[var(--text-secondary)] border-[var(--border-subtle)] hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)]" data-cat="about">About &amp; Expertise</button>
+          <button type="button" class="cat-tab px-3 py-1.5 rounded-md text-xs font-semibold border transition-all cursor-pointer bg-[var(--bg-secondary)] text-[var(--text-secondary)] border-[var(--border-subtle)] hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)]" data-cat="freelance">Freelance &amp; Hiring</button>
+          <button type="button" class="cat-tab px-3 py-1.5 rounded-md text-xs font-semibold border transition-all cursor-pointer bg-[var(--bg-secondary)] text-[var(--text-secondary)] border-[var(--border-subtle)] hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)]" data-cat="projects">Projects &amp; Tech</button>
+          <button type="button" class="cat-tab px-3 py-1.5 rounded-md text-xs font-semibold border transition-all cursor-pointer bg-[var(--bg-secondary)] text-[var(--text-secondary)] border-[var(--border-subtle)] hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)]" data-cat="delivery">Delivery &amp; Support</button>
+        </div>
+
+        <!-- Bulk Action Toggle -->
+        <div class="flex items-center">
+          <button type="button" id="faq-expand-all" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-[var(--bg-secondary)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-card-hover)] transition-all cursor-pointer">
+            <svg class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m7 15 5 5 5-5"/>
+              <path d="m7 9 5-5 5 5"/>
+            </svg>
+            <span id="bulk-toggle-text">Expand All</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACTIVE RESULTS COUNT NOTICE -->
+    <div id="faq-filter-notice" class="hidden items-center justify-between px-3.5 py-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-xs text-[var(--text-secondary)]">
+      <span>Showing <strong id="visible-count" class="text-[var(--text-primary)]">{faqs.length}</strong> matching questions</span>
+      <button type="button" id="reset-filters-btn" class="text-blue-400 font-semibold underline hover:text-blue-300 cursor-pointer bg-transparent border-none p-0">Reset search</button>
+    </div>
+
+    <!-- ACCORDION LIST -->
+    <section class="flex flex-col gap-3" id="faq-accordion-list">
+      {faqs.map((faq, index) => (
+        <details 
+          class="faq-item group bg-transparent rounded-xl overflow-hidden transition-all" 
+          id={faq.id} 
+          data-category={faq.category}
+          data-keywords={`${faq.question} ${faq.tags.join(' ')} ${faq.categoryLabel}`.toLowerCase()}
+        >
+          <summary class="list-none p-4 sm:p-5 cursor-pointer flex items-start justify-between gap-4 select-none">
+            <div class="flex items-start gap-3 sm:gap-4 flex-1">
+              <span class="text-xs font-mono font-bold text-[var(--text-muted)] pt-1 flex-shrink-0">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <div class="flex flex-col gap-1.5 flex-1">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <span class="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                    {faq.categoryLabel}
+                  </span>
+                  {faq.tags.slice(0, 2).map(tag => (
+                    <span class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-[var(--bg-secondary)] text-[var(--text-muted)] border border-[var(--border-subtle)]">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <h2 class="text-base sm:text-lg font-bold text-[var(--text-primary)] leading-snug group-hover:text-blue-400 transition-colors m-0">
+                  {faq.question}
+                </h2>
+              </div>
+            </div>
+            
+            <div class="flex items-center pt-0.5 flex-shrink-0">
+              <span class="w-7 h-7 rounded-full bg-[var(--bg-secondary)] border border-[var(--border-subtle)] text-[var(--text-secondary)] flex items-center justify-center transition-transform duration-200 group-open:rotate-180 group-open:bg-blue-600 group-open:border-blue-600 group-open:text-white" aria-hidden="true">
+                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </span>
+            </div>
+          </summary>
+
+          <div class="px-4 sm:px-5 pb-5 sm:pl-14 flex flex-col gap-3.5 text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed border-t border-[var(--border-subtle)]/60 pt-4">
+            <div class="leading-relaxed" set:html={faq.answerHtml} />
+            
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[var(--border-subtle)] text-xs text-[var(--text-muted)]">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="font-semibold text-[var(--text-muted)]">Tags:</span>
+                {faq.tags.map(tag => (
+                  <button type="button" class="tag-search-btn bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded px-1.5 py-0.5 text-[11px] text-[var(--text-secondary)] hover:bg-blue-600 hover:text-white hover:border-blue-600 cursor-pointer transition-all" data-search={tag}>
+                    #{tag}
+                  </button>
+                ))}
+              </div>
+              <button type="button" class="copy-faq-link inline-flex items-center gap-1 text-[var(--text-muted)] hover:text-blue-400 text-xs font-semibold cursor-pointer bg-transparent border-none p-0 transition-colors" data-id={faq.id} title="Copy direct link to this question">
+                <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                </svg>
+                <span>Share link</span>
+              </button>
+            </div>
+          </div>
+        </details>
+      ))}
+
+      <!-- NO RESULTS FOUND STATE -->
+      <div id="faq-empty-state" class="hidden flex-col items-center justify-center text-center p-12 bg-transparent border border-dashed border-[var(--border-card)] rounded-xl gap-2">
+        <div class="text-[var(--text-muted)] mb-1">
+          <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <line x1="8" y1="11" x2="14" y2="11"></line>
+          </svg>
+        </div>
+        <h3 class="text-lg font-bold text-[var(--text-primary)] m-0">No matching questions found</h3>
+        <p class="text-sm text-[var(--text-secondary)] max-w-md m-0 leading-relaxed">
+          We couldn't find any questions matching your query. Try searching for broader terms like "pricing", "projects", "stack", or "contracts".
+        </p>
+        <button type="button" id="empty-clear-btn" class="mt-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 text-xs font-semibold cursor-pointer border-none transition-all">
+          Clear search &amp; show all questions
+        </button>
+      </div>
+    </section>
+
+    <!-- BOTTOM CTA BANNER: STILL HAVE QUESTIONS? -->
+    <section class="bg-transparent rounded-2xl p-6 sm:p-8 mt-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+        <div class="md:col-span-2 flex flex-col gap-2.5">
+          <div class="inline-block px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-blue-500/15 text-blue-400 border border-blue-500/30 w-fit">
+            Let's Discuss Your Project
+          </div>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-[var(--text-primary)] leading-tight m-0">
+            Have a specific requirement or architecture question?
+          </h2>
+          <p class="text-sm text-[var(--text-secondary)] leading-relaxed m-0">
+            Whether you need a custom SaaS built from scratch, high-throughput Redis/PostgreSQL optimization, or an autonomous AI agent pipeline, let's schedule a direct technical discovery call.
+          </p>
+        </div>
+        <div class="flex flex-col gap-2.5 w-full">
+          <a href="/tools/appointment" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md transition-all no-underline">
+            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+              <path d="m9 16 2 2 4-4"/>
+            </svg>
+            <span>Book 1:1 Consultation</span>
+          </a>
+          <a href="/tools/estimator" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-transparent hover:bg-white/5 border border-[var(--border-subtle)] text-[var(--text-primary)] font-semibold text-sm transition-all no-underline">
+            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"/>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+            <span>Calculate Project Estimate</span>
+          </a>
+          <a href={`mailto:${SITE.EMAIL}`} class="text-xs text-[var(--text-secondary)] text-center no-underline mt-0.5">
+            Or email directly: <strong class="text-blue-400 hover:underline">{SITE.EMAIL}</strong>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<script is:inline>
+  function initFAQPage() {
+    const searchInput = document.getElementById('faq-search-input');
+    const searchClear = document.getElementById('faq-search-clear');
+    const categoryTabs = document.querySelectorAll('.cat-tab');
+    const faqItems = document.querySelectorAll('.faq-item');
+    const notice = document.getElementById('faq-filter-notice');
+    const countDisplay = document.getElementById('visible-count');
+    const resetFiltersBtn = document.getElementById('reset-filters-btn');
+    const emptyState = document.getElementById('faq-empty-state');
+    const emptyClearBtn = document.getElementById('empty-clear-btn');
+    const expandAllBtn = document.getElementById('faq-expand-all');
+    const bulkToggleText = document.getElementById('bulk-toggle-text');
+
+    let activeCategory = 'all';
+    let searchQuery = '';
+    let isAllExpanded = false;
+
+    function applyFilters() {
+      let visibleCount = 0;
+      const q = searchQuery.trim().toLowerCase();
+
+      faqItems.forEach(item => {
+        const itemCategory = item.getAttribute('data-category');
+        const itemKeywords = item.getAttribute('data-keywords') || '';
+
+        const matchesCat = activeCategory === 'all' || itemCategory === activeCategory;
+        const matchesSearch = !q || itemKeywords.includes(q);
+
+        if (matchesCat && matchesSearch) {
+          item.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+
+      if (countDisplay) countDisplay.textContent = String(visibleCount);
+
+      // Show/hide filter notice
+      const isFiltered = activeCategory !== 'all' || q.length > 0;
+      if (notice) {
+        if (isFiltered) notice.classList.remove('hidden');
+        else notice.classList.add('hidden');
+      }
+
+      // Show/hide empty state
+      if (emptyState) {
+        if (visibleCount === 0) emptyState.classList.remove('hidden');
+        else emptyState.classList.add('hidden');
+      }
+
+      // Show/hide search clear button
+      if (searchClear) {
+        if (q.length > 0) searchClear.classList.remove('hidden');
+        else searchClear.classList.add('hidden');
+      }
+    }
+
+    // Search Input
+    searchInput?.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      applyFilters();
+    });
+
+    searchClear?.addEventListener('click', () => {
+      if (searchInput) searchInput.value = '';
+      searchQuery = '';
+      applyFilters();
+      searchInput?.focus();
+    });
+
+    // Category Tabs
+    categoryTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        categoryTabs.forEach(t => {
+          t.className = 'cat-tab px-3 py-1.5 rounded-md text-xs font-semibold border transition-all cursor-pointer bg-[var(--bg-secondary)] text-[var(--text-secondary)] border-[var(--border-subtle)] hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)]';
+        });
+        tab.className = 'cat-tab px-3 py-1.5 rounded-md text-xs font-semibold border transition-all cursor-pointer bg-blue-600 text-white border-blue-600 shadow-sm';
+        activeCategory = tab.getAttribute('data-cat') || 'all';
+        applyFilters();
+      });
+    });
+
+    // Reset Filters
+    function resetAll() {
+      if (searchInput) searchInput.value = '';
+      searchQuery = '';
+      activeCategory = 'all';
+      categoryTabs.forEach(t => {
+        if (t.getAttribute('data-cat') === 'all') {
+          t.className = 'cat-tab px-3 py-1.5 rounded-md text-xs font-semibold border transition-all cursor-pointer bg-blue-600 text-white border-blue-600 shadow-sm';
+        } else {
+          t.className = 'cat-tab px-3 py-1.5 rounded-md text-xs font-semibold border transition-all cursor-pointer bg-[var(--bg-secondary)] text-[var(--text-secondary)] border-[var(--border-subtle)] hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)]';
+        }
+      });
+      applyFilters();
+    }
+
+    resetFiltersBtn?.addEventListener('click', resetAll);
+    emptyClearBtn?.addEventListener('click', resetAll);
+
+    // Tag click to search
+    document.querySelectorAll('.tag-search-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const tag = btn.getAttribute('data-search') || '';
+        if (searchInput) searchInput.value = tag;
+        searchQuery = tag;
+        applyFilters();
+        window.scrollTo({ top: searchInput.offsetTop - 120, behavior: 'smooth' });
+      });
+    });
+
+    // Bulk Expand / Collapse
+    expandAllBtn?.addEventListener('click', () => {
+      isAllExpanded = !isAllExpanded;
+      faqItems.forEach(item => {
+        if (!item.classList.contains('hidden')) {
+          if (isAllExpanded) item.setAttribute('open', 'true');
+          else item.removeAttribute('open');
+        }
+      });
+      if (bulkToggleText) bulkToggleText.textContent = isAllExpanded ? 'Collapse All' : 'Expand All';
+    });
+
+    // Share link copy
+    document.querySelectorAll('.copy-faq-link').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = btn.getAttribute('data-id');
+        const url = `${window.location.origin}/faq#${id}`;
+        navigator.clipboard.writeText(url).then(() => {
+          const span = btn.querySelector('span');
+          if (span) {
+            const original = span.textContent;
+            span.textContent = 'Link copied!';
+            setTimeout(() => { span.textContent = original; }, 2000);
+          }
+        });
+      });
+    });
+
+    // Hash navigation (open targeted question on page load)
+    if (window.location.hash) {
+      const targetId = window.location.hash.slice(1);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement && targetElement.tagName.toLowerCase() === 'details') {
+        targetElement.setAttribute('open', 'true');
+        setTimeout(() => {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 150);
+      }
+    }
+  }
+
+  initFAQPage();
+  document.addEventListener('astro:after-swap', initFAQPage);
+</script>

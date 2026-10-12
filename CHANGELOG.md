@@ -3,6 +3,17 @@
 All notable changes to the SK Builds portfolio platform are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.14] - 2026-10-12
+
+### Changed
+- **Global Card Transparency Audit & Refinement**:
+  - Audited all card elements, containers, and widgets across the entire application to ensure 100% transparent backgrounds (`background: transparent;` / `bg-transparent`).
+  - Switched global CSS design tokens `--bg-card` and `--bg-surface` in both dark and light modes to `transparent`, paired with subtle 4% opacity hover accents.
+  - Refined all card components: `.lighthouse-card`, `.stat-card`, `.principle-card`, `.stack-interactive-bar`, `.stack-cta-card`, `.cal-booking-card`, `.cal-col-info`, `.cal-confirm-panel`, `.unified-booking-card`, `.confirmed-meta-box`, `.color-picker-card`, `.score-card`, `.hash-result-card`, `.token-row-card`, `.resume-sheet`, and `.skill-card`.
+  - Preserved crisp border geometry (`border: 1px solid var(--border-card)`), clean typography, high contrast, and smooth interactive hover states without any opaque surface fills.
+
+---
+
 ## [2.10.13] - 2026-10-12
 
 ### Changed
