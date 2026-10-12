@@ -3,6 +3,55 @@
 All notable changes to the SK Builds portfolio platform are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.13] - 2026-10-12
+
+### Changed
+- **Landing Page Hero CTA Consolidation**:
+  - Removed all 3 prior buttons (`Book Consultation`, `Developer Tools`, `Ask AI Copilot`) from the landing page hero section.
+  - Replaced with a single prominent `"Book Appointment"` CTA button linking directly to `/tools/appointment`.
+- **Custom 2-Column Unified Booking Interface with Live Calendly REST API (`/tools/appointment`)**:
+  - Engineered a custom 2-column unified card with **zero space between columns** (`gap: 0`), featuring a crisp vertical border divider.
+  - Left column: Consultation details, session meta chips, selected slot banner, input fields (Name, Email, Agenda), and `"Confirm Appointment with Calendly"` CTA.
+  - Right column: Interactive calendar matrix with live availability dots, month navigation, 12h/24h toggle, and responsive slot pill grid.
+  - Connected live to Calendly REST API (`https://api.calendly.com/event_type_available_times`) using Sunil's Personal Access Token to query real-time slot availability.
+  - Executed fully programmatic booking in the background via Calendly REST API (`POST https://api.calendly.com/invitees`) without calling any Calendly UI or popup widgets at the end.
+  - Transitions to an instant in-page confirmation card displaying scheduled appointment timestamps, attendee details, Google Meet link status, and Calendly reschedule/cancel management links.
+  - Completely removed all Google Calendar references and dependencies.
+
+---
+
+## [2.10.12] - 2026-10-12
+
+### Added
+- **Centralized Global Color Design Token System (`src/styles/global.css`)**: Consolidated all raw hex and rgba colors across the repository into reusable CSS variables declared in `:root` and `[data-theme="light"]`:
+  - **Brand & Action Blues**: `--color-blue-50` through `--color-blue-900`, `--color-blue-glow`, and `--color-blue-badge-*`.
+  - **Sky & Cyan Accents**: `--color-sky-400` through `--color-sky-700`, `--color-cyan-400` through `--color-cyan-600`.
+  - **Status Greens & Emeralds**: `--color-green-400` through `--color-green-700`, `--color-emerald-400` through `--color-emerald-700`.
+  - **Alerts, Errors & Warnings**: `--color-red-400` through `--color-red-700`, `--color-amber-400` through `--color-amber-600`, `--color-yellow-500`.
+  - **Creative Accents**: `--color-purple-400` through `--color-purple-700`, `--color-pink-400` through `--color-pink-600`.
+  - **Neutral Slate Scale**: `--color-slate-50` through `--color-slate-950`.
+  - **Glass & Backdrop Utilities**: `--glass-bg-subtle`, `--glass-bg-base`, `--glass-bg-medium`, `--glass-border-subtle`, `--glass-border-hover`, `--overlay-backdrop`.
+
+### Architecture
+- **Version Bump**: Bumped release version to `2.10.12` in `package.json`.
+- **Documentation**: Synchronized changelog entries across `CHANGELOG.md` and `src/pages/changelog.astro`.
+
+---
+
+## [2.10.11] - 2026-10-12
+
+### Changed
+- **Technical Skills Single-Column Layout Overhaul**: Redesigned the landing page **Technical Skills** section out of a cramped 2-column layout into an expansive, full-width single-column flow (`.skills-single-column`):
+  - Each skill category spans the full container width with an accent indicator bullet, clear title, and live count badge (`X skills`).
+  - Tech stack pills wrap naturally across the full width with comfortable padding (`0.28rem 0.65rem`), distinct monospace typography, and interactive hover lighting.
+  - Eliminated awkward line wraps and text crowding for long technology descriptors.
+
+### Architecture
+- **Version Bump**: Bumped release version to `2.10.11` in `package.json`.
+- **Documentation**: Synchronized changelog entries across `CHANGELOG.md` and `src/pages/changelog.astro`.
+
+---
+
 ## [2.10.10] - 2026-10-12
 
 ### Changed

@@ -15,7 +15,7 @@ export const GET: APIRoute = ({ site }) => {
 - [Work Experience](${siteUrl}/work): Comprehensive career timeline across senior full-stack roles, system design responsibilities, and technical achievements.
 - [Blog & Technical Articles](${siteUrl}/blog): In-depth writeups on system architecture, database optimization, CI/CD, microservices, and modern web development.
 - [Education & Certifications](${siteUrl}/education): Academic background in computer engineering, industry certifications, and continuous technical training.
-- [Freelance Estimator & Booking Tools](${siteUrl}/tools): Interactive project cost & architecture estimator and Google Calendar consultation scheduler.
+- [Freelance Estimator & Booking Tools](${siteUrl}/tools): Interactive project cost & architecture estimator and Calendly consultation scheduler.
 - [RSS Feed](${siteUrl}/rss.xml): Syndication feed for latest technical blog articles and architectural case studies.
 - [XML Sitemap](${siteUrl}/sitemap-index.xml): Full XML sitemap index for search crawlers.
 

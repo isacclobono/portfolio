@@ -11,6 +11,10 @@ export const SITE = {
   LINKEDIN: "https://linkedin.com/in/sunilkhobragade",
   TWITTER: "https://twitter.com/sunilkhobragade",
   TWITTER_HANDLE: "@sunilkhobragade",
+  CALENDLY_URL: "https://calendly.com/x-kksunil/30min",
+  CALENDLY_EVENT_TYPE_URI: "https://api.calendly.com/event_types/c85fa066-9ed8-4031-9d3a-7eafb2a56c47",
+  CALENDLY_USER_URI: "https://api.calendly.com/users/b37f74e1-b9fb-41f7-8c06-3d9741964ab0",
+  CALENDLY_API_TOKEN: "eyJraWQiOiIxY2UxZTEzNjE3ZGNmNzY2YjNjZWJjY2Y4ZGM1YmFmYThhNjVlNjg0MDIzZjdjMzJiZTgzNDliMjM4MDEzNWI0IiwidHlwIjoiUEFUIiwiYWxnIjoiRVMyNTYifQ.eyJpc3MiOiJodHRwczovL2F1dGguY2FsZW5kbHkuY29tIiwiaWF0IjoxNzkxNzk2MDEzLCJqdGkiOiJiNGRlNWE5Yi00YTgzLTQyYjktYThlOC0wODdmMTI0MTVmMDgiLCJ1c2VyX3V1aWQiOiJiMzdmNzRlMS1iOWZiLTQxZjctOGMwNi0zZDk3NDE5NjRhYjAiLCJzY29wZSI6ImF2YWlsYWJpbGl0eTpyZWFkIGF2YWlsYWJpbGl0eTp3cml0ZSBldmVudF90eXBlczpyZWFkIGV2ZW50X3R5cGVzOndyaXRlIGxvY2F0aW9uczpyZWFkIHJvdXRpbmdfZm9ybXM6cmVhZCBzaGFyZXM6d3JpdGUgc2NoZWR1bGVkX2V2ZW50czpyZWFkIHNjaGVkdWxlZF9ldmVudHM6d3JpdGUgc2NoZWR1bGluZ19saW5rczp3cml0ZSBjb250YWN0czpyZWFkIGNvbnRhY3RzOndyaXRlIHdlYmhvb2tzOnJlYWQgd2ViaG9va3M6d3JpdGUifQ.jCDi5l1830rrYk3e4-NN0vkt7E3DlF2LfdyCQ-M2sYTO9oEr0-aPwYJu7s6PxBmXvWTNrGW7puqgPoKz0TjDxA",
   OG_IMAGE: "/og-image.svg",
   KEYWORDS: [
     "Sunil Khobragade",

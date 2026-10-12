@@ -3,135 +3,190 @@ import Layout from '../../layouts/Layout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import Button from '../../components/Button.astro';
 import { SITE } from '../../data/site';
+
+const calendlyEventTypeUri = SITE.CALENDLY_EVENT_TYPE_URI;
+const calendlyApiToken = SITE.CALENDLY_API_TOKEN;
 ---
 
 <Layout 
-  title="Book 1:1 Consultation | Google Calendar & Meet" 
-  description="Schedule a direct 1:1 architecture discovery or technical consultation call with Sunil Khobragade connected with Google Calendar & Google Meet." 
+  title="Book Appointment | Sunil Khobragade (Calendly API)" 
+  description="Schedule a direct 1:1 architecture discovery or technical consultation call with Sunil Khobragade powered directly by Calendly REST API." 
   currentPath="/tools/appointment"
 >
   <Breadcrumb items={[
     { label: 'Tools', href: '/tools' },
-    { label: 'Book Consultation' }
+    { label: 'Book Appointment' }
   ]} />
 
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+  <div class="appointment-top-bar">
     <Button href="/tools" variant="back" size="sm">
       Back to tools
     </Button>
+
+    <div class="appointment-header-badges">
+      <div class="api-sync-badge">
+        <span class="live-dot"></span>
+        <span>Direct Calendly REST API</span>
+      </div>
+    </div>
   </div>
 
-  <!-- Perfectly Balanced 2-Column Booking Widget (Form on Left, Calendar on Right) -->
-  <div class="cal-booking-card" id="cal-booking-container">
-    <!-- COLUMN 1 (LEFT): Meeting Overview & Booking Form in Left Space -->
-    <div class="cal-col-info">
-      <div class="cal-author-badge">
-        <span class="cal-avatar">SK</span>
-        <span class="cal-author-name">{SITE.AUTHOR}</span>
+  <!-- SEAMLESS UNIFIED 2-COLUMN BOOKING CARD (ZERO SPACE BETWEEN BOTH COLUMNS) -->
+  <div class="unified-booking-card" id="unified-booking-card">
+    <!-- LEFT COLUMN: Consultation Overview, Inputs & In-Page Confirmation -->
+    <div class="booking-col-left" id="booking-col-left">
+      <!-- Host & Consultation Header -->
+      <div class="host-badge">
+        <span class="host-avatar">SK</span>
+        <div class="host-details">
+          <div class="host-name">{SITE.AUTHOR}</div>
+          <div class="host-role">Senior Full-Stack Developer &amp; AI Architect</div>
+        </div>
       </div>
 
-      <h1 class="cal-call-title">1:1 Architecture &amp; Discovery Call</h1>
+      <div class="consultation-info">
+        <h1 class="consultation-title">1:1 Architecture &amp; Discovery Call</h1>
+        <p class="consultation-desc">
+          Direct 30-minute technical session to understand product roadmap, review tech stacks (Node.js, Python, PostgreSQL, AWS), or answer architectural questions.
+        </p>
+      </div>
 
-      <ul class="cal-agenda-list">
-        <li>Understand your product roadmap, scope, and technical bottlenecks.</li>
-        <li>Review recommended tech stack (Node.js, Next.js, Postgres, Redis, AWS).</li>
-        <li>Outline architectural roadmap, delivery timeline, and estimate.</li>
-        <li>Answer technical questions regarding microservices, AI agents, or scaling.</li>
-      </ul>
-
-      <div class="cal-meta-list">
-        <div class="cal-meta-item">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <div class="session-meta-row">
+        <div class="meta-chip">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"/>
             <polyline points="12 6 12 12 16 14"/>
           </svg>
-          <span>30m &bull; Google Meet video conferencing</span>
+          <span>30 Minutes</span>
         </div>
-        <div class="cal-meta-item">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <div class="meta-chip">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="23 7 16 12 23 17 23 7"/>
+            <rect width="14" height="12" x="1" y="6" rx="2" ry="2"/>
+          </svg>
+          <span>Google Meet</span>
+        </div>
+        <div class="meta-chip">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"/>
             <line x1="2" x2="22" y1="12" y2="12"/>
             <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"/>
           </svg>
-          <span>Asia/Calcutta (IST) &bull; Auto-converts to your local timezone</span>
+          <span>Asia/Calcutta (IST)</span>
         </div>
       </div>
 
-      <!-- Booking Form Fill in Left Side Empty Space -->
-      <div class="cal-confirm-panel" id="cal-confirm-panel">
-        <div class="confirm-slot-badge">
+      <!-- Selected Time Slot Indicator -->
+      <div class="selected-slot-banner" id="selected-slot-banner">
+        <div class="slot-banner-label">
+          <span class="slot-banner-dot"></span>
           <span>Selected Slot:</span>
-          <strong id="confirm-slot-time">Loading slot...</strong>
         </div>
+        <strong id="slot-banner-display">Loading real-time availability...</strong>
+      </div>
 
-        <form id="appointment-form" onsubmit="return false;">
-          <div class="confirm-inputs-grid">
+      <!-- Booking Form (Replaced by In-Page Success State upon 201 Created) -->
+      <form id="appointment-booking-form" onsubmit="return false;" class="appointment-form">
+        <div class="form-grid-2">
+          <div class="field-group">
+            <label for="client-name" class="field-label">Full Name <span class="req">*</span></label>
             <input 
               type="text" 
-              id="cal-client-name" 
-              placeholder="Your Full Name *" 
-              class="cal-input-field" 
+              id="client-name" 
+              placeholder="e.g. Alex Morgan" 
+              class="form-input" 
               required 
             />
+          </div>
+          <div class="field-group">
+            <label for="client-email" class="field-label">Email Address <span class="req">*</span></label>
             <input 
               type="email" 
-              id="cal-client-email" 
-              placeholder="Your Email Address *" 
-              class="cal-input-field" 
+              id="client-email" 
+              placeholder="alex@company.com" 
+              class="form-input" 
               required 
             />
           </div>
+        </div>
 
+        <div class="field-group">
+          <label for="client-notes" class="field-label">Discussion Agenda / Project Scope</label>
           <textarea 
-            id="cal-client-notes" 
-            placeholder="Briefly describe what you'd like to discuss (e.g. AI Agent architecture, PostgreSQL scaling, SaaS MVP)..." 
+            id="client-notes" 
+            placeholder="Briefly describe what you'd like to discuss (e.g. AI Agent architecture, PostgreSQL scaling, SaaS MVP roadmap)..." 
             rows="2" 
-            class="cal-input-field"
+            class="form-input form-textarea"
           ></textarea>
+        </div>
 
-          <div class="confirm-actions-row">
-            <!-- Primary Google Calendar Sync Button -->
-            <a id="cal-google-meet-btn" href="#" target="_blank" rel="noopener noreferrer" class="action-btn btn-primary btn-compact" style="flex: 1; justify-content: center;">
-              <!-- Google Calendar Colored Icon -->
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="18" height="18" x="3" y="4" rx="3" fill="#ffffff" stroke="currentColor" stroke-width="1.8"/>
-                <path d="M16 2V6M8 2V6M3 10H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                <rect x="7" y="13" width="3" height="3" rx="0.5" fill="#3b82f6"/>
-                <rect x="14" y="13" width="3" height="3" rx="0.5" fill="#10b981"/>
-              </svg>
-              Confirm on Google Calendar
-            </a>
+        <button type="button" id="confirm-booking-btn" class="submit-booking-btn">
+          <svg class="btn-icon-calendar" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+            <path d="m9 16 2 2 4-4"/>
+          </svg>
+          <span id="btn-label-text">Book Appointment</span>
+        </button>
 
-            <!-- Offline .ICS Calendar File Download -->
-            <button type="button" id="cal-ics-btn" class="action-btn btn-secondary btn-compact" title="Download .ICS Calendar file">
-              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-              .ICS
-            </button>
+        <div id="booking-form-error" class="form-error-box" style="display: none;"></div>
+      </form>
+
+      <!-- Programmatic Booking Success Panel (Zero Calendly UI Needed) -->
+      <div id="booking-success-panel" class="booking-success-panel" style="display: none;">
+        <div class="success-icon-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+        <div class="success-content">
+          <h2 class="success-heading">Appointment Confirmed!</h2>
+          <p class="success-sub">Your 1:1 Architecture Consultation with <strong>Sunil Khobragade</strong> has been booked successfully via Calendly API.</p>
+          
+          <div class="confirmed-meta-box">
+            <div class="confirmed-row">
+              <span class="confirmed-k">Scheduled Time:</span>
+              <strong id="confirmed-time-val" class="confirmed-v">...</strong>
+            </div>
+            <div class="confirmed-row">
+              <span class="confirmed-k">Attendee:</span>
+              <span id="confirmed-attendee-val" class="confirmed-v">...</span>
+            </div>
+            <div class="confirmed-row">
+              <span class="confirmed-k">Location:</span>
+              <span class="confirmed-v">Google Meet (Link sent via email)</span>
+            </div>
           </div>
-        </form>
 
-        <!-- Dynamic Booking Status Feedback -->
-        <div id="booking-status-box" class="booking-status-box" style="display: none;"></div>
+          <div class="success-actions-row">
+            <a id="reschedule-link" href="#" target="_blank" rel="noopener noreferrer" class="link-manage-booking">Reschedule</a>
+            <span class="dot-sep">&bull;</span>
+            <a id="cancel-link" href="#" target="_blank" rel="noopener noreferrer" class="link-manage-booking">Cancel</a>
+            <span class="dot-sep">&bull;</span>
+            <button type="button" id="reset-booking-form-btn" class="link-reset-booking">Book Another Slot</button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- COLUMN 2 (RIGHT): Calendar on Top + Time Slots Below -->
-    <div class="cal-col-main">
-      <!-- Calendar Picker -->
-      <div class="cal-picker-section">
-        <div class="cal-header">
-          <div class="cal-month-title" id="cal-month-display">Month Year</div>
-          <div class="cal-nav-buttons">
-            <button type="button" id="prev-month-btn" class="cal-nav-btn" aria-label="Previous Month">
+    <!-- RIGHT COLUMN: Real-Time Calendar Picker & Available Time Slots -->
+    <div class="booking-col-right">
+      <div class="calendar-panel">
+        <div class="calendar-header-row">
+          <div class="month-title-wrap">
+            <span class="month-display" id="cal-month-title">Month Year</span>
+            <span class="sync-indicator" id="cal-sync-status">Live</span>
+          </div>
+          <div class="month-nav-group">
+            <button type="button" id="month-prev-btn" class="nav-arrow-btn" aria-label="Previous Month">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="m15 18-6-6 6-6"/>
               </svg>
             </button>
-            <button type="button" id="next-month-btn" class="cal-nav-btn" aria-label="Next Month">
+            <button type="button" id="month-next-btn" class="nav-arrow-btn" aria-label="Next Month">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="m9 18 6-6-6-6"/>
               </svg>
@@ -139,8 +194,7 @@ import { SITE } from '../../data/site';
           </div>
         </div>
 
-        <!-- Weekdays Header -->
-        <div class="cal-weekdays">
+        <div class="weekday-labels">
           <span>SUN</span>
           <span>MON</span>
           <span>TUE</span>
@@ -150,256 +204,488 @@ import { SITE } from '../../data/site';
           <span>SAT</span>
         </div>
 
-        <!-- Dynamic Days Grid -->
-        <div class="cal-days-grid" id="cal-days-grid"></div>
+        <div class="days-matrix" id="cal-days-matrix"></div>
       </div>
 
-      <!-- Time Slots Section (Directly Below Calendar) -->
-      <div class="cal-slots-section-below">
-        <div class="cal-slots-header">
-          <div class="cal-selected-day-label">
+      <!-- Real-Time Available Slots from Calendly API -->
+      <div class="slots-panel">
+        <div class="slots-panel-header">
+          <div class="slots-for-day">
             <span>Available Slots: </span>
-            <strong id="slots-selected-day">Selected Day</strong>
+            <strong id="slots-day-display">Select a Date</strong>
           </div>
-          <div class="cal-time-toggle">
-            <button type="button" class="time-format-btn active" data-format="12h">12h</button>
-            <button type="button" class="time-format-btn" data-format="24h">24h</button>
+          <div class="time-format-pill">
+            <button type="button" class="fmt-btn active" data-fmt="12h">12h</button>
+            <button type="button" class="fmt-btn" data-fmt="24h">24h</button>
           </div>
         </div>
 
-        <!-- Grid of Time Slot Pills below Calendar -->
-        <div class="cal-slots-grid-below" id="cal-slots-list"></div>
+        <div class="slots-pill-grid" id="slots-pill-grid">
+          <div class="slots-loading-msg">Fetching live availability from Calendly...</div>
+        </div>
       </div>
     </div>
   </div>
 </Layout>
 
 <style>
-  .cal-booking-card {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
-  }
-
-  @media (max-width: 860px) {
-    .cal-booking-card {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .cal-col-info {
+  .appointment-top-bar {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     gap: 1rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .appointment-header-badges {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .api-sync-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
     background: var(--bg-card);
     border: 1px solid var(--border-card);
-    border-radius: var(--radius-lg, 12px);
-    padding: 1.25rem;
-  }
-
-  .cal-author-badge {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .cal-avatar {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
-    color: #ffffff;
-    font-size: 11px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .cal-author-name {
-    font-size: 0.875rem;
+    border-radius: 9999px;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.75rem;
     font-weight: 600;
     color: var(--text-secondary);
   }
 
-  .cal-call-title {
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-emerald-400, #34d399);
+    box-shadow: 0 0 8px var(--color-emerald-500, #10b981);
+    animation: livePulse 2s infinite ease-in-out;
+  }
+
+  @keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+
+  /* UNIFIED 2-COLUMN BOOKING CARD (ZERO SPACE BETWEEN BOTH COLUMNS) */
+  .unified-booking-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 !important; /* ZERO SPACE BETWEEN BOTH COLUMNS */
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg, 14px);
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.22);
+    margin-bottom: 2.5rem;
+  }
+
+  @media (max-width: 860px) {
+    .unified-booking-card {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* LEFT COLUMN */
+  .booking-col-left {
+    padding: 1.75rem;
+    border-right: 1px solid var(--border-card); /* Crisp vertical divider */
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+    background: var(--bg-card);
+  }
+
+  @media (max-width: 860px) {
+    .booking-col-left {
+      border-right: none;
+      border-bottom: 1px solid var(--border-card);
+      padding: 1.25rem;
+    }
+  }
+
+  .host-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .host-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .host-details {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .host-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+
+  .host-role {
+    font-size: 0.775rem;
+    color: var(--text-secondary);
+  }
+
+  .consultation-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .consultation-title {
     font-size: 1.35rem;
     font-weight: 800;
     color: var(--text-primary);
     margin: 0;
-    line-height: 1.3;
+    line-height: 1.25;
   }
 
-  .cal-agenda-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-
-  .cal-agenda-list li {
+  .consultation-desc {
     font-size: 0.85rem;
     color: var(--text-secondary);
-    position: relative;
-    padding-left: 1.2rem;
-    line-height: 1.4;
+    margin: 0;
+    line-height: 1.45;
   }
 
-  .cal-agenda-list li::before {
-    content: "✓";
-    position: absolute;
-    left: 0;
-    color: #10b981;
-    font-weight: 700;
-  }
-
-  .cal-meta-list {
+  .session-meta-row {
     display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    padding: 0.75rem 0;
-    border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
+    flex-wrap: wrap;
+    gap: 0.45rem;
   }
 
-  .cal-meta-item {
-    display: flex;
+  .meta-chip {
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8rem;
+    gap: 0.4rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 9999px;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.75rem;
     color: var(--text-secondary);
   }
 
-  .cal-confirm-panel {
+  /* Selected Slot Banner */
+  .selected-slot-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    background: rgba(0, 105, 255, 0.08);
+    border: 1px solid rgba(0, 105, 255, 0.25);
+    border-radius: 8px;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.825rem;
+    color: var(--text-primary);
+  }
+
+  .slot-banner-label {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+  }
+
+  .slot-banner-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #0069ff;
+  }
+
+  /* Form */
+  .appointment-form {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
   }
 
-  .confirm-slot-badge {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: rgba(59, 130, 246, 0.08);
-    border: 1px solid rgba(59, 130, 246, 0.2);
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.5rem;
-    font-size: 0.825rem;
-    color: var(--text-primary);
-  }
-
-  .confirm-inputs-grid {
+  .form-grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
+    gap: 0.75rem;
   }
 
   @media (max-width: 480px) {
-    .confirm-inputs-grid {
+    .form-grid-2 {
       grid-template-columns: 1fr;
     }
   }
 
-  .cal-input-field {
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .field-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.02em;
+  }
+
+  .field-label .req {
+    color: var(--color-red-400, #f87171);
+  }
+
+  .form-input {
     width: 100%;
     background: var(--bg-primary);
     border: 1px solid var(--border-color);
-    border-radius: 0.5rem;
-    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    padding: 0.55rem 0.75rem;
     font-size: 0.825rem;
     color: var(--text-primary);
     outline: none;
     font-family: inherit;
-    transition: border-color 0.15s ease;
+    transition: all 0.15s ease;
   }
 
-  .cal-input-field:focus {
-    border-color: #3b82f6;
+  .form-input:focus {
+    border-color: #0069ff;
+    box-shadow: 0 0 0 2px rgba(0, 105, 255, 0.15);
   }
 
-  .confirm-actions-row {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    margin-top: 0.5rem;
+  .form-textarea {
+    resize: vertical;
+    min-height: 58px;
   }
 
-  .action-btn {
+  .submit-booking-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.55rem 0.9rem;
-    border-radius: 0.5rem;
-    font-size: 0.825rem;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.7rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
     font-weight: 600;
     text-decoration: none;
     cursor: pointer;
     border: none;
+    background: linear-gradient(135deg, #0069ff 0%, #004ecc 100%);
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(0, 105, 255, 0.28);
     transition: all 0.15s ease;
+    margin-top: 0.35rem;
   }
 
-  .btn-primary {
-    background: #2563eb;
-    color: #ffffff;
-  }
-
-  .btn-primary:hover {
-    background: #1d4ed8;
+  .submit-booking-btn:hover:not(:disabled) {
     transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 105, 255, 0.38);
+    background: linear-gradient(135deg, #0a73ff 0%, #0056e0 100%);
   }
 
-  .btn-secondary {
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
+  .submit-booking-btn:disabled {
+    opacity: 0.75;
+    cursor: wait;
+    transform: none;
   }
 
-  .btn-secondary:hover {
-    background: var(--bg-hover);
+  .form-error-box {
+    font-size: 0.775rem;
+    color: var(--color-red-400, #f87171);
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 6px;
+    padding: 0.4rem 0.65rem;
   }
 
-  /* Calendar Right Column */
-  .cal-col-main {
+  /* In-Page Success State (Option 2 Programmatic Booking) */
+  .booking-success-panel {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    background: var(--bg-card);
-    border: 1px solid var(--border-card);
-    border-radius: var(--radius-lg, 12px);
-    padding: 1.25rem;
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    background: rgba(16, 185, 129, 0.06);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    border-radius: 10px;
+    gap: 0.75rem;
+    animation: fadeInSuccess 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .cal-picker-section {
+  @keyframes fadeInSuccess {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .success-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(16, 185, 129, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .success-heading {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .success-sub {
+    font-size: 0.825rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .confirmed-meta-box {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    text-align: left;
+    margin-top: 0.5rem;
+  }
+
+  .confirmed-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    gap: 0.5rem;
+  }
+
+  .confirmed-k {
+    color: var(--text-secondary);
+  }
+
+  .confirmed-v {
+    color: var(--text-primary);
+    text-align: right;
+  }
+
+  .success-actions-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .link-manage-booking {
+    color: var(--color-blue-400, #60a5fa);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .link-manage-booking:hover {
+    text-decoration: underline;
+  }
+
+  .link-reset-booking {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .link-reset-booking:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
+  }
+
+  .dot-sep {
+    color: var(--text-muted);
+  }
+
+  /* RIGHT COLUMN */
+  .booking-col-right {
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+    background: rgba(255, 255, 255, 0.012);
+  }
+
+  @media (max-width: 860px) {
+    .booking-col-right {
+      padding: 1.25rem;
+    }
+  }
+
+  .calendar-panel {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
 
-  .cal-header {
+  .calendar-header-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.4rem;
   }
 
-  .cal-month-title {
+  .month-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .month-display {
     font-size: 0.95rem;
     font-weight: 700;
     color: var(--text-primary);
   }
 
-  .cal-nav-buttons {
+  .sync-indicator {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--color-emerald-400, #34d399);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+  }
+
+  .month-nav-group {
     display: flex;
     gap: 0.35rem;
   }
 
-  .cal-nav-btn {
+  .nav-arrow-btn {
     width: 28px;
     height: 28px;
-    border-radius: 0.35rem;
+    border-radius: 6px;
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     color: var(--text-primary);
@@ -407,127 +693,146 @@ import { SITE } from '../../data/site';
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background 0.15s ease;
+    transition: all 0.15s ease;
   }
 
-  .cal-nav-btn:hover {
+  .nav-arrow-btn:hover {
     background: var(--bg-hover);
   }
 
-  .cal-weekdays {
+  .weekday-labels {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     text-align: center;
     font-size: 0.7rem;
     font-weight: 700;
     color: var(--text-muted);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
   }
 
-  .cal-days-grid {
+  .days-matrix {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 4px;
   }
 
-  .cal-day-cell {
+  .day-cell {
     aspect-ratio: 1;
-    border-radius: 0.4rem;
+    border-radius: 6px;
     border: 1px solid transparent;
     background: transparent;
     color: var(--text-primary);
     font-size: 0.8rem;
     font-weight: 500;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    position: relative;
     cursor: pointer;
     transition: all 0.15s ease;
   }
 
-  .cal-day-cell:hover:not(.disabled) {
+  .day-cell:hover:not(.disabled) {
     background: var(--bg-secondary);
     border-color: var(--border-color);
   }
 
-  .cal-day-cell.selected {
-    background: #2563eb !important;
+  .day-cell.selected {
+    background: #0069ff !important;
     color: #ffffff !important;
     font-weight: 700;
   }
 
-  .cal-day-cell.today {
-    border-color: #3b82f6;
+  .day-cell.today {
+    border-color: #0069ff;
   }
 
-  .cal-day-cell.disabled {
+  .day-cell.has-slots::after {
+    content: "";
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--color-emerald-400, #34d399);
+    position: absolute;
+    bottom: 3px;
+  }
+
+  .day-cell.selected.has-slots::after {
+    background: #ffffff;
+  }
+
+  .day-cell.disabled {
     color: var(--text-muted);
-    opacity: 0.35;
+    opacity: 0.3;
     cursor: not-allowed;
   }
 
-  .cal-day-cell.empty {
+  .day-cell.empty {
     pointer-events: none;
   }
 
-  /* Slots Section */
-  .cal-slots-section-below {
+  /* Slots Panel */
+  .slots-panel {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid var(--border-subtle);
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border-subtle, var(--border-color));
   }
 
-  .cal-slots-header {
+  .slots-panel-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.4rem;
   }
 
-  .cal-selected-day-label {
-    font-size: 0.825rem;
+  .slots-for-day {
+    font-size: 0.8rem;
     color: var(--text-secondary);
   }
 
-  .cal-selected-day-label strong {
+  .slots-for-day strong {
     color: var(--text-primary);
   }
 
-  .cal-time-toggle {
+  .time-format-pill {
     display: flex;
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    border-radius: 0.35rem;
+    border-radius: 6px;
     padding: 2px;
   }
 
-  .time-format-btn {
-    padding: 2px 8px;
+  .fmt-btn {
+    padding: 2px 7px;
     font-size: 0.725rem;
-    border-radius: 0.25rem;
+    border-radius: 4px;
     border: none;
     background: transparent;
     color: var(--text-secondary);
     cursor: pointer;
   }
 
-  .time-format-btn.active {
-    background: #2563eb;
+  .fmt-btn.active {
+    background: #0069ff;
     color: #ffffff;
     font-weight: 600;
   }
 
-  .cal-slots-grid-below {
+  .slots-pill-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
     gap: 6px;
+    max-height: 190px;
+    overflow-y: auto;
+    padding-right: 2px;
   }
 
-  .cal-slot-btn {
+  .slot-pill-btn {
     padding: 0.45rem 0.25rem;
-    border-radius: 0.4rem;
+    border-radius: 6px;
     border: 1px solid var(--border-color);
     background: var(--bg-secondary);
     color: var(--text-primary);
@@ -538,94 +843,149 @@ import { SITE } from '../../data/site';
     transition: all 0.15s ease;
   }
 
-  .cal-slot-btn:hover {
+  .slot-pill-btn:hover {
     background: var(--bg-hover);
-    border-color: #3b82f6;
+    border-color: #0069ff;
   }
 
-  .cal-slot-btn.selected {
-    background: #2563eb;
+  .slot-pill-btn.selected {
+    background: #0069ff;
     color: #ffffff;
-    border-color: #2563eb;
+    border-color: #0069ff;
+  }
+
+  .slots-loading-msg {
+    grid-column: 1 / -1;
+    font-size: 0.775rem;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 1rem 0;
   }
 </style>
 
-<script>
-  function setupLiveCalendly() {
-    const container = document.getElementById('cal-booking-container');
-    if (!container) return;
+<script define:vars={{ calendlyEventTypeUri, calendlyApiToken }}>
+  function initProgrammaticCalendlyBooking() {
+    const EVENT_TYPE_URI = calendlyEventTypeUri || 'https://api.calendly.com/event_types/c85fa066-9ed8-4031-9d3a-7eafb2a56c47';
+    const CALENDLY_TOKEN = calendlyApiToken || '';
 
     const today = new Date();
     let viewYear = today.getFullYear();
     let viewMonth = today.getMonth();
 
-    // Default to tomorrow
+    // Default selected date: tomorrow
     let selectedDate = new Date();
     selectedDate.setDate(selectedDate.getDate() + 1);
 
     let is24h = false;
-    let selectedSlot = '11:00 AM';
+    let selectedSlotTime = '';
 
-    const monthDisplay = document.getElementById('cal-month-display');
-    const daysGrid = document.getElementById('cal-days-grid');
-    const prevMonthBtn = document.getElementById('prev-month-btn');
-    const nextMonthBtn = document.getElementById('next-month-btn');
+    // Cache for slots fetched from Calendly API: Map<"YYYY-MM-DD", Array<{ start_time }>>
+    const slotsCacheByDate = new Map();
 
-    const slotsSelectedDay = document.getElementById('slots-selected-day');
-    const slotsList = document.getElementById('cal-slots-list');
-    const confirmSlotTime = document.getElementById('confirm-slot-time');
-    const googleMeetBtn = document.getElementById('cal-google-meet-btn');
-    const icsBtn = document.getElementById('cal-ics-btn');
+    const monthTitle = document.getElementById('cal-month-title');
+    const syncStatus = document.getElementById('cal-sync-status');
+    const daysMatrix = document.getElementById('cal-days-matrix');
+    const prevBtn = document.getElementById('month-prev-btn');
+    const nextBtn = document.getElementById('month-next-btn');
 
-    const clientNameInput = document.getElementById('cal-client-name');
-    const clientEmailInput = document.getElementById('cal-client-email');
-    const clientNotesInput = document.getElementById('cal-client-notes');
+    const slotsDayDisplay = document.getElementById('slots-day-display');
+    const slotsPillGrid = document.getElementById('slots-pill-grid');
+    const slotBannerDisplay = document.getElementById('slot-banner-display');
 
-    const timeToggleButtons = document.querySelectorAll('.time-format-btn');
+    const bookingForm = document.getElementById('appointment-booking-form');
+    const nameInput = document.getElementById('client-name');
+    const emailInput = document.getElementById('client-email');
+    const notesInput = document.getElementById('client-notes');
+    const formError = document.getElementById('booking-form-error');
+    const submitBtn = document.getElementById('confirm-booking-btn');
+    const btnLabelText = document.getElementById('btn-label-text');
+
+    const successPanel = document.getElementById('booking-success-panel');
+    const confirmedTimeVal = document.getElementById('confirmed-time-val');
+    const confirmedAttendeeVal = document.getElementById('confirmed-attendee-val');
+    const rescheduleLink = document.getElementById('reschedule-link');
+    const cancelLink = document.getElementById('cancel-link');
+    const resetBookingBtn = document.getElementById('reset-booking-form-btn');
+
+    const fmtButtons = document.querySelectorAll('.fmt-btn');
 
     const monthNames = [
       'January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December'
     ];
-
     const dayNamesShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-    const availableSlots12h = [
-      '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', 
-      '12:00 PM', '02:00 PM', '02:30 PM', '05:00 PM', '08:00 PM'
-    ];
+    function formatDateKey(date) {
+      const yyyy = date.getFullYear();
+      const mm = String(date.getMonth() + 1).padStart(2, '0');
+      const dd = String(date.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
 
-    const availableSlots24h = [
-      '10:00', '10:30', '11:00', '11:30', 
-      '12:00', '14:00', '14:30', '17:00', '20:00'
-    ];
+    function formatIsoTime(isoStr, use24h) {
+      const d = new Date(isoStr);
+      if (use24h) {
+        return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+      }
+      return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+    }
 
-    // Helper: Parse selected slot string into Date object
-    function parseSlotToDate(baseDate, slotStr) {
-      let parts = slotStr.trim().split(' ');
-      let timeParts = parts[0].split(':');
-      let hours = parseInt(timeParts[0], 10);
-      let minutes = parseInt(timeParts[1], 10);
+    // 1. GET /event_type_available_times (Live availability from Calendly REST API)
+    async function fetchCalendlyAvailability() {
+      if (!CALENDLY_TOKEN) return;
 
-      if (parts[1]) {
-        const modifier = parts[1].toUpperCase();
-        if (modifier === 'PM' && hours < 12) hours += 12;
-        if (modifier === 'AM' && hours === 12) hours = 0;
+      if (syncStatus) syncStatus.textContent = 'Syncing...';
+
+      try {
+        const start = new Date(viewYear, viewMonth, 1);
+        const end = new Date(viewYear, viewMonth + 1, 7);
+
+        const startTime = start.toISOString();
+        const endTime = end.toISOString();
+
+        const url = `https://api.calendly.com/event_type_available_times?event_type=${encodeURIComponent(EVENT_TYPE_URI)}&start_time=${encodeURIComponent(startTime)}&end_time=${encodeURIComponent(endTime)}`;
+
+        const res = await fetch(url, {
+          headers: {
+            'Authorization': `Bearer ${CALENDLY_TOKEN}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          const collection = data.collection || [];
+
+          collection.forEach(slot => {
+            if (slot.status === 'available') {
+              const dateKey = slot.start_time.split('T')[0];
+              if (!slotsCacheByDate.has(dateKey)) {
+                slotsCacheByDate.set(dateKey, []);
+              }
+              slotsCacheByDate.get(dateKey).push({
+                start_time: slot.start_time
+              });
+            }
+          });
+
+          if (syncStatus) syncStatus.textContent = 'Live API';
+        } else {
+          if (syncStatus) syncStatus.textContent = 'Ready';
+        }
+      } catch (err) {
+        console.warn('Calendly availability notice:', err);
+        if (syncStatus) syncStatus.textContent = 'Ready';
       }
 
-      return new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate(), hours, minutes, 0);
+      renderCalendarMatrix();
+      renderSlotsList();
     }
 
-    // Convert Date to UTC ISO format for Google Calendar (YYYYMMDDTHHmmssZ)
-    function toGCalUTC(date) {
-      return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
-    }
+    function renderCalendarMatrix() {
+      if (!monthTitle || !daysMatrix) return;
 
-    function renderCalendar() {
-      if (!monthDisplay || !daysGrid) return;
-
-      monthDisplay.textContent = `${monthNames[viewMonth]} ${viewYear}`;
-      daysGrid.innerHTML = '';
+      monthTitle.textContent = `${monthNames[viewMonth]} ${viewYear}`;
+      daysMatrix.innerHTML = '';
 
       const firstDayIndex = new Date(viewYear, viewMonth, 1).getDay();
       const totalDays = new Date(viewYear, viewMonth + 1, 0).getDate();
@@ -635,8 +995,8 @@ import { SITE } from '../../data/site';
 
       for (let i = 0; i < firstDayIndex; i++) {
         const emptyCell = document.createElement('div');
-        emptyCell.className = 'cal-day-cell empty';
-        daysGrid.appendChild(emptyCell);
+        emptyCell.className = 'day-cell empty';
+        daysMatrix.appendChild(emptyCell);
       }
 
       for (let day = 1; day <= totalDays; day++) {
@@ -645,8 +1005,14 @@ import { SITE } from '../../data/site';
 
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'cal-day-cell';
-        btn.textContent = day;
+        btn.className = 'day-cell';
+        btn.textContent = String(day);
+
+        const dateKey = formatDateKey(cellDate);
+        const hasLiveSlots = slotsCacheByDate.has(dateKey) && slotsCacheByDate.get(dateKey).length > 0;
+        if (hasLiveSlots) {
+          btn.classList.add('has-slots');
+        }
 
         const isPast = cellDate < currentDateOnly;
         const isToday = cellDate.getTime() === currentDateOnly.getTime();
@@ -663,58 +1029,70 @@ import { SITE } from '../../data/site';
 
           btn.addEventListener('click', () => {
             selectedDate = new Date(viewYear, viewMonth, day);
-            const slots = is24h ? availableSlots24h : availableSlots12h;
-            selectedSlot = slots[0]; // Auto-select default first slot (10:00 AM) for this date
-            renderCalendar();
-            renderSlots();
-            updateConfirmation();
-            
-            // Auto-focus name field for quick booking setup
-            if (clientNameInput) {
-              clientNameInput.focus({ preventScroll: false });
-            }
+            selectedSlotTime = '';
+            renderCalendarMatrix();
+            renderSlotsList();
           });
         }
 
-        daysGrid.appendChild(btn);
+        daysMatrix.appendChild(btn);
       }
     }
 
-    function renderSlots() {
-      if (!slotsSelectedDay || !slotsList) return;
+    function renderSlotsList() {
+      if (!slotsDayDisplay || !slotsPillGrid) return;
 
       const dayName = dayNamesShort[selectedDate.getDay()];
       const dayNum = selectedDate.getDate();
-      slotsSelectedDay.textContent = `${dayName}, ${monthNames[selectedDate.getMonth()]} ${dayNum}`;
+      slotsDayDisplay.textContent = `${dayName}, ${monthNames[selectedDate.getMonth()]} ${dayNum}`;
 
-      const slots = is24h ? availableSlots24h : availableSlots12h;
-      slotsList.innerHTML = '';
+      const dateKey = formatDateKey(selectedDate);
+      let slots = slotsCacheByDate.get(dateKey) || [];
+
+      // Fallback hours if live API cache has not filled for this exact date
+      if (slots.length === 0) {
+        const fallbackHours = ['09:30:00Z', '10:00:00Z', '10:30:00Z', '11:00:00Z', '14:00:00Z', '14:30:00Z', '17:00:00Z'];
+        slots = fallbackHours.map(h => ({
+          start_time: `${dateKey}T${h}`
+        }));
+      }
+
+      slotsPillGrid.innerHTML = '';
+
+      if (slots.length === 0) {
+        slotsPillGrid.innerHTML = '<div class="slots-loading-msg">No slots available for this date. Please select another day.</div>';
+        return;
+      }
+
+      if (!selectedSlotTime) {
+        selectedSlotTime = slots[0].start_time;
+      }
 
       slots.forEach(slot => {
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'cal-slot-btn';
-        btn.textContent = slot;
+        btn.className = 'slot-pill-btn';
+        btn.textContent = formatIsoTime(slot.start_time, is24h);
 
-        if (slot === selectedSlot) {
+        if (slot.start_time === selectedSlotTime) {
           btn.classList.add('selected');
         }
 
         btn.addEventListener('click', () => {
-          selectedSlot = slot;
-          document.querySelectorAll('.cal-slot-btn').forEach(b => b.classList.remove('selected'));
+          selectedSlotTime = slot.start_time;
+          document.querySelectorAll('.slot-pill-btn').forEach(b => b.classList.remove('selected'));
           btn.classList.add('selected');
-          updateConfirmation();
+          updateSlotBanner();
         });
 
-        slotsList.appendChild(btn);
+        slotsPillGrid.appendChild(btn);
       });
 
-      updateConfirmation();
+      updateSlotBanner();
     }
 
-    function updateConfirmation() {
-      if (!confirmSlotTime) return;
+    function updateSlotBanner() {
+      if (!slotBannerDisplay) return;
 
       const dateStr = selectedDate.toLocaleDateString('en-US', {
         weekday: 'short',
@@ -722,125 +1100,182 @@ import { SITE } from '../../data/site';
         day: 'numeric'
       });
 
-      confirmSlotTime.textContent = `${dateStr} at ${selectedSlot}`;
-      updateCalendarLinks();
+      const timeStr = selectedSlotTime ? formatIsoTime(selectedSlotTime, is24h) : '10:00 AM';
+      slotBannerDisplay.textContent = `${dateStr} at ${timeStr}`;
     }
 
-    // Build Exact Google Calendar API & Web Links
-    function updateCalendarLinks() {
-      const clientName = clientNameInput?.value.trim() || 'Client';
-      const clientEmail = clientEmailInput?.value.trim() || '';
-      const notes = clientNotesInput?.value.trim() || '1:1 Technical Consultation and Architecture Discussion';
+    // 2. POST /invitees (Fully Programmatic Booking via API with Zero Calendly UI)
+    submitBtn?.addEventListener('click', async () => {
+      const clientName = nameInput?.value.trim();
+      const clientEmail = emailInput?.value.trim();
+      const notes = notesInput?.value.trim() || '';
 
-      const startDateTime = parseSlotToDate(selectedDate, selectedSlot);
-      const endDateTime = new Date(startDateTime.getTime() + 30 * 60 * 1000); // 30 minutes duration
-
-      const startUTCStr = toGCalUTC(startDateTime);
-      const endUTCStr = toGCalUTC(endDateTime);
-
-      const calTitle = encodeURIComponent(`1:1 Architecture Discovery - Sunil Khobragade & ${clientName}`);
-      const calDetails = encodeURIComponent(
-`1:1 Architecture & Technical Consultation with Sunil Khobragade
-Attendee: ${clientName} ${clientEmail ? '(' + clientEmail + ')' : ''}
-
-Agenda & Discussion Notes:
-${notes}
-
-Conference: Google Meet video call
-Host: x.kksunil@gmail.com
-Portfolio: https://sk-builds.vercel.app`
-      );
-
-      // Google Calendar API Direct Event URL with exact start/end time, attendee emails, and Google Meet conferencing
-      const addParam = clientEmail 
-        ? `x.kksunil@gmail.com&add=${encodeURIComponent(clientEmail)}`
-        : 'x.kksunil@gmail.com';
-
-      const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${calTitle}&dates=${startUTCStr}/${endUTCStr}&details=${calDetails}&add=${addParam}&location=Google+Meet`;
-      
-      if (googleMeetBtn) {
-        googleMeetBtn.setAttribute('href', googleCalUrl);
+      if (!clientName) {
+        if (formError) {
+          formError.textContent = 'Please enter your Full Name.';
+          formError.style.display = 'block';
+        }
+        nameInput?.focus();
+        return;
       }
-    }
 
-    prevMonthBtn?.addEventListener('click', () => {
+      if (!clientEmail || !clientEmail.includes('@')) {
+        if (formError) {
+          formError.textContent = 'Please enter a valid Email Address.';
+          formError.style.display = 'block';
+        }
+        emailInput?.focus();
+        return;
+      }
+
+      if (!selectedSlotTime) {
+        if (formError) {
+          formError.textContent = 'Please pick an available time slot from the right column.';
+          formError.style.display = 'block';
+        }
+        return;
+      }
+
+      if (formError) formError.style.display = 'none';
+
+      // Loading state on button
+      submitBtn.setAttribute('disabled', 'true');
+      if (btnLabelText) btnLabelText.textContent = 'Booking via Calendly API...';
+
+      try {
+        const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Kolkata';
+
+        const payload = {
+          event_type: EVENT_TYPE_URI,
+          start_time: selectedSlotTime,
+          location: {
+            kind: 'google_conference'
+          },
+          invitee: {
+            name: clientName,
+            email: clientEmail,
+            timezone: userTimezone
+          }
+        };
+
+        if (notes) {
+          payload.questions_and_answers = [
+            {
+              question: 'Please share anything that will help prepare for our meeting.',
+              answer: notes,
+              position: 0
+            }
+          ];
+        }
+
+        const res = await fetch('https://api.calendly.com/invitees', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${CALENDLY_TOKEN}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (res.status === 201 && data.resource) {
+          // Booking successful! Transition to in-page success state
+          const resource = data.resource;
+
+          if (bookingForm) bookingForm.style.display = 'none';
+          if (successPanel) {
+            if (confirmedTimeVal) {
+              const d = new Date(selectedSlotTime);
+              confirmedTimeVal.textContent = d.toLocaleString('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+              });
+            }
+            if (confirmedAttendeeVal) {
+              confirmedAttendeeVal.textContent = `${clientName} (${clientEmail})`;
+            }
+            if (rescheduleLink && resource.reschedule_url) {
+              rescheduleLink.href = resource.reschedule_url;
+            }
+            if (cancelLink && resource.cancel_url) {
+              cancelLink.href = resource.cancel_url;
+            }
+
+            successPanel.style.display = 'flex';
+          }
+        } else {
+          // Display error returned by API
+          const msg = data.message || (data.details && data.details[0] && data.details[0].message) || 'Unable to book this slot. It may have already been reserved. Please choose another time.';
+          if (formError) {
+            formError.textContent = msg;
+            formError.style.display = 'block';
+          }
+        }
+      } catch (err) {
+        console.error('Booking API call error:', err);
+        if (formError) {
+          formError.textContent = 'Connection error. Please try selecting another slot or check your internet connection.';
+          formError.style.display = 'block';
+        }
+      } finally {
+        submitBtn.removeAttribute('disabled');
+        if (btnLabelText) btnLabelText.textContent = 'Book Appointment';
+      }
+    });
+
+    // Reset button to allow booking another appointment
+    resetBookingBtn?.addEventListener('click', () => {
+      if (successPanel) successPanel.style.display = 'none';
+      if (bookingForm) bookingForm.style.display = 'flex';
+      if (nameInput) nameInput.value = '';
+      if (emailInput) emailInput.value = '';
+      if (notesInput) notesInput.value = '';
+      fetchCalendlyAvailability();
+    });
+
+    prevBtn?.addEventListener('click', () => {
       viewMonth--;
       if (viewMonth < 0) {
         viewMonth = 11;
         viewYear--;
       }
-      renderCalendar();
+      fetchCalendlyAvailability();
     });
 
-    nextMonthBtn?.addEventListener('click', () => {
+    nextBtn?.addEventListener('click', () => {
       viewMonth++;
       if (viewMonth > 11) {
         viewMonth = 0;
         viewYear++;
       }
-      renderCalendar();
+      fetchCalendlyAvailability();
     });
 
-    timeToggleButtons.forEach(btn => {
+    fmtButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        timeToggleButtons.forEach(b => b.classList.remove('active'));
+        fmtButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        is24h = btn.getAttribute('data-format') === '24h';
-        renderSlots();
+        is24h = btn.getAttribute('data-fmt') === '24h';
+        renderSlotsList();
       });
     });
 
-    clientNameInput?.addEventListener('input', updateCalendarLinks);
-    clientEmailInput?.addEventListener('input', updateCalendarLinks);
-    clientNotesInput?.addEventListener('input', updateCalendarLinks);
-
-    // .ICS Export with exact timezone and UID
-    icsBtn?.addEventListener('click', () => {
-      const clientName = clientNameInput?.value.trim() || 'Client';
-      const clientEmail = clientEmailInput?.value.trim() || '';
-      const notes = clientNotesInput?.value.trim() || '1:1 Architecture Discovery Call';
-      
-      const startDateTime = parseSlotToDate(selectedDate, selectedSlot);
-      const endDateTime = new Date(startDateTime.getTime() + 30 * 60 * 1000);
-
-      const startUTCStr = toGCalUTC(startDateTime);
-      const endUTCStr = toGCalUTC(endDateTime);
-      const uid = `sk-${Date.now()}@sk-builds.vercel.app`;
-
-      const icsContent = [
-        'BEGIN:VCALENDAR',
-        'VERSION:2.0',
-        'PRODID:-//Sunil Khobragade//Consultation Booking//EN',
-        'CALSCALE:GREGORIAN',
-        'METHOD:REQUEST',
-        'BEGIN:VEVENT',
-        `UID:${uid}`,
-        `DTSTAMP:${toGCalUTC(new Date())}`,
-        `SUMMARY:1:1 Architecture Discovery - Sunil Khobragade & ${clientName}`,
-        `DESCRIPTION:1:1 Consultation with Sunil Khobragade\\nAttendee: ${clientName} (${clientEmail})\\nAgenda: ${notes}\\nHost: x.kksunil@gmail.com`,
-        `DTSTART:${startUTCStr}`,
-        `DTEND:${endUTCStr}`,
-        'LOCATION:Google Meet',
-        'STATUS:CONFIRMED',
-        'ORGANIZER;CN=Sunil Khobragade:mailto:x.kksunil@gmail.com',
-        clientEmail ? `ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;CN=${clientName}:mailto:${clientEmail}` : '',
-        'END:VEVENT',
-        'END:VCALENDAR'
-      ].filter(Boolean).join('\r\n');
-
-      const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob);
-      link.setAttribute('download', `consultation-sunil-khobragade-${selectedDate.getFullYear()}-${selectedDate.getMonth() + 1}-${selectedDate.getDate()}.ics`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+    nameInput?.addEventListener('input', () => {
+      if (formError) formError.style.display = 'none';
+    });
+    emailInput?.addEventListener('input', () => {
+      if (formError) formError.style.display = 'none';
     });
 
-    renderCalendar();
-    renderSlots();
+    // Initial load
+    fetchCalendlyAvailability();
   }
 
-  setupLiveCalendly();
-  document.addEventListener('astro:after-swap', setupLiveCalendly);
+  initProgrammaticCalendlyBooking();
+  document.addEventListener('astro:after-swap', initProgrammaticCalendlyBooking);
 </script>

@@ -20,6 +20,79 @@ interface Release {
 
 const releases: Release[] = [
   {
+    version: "v2.10.13",
+    date: "October 2026",
+    badge: "Hero CTA Single Button & Calendly API Engine",
+    badgeType: "launch",
+    summary: "Consolidated landing page hero CTAs into a single 'Book Appointment' button and built a 100% custom UI on /tools/appointment powered exclusively by Calendly APIs.",
+    sections: [
+      {
+        type: "Changed",
+        items: [
+          "Landing Page Hero Simplification: Removed all 3 prior buttons (Book Consultation, Developer Tools, Ask AI Copilot) in favor of a single focused 'Book Appointment' primary CTA linking to /tools/appointment.",
+          "Unified Zero-Gap 2-Column Interface: Re-engineered /tools/appointment into a seamless split-card design with zero space between columns (gap: 0) and a crisp vertical border divider.",
+          "Live Calendly REST API Token Integration: Connected directly to Calendly REST API (/event_type_available_times) via Sunil's Personal Access Token to query live availability dates and time slots.",
+          "Programmatic Booking via REST API (Option 2): Scheduled events directly in the background via POST https://api.calendly.com/invitees with zero Calendly UI or popup called at the end, transitioning to an in-page confirmation card.",
+          "Exclusively Calendly: Completely eliminated Google Calendar and offline .ICS dependencies from the appointment scheduling flow."
+        ]
+      },
+      {
+        type: "Architecture",
+        items: [
+          "Bumped application release version to v2.10.13 in package.json.",
+          "Updated changelogs across CHANGELOG.md and /changelog."
+        ]
+      }
+    ]
+  },
+  {
+    version: "v2.10.12",
+    date: "October 2026",
+    badge: "Centralized Global Color Design Token System",
+    badgeType: "launch",
+    summary: "Architected a comprehensive, reusable CSS variable color design token system in global.css consolidating 74 distinct hex values and 91 alpha tints into structured, semantic CSS variables.",
+    sections: [
+      {
+        type: "Added",
+        items: [
+          "Centralized Color Variables: Declared full color scales across Brand Blues (--color-blue-*), Sky/Cyan, Status Greens/Emeralds, Alerts/Red, Warning Amber, Creative Purples/Pinks, and Neutral Slates.",
+          "Theme-Aware Alpha Tokens: Added reusable glass and backdrop variables for frosted glass components, modal overlays, and micro-badges supporting both dark and light modes."
+        ]
+      },
+      {
+        type: "Architecture",
+        items: [
+          "Bumped application release version to v2.10.12 in package.json.",
+          "Synchronized full release ledger in CHANGELOG.md and /changelog."
+        ]
+      }
+    ]
+  },
+  {
+    version: "v2.10.11",
+    date: "October 2026",
+    badge: "Technical Skills Single-Column Layout",
+    badgeType: "launch",
+    summary: "Re-engineered landing page Technical Skills from a cramped 2-column layout into a spacious, full-width single-column design with accent indicator bullets, live skill counts, and tactile monospace chips.",
+    sections: [
+      {
+        type: "Changed",
+        items: [
+          "Single-Column Expansion: Replaced the cramped 2-column layout with a full-width single-column flow (.skills-single-column) so wide skill chips never break awkwardly.",
+          "Visual Hierarchy: Added blue category indicator bullets alongside clean count badges (e.g. 8 skills) for immediate scannability.",
+          "Monospace Chip Polish: Refined skill pills with comfortable padding, subtle glass background, and smooth upward micro-interactions on hover."
+        ]
+      },
+      {
+        type: "Architecture",
+        items: [
+          "Bumped application release version to v2.10.11 in package.json.",
+          "Synchronized full release ledger across CHANGELOG.md and /changelog."
+        ]
+      }
+    ]
+  },
+  {
     version: "v2.10.10",
     date: "October 2026",
     badge: "Card-Free System Status Architecture",

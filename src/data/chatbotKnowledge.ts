@@ -100,7 +100,7 @@ export const SUNIL_KNOWLEDGE_BASE = {
     {
       name: "1:1 Consultation Scheduler",
       url: "/tools/appointment",
-      description: "Book a direct 1:1 architecture discovery or technical consultation call on Google Calendar."
+      description: "Book a direct 1:1 architecture discovery or technical consultation call via Calendly."
     },
     {
       name: "JWT Token Decoder & Inspector",
