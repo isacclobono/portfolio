@@ -3,6 +3,20 @@
 All notable changes to the SK Builds portfolio platform are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.2] - 2026-10-12
+
+### Changed
+- **ChatGPT-Grade Conversational Precision**: Enforced laser-focused single-domain responses in SK Agent. When asked for skills, it delivers ONLY categorized technical proficiencies with a link to [Tech Stack](/tech-stack)—completely suppressing unasked job histories, project tables, or education credentials.
+- **Context Pollution Safeguards**: In `/api/chat`, prior assistant responses in client history are automatically sanitized and truncated to 250 characters, preventing the model from mimicking previous bloated responses or legacy IndexedDB transcripts.
+- **Preamble & Header Suppression**: Removed decorative introductory banners and executive summaries for domain questions, ensuring answers begin immediately with the requested data.
+- **Calibrated Inference Determinism**: Set model temperature to `0.1` and max tokens to `800` on Groq LPU inference for tight, predictable answers under 150 words.
+
+### Architecture
+- **Version Bump**: Bumped application release version to `2.10.2` in `package.json`.
+- **Changelog Synchronization**: Updated documentation across `CHANGELOG.md` and `src/pages/changelog.astro`.
+
+---
+
 ## [2.10.1] - 2026-10-12
 
 ### Changed

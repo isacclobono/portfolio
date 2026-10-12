@@ -33,13 +33,16 @@ export const POST: APIRoute = async ({ request }) => {
       }
     }
 
-    // Filter and sanitize messages from client
+    // Filter and sanitize messages from client (keeping last 4 to preserve focus and prevent bloated history pollution)
     const sanitizedMessages = clientMessages
       .filter((m) => m && typeof m.content === 'string' && (m.role === 'user' || m.role === 'assistant'))
       .map((m) => ({
         role: m.role,
-        content: m.content.slice(0, 4000), // Protect against payload bloat
-      }));
+        content: m.role === 'assistant'
+          ? (m.content.length > 250 ? m.content.slice(0, 250) + '...' : m.content)
+          : m.content.slice(0, 2000),
+      }))
+      .slice(-4);
 
     // Ensure system prompt with full knowledge base is at index 0
     const conversation = [
@@ -50,6 +53,9 @@ export const POST: APIRoute = async ({ request }) => {
       ...sanitizedMessages,
     ];
 
+    console.log('Sending to Groq prompt length:', CHATBOT_SYSTEM_PROMPT.length);
+    console.log('User message content:', sanitizedMessages[sanitizedMessages.length - 1]?.content);
+
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -59,8 +65,8 @@ export const POST: APIRoute = async ({ request }) => {
       body: JSON.stringify({
         model,
         messages: conversation,
-        temperature: 0.2,
-        max_tokens: 1200,
+        temperature: 0.1,
+        max_tokens: 800,
         stream: true,
       }),
     });

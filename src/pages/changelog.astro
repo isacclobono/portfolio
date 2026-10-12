@@ -20,6 +20,31 @@ interface Release {
 
 const releases: Release[] = [
   {
+    version: "v2.10.2",
+    date: "October 2026",
+    badge: "Anti-Pollution & Laser-Scoping Guardrails",
+    badgeType: "accent",
+    summary: "Eliminated AI assistant context poisoning and historical template mirroring. Hardened strict domain-specific routing (Skills → Skills only, Experience → Work history only, Projects → Flagship builds only), introduced history truncation safeguards (stripping past bloated assistant responses), and calibrated model temperature (0.1) for deterministic, laser-focused engineering answers under 150 words.",
+    sections: [
+      {
+        type: "Changed",
+        items: [
+          "Hardened Strict Domain Routing: Questions asking about skills output purely technical stacks by category with a single link to [Tech Stack](/tech-stack); zero unprompted company names, dates, or project directories.",
+          "Eliminated Context History Pollution: In /api/chat, prior assistant messages from conversation history are automatically sanitized and truncated to 250 characters, preventing the model from mimicking previous bloated responses or client IndexedDB dumps.",
+          "Laser Preamble Suppression: Eliminated biographical banners and decorative executive summaries; responses begin immediately with the requested content like ChatGPT and Claude.",
+          "Calibrated Determinism: Tuned Groq inference temperature to 0.1 and max tokens to 800, ensuring tight, predictable, and factual responses."
+        ]
+      },
+      {
+        type: "Architecture",
+        items: [
+          "Bumped application release version to v2.10.2 in package.json.",
+          "Synchronized full changelog ledger across CHANGELOG.md and /changelog."
+        ]
+      }
+    ]
+  },
+  {
     version: "v2.10.1",
     date: "October 2026",
     badge: "AI Agent Conversational Precision",
