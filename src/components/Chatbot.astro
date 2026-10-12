@@ -1792,40 +1792,88 @@ const knowledgeData = JSON.stringify(SUNIL_KNOWLEDGE_BASE);
         }, 350);
       }
 
-      // Short & Meaningful Offline Knowledge Engine
+      // Articulate & Resilient Knowledge Engine (Handles typos like 'eperience', offline resilience)
       function generateSmartResponse(query) {
-        const q = query.toLowerCase();
+        const q = (query || "").toLowerCase().trim();
         let reply = "";
 
-        if (q.includes('skill') || q.includes('stack') || q.includes('technolog') || q.includes('ai agent') || q.includes('rag')) {
-          reply = `• <strong>AI &amp; GenAI:</strong> AI Agents (LangGraph, CrewAI), RAG pipelines, Vector DBs (pgvector, Pinecone).<br>
-• <strong>Full-Stack:</strong> Node.js, Python (FastAPI), React 19, Next.js, Laravel.<br>
-• <strong>Cloud &amp; DevOps:</strong> Docker, Kubernetes, AWS, CI/CD automation.<br><br>
-See full stack on <a href="/tech-stack">Tech Stack &rarr;</a>`;
-        } else if (q.includes('project') || q.includes('portfolio') || q.includes('work done') || q.includes('pulse') || q.includes('lms') || q.includes('booking') || q.includes('e-commerce')) {
-          reply = `• <a href="/projects/pulse-chat"><strong>Pulse Chat</strong></a>: AI customer support with real-time WebSockets.<br>
-• <a href="/projects/ai-enabled-lms"><strong>AI-Enabled LMS</strong></a>: Educational platform with Vertex AI.<br>
-• <a href="/projects/e-commerce-platform"><strong>E-Commerce Platform</strong></a>: Multi-gateway payments (Stripe/Razorpay).<br>
-• <a href="/projects/real-time-appointment-booking"><strong>Appointment Booking</strong></a>: Concurrency-safe Redis locking.<br><br>
-Explore all on <a href="/projects">Projects &rarr;</a>`;
-        } else if (q.includes('experience') || q.includes('career') || q.includes('intencode') || q.includes('job') || q.includes('company')) {
-          reply = `• <strong>Intencode India</strong> (2022–Present): Full-Stack Dev leading microservices and CI/CD.<br>
-• <strong>Freelance Solutions Architect</strong> (2020–2022): Built 15+ enterprise web platforms.<br>
-• <strong>IBM India Intern</strong> (2021–2022): Enhanced internal tools with Node &amp; Angular.<br><br>
-Full career details on <a href="/work">Work Experience &rarr;</a>`;
-        } else if (q.includes('contact') || q.includes('hire') || q.includes('email') || q.includes('phone') || q.includes('book') || q.includes('call') || q.includes('rate') || q.includes('cost')) {
-          reply = `• <strong>Email:</strong> <a href="mailto:sunilkhobragade@proton.me">sunilkhobragade@proton.me</a><br>
+        // 1. Work Experience & Career History (Handles: experience, eperience, experiance, exp, career, work, etc.)
+        if (/exper|eper|expe|career|intencode|work|background|history|job|role|years|resume|cv/.test(q)) {
+          reply = `<strong>Sunil Khobragade</strong> brings <strong>6+ years of production experience</strong> building distributed systems, autonomous AI agents, and high-performance cloud platforms.<br><br>
+<strong>Core Career Milestones:</strong><br>
+• <strong>Full-Stack Developer at Intencode India</strong> (Oct 2022 – Present | Hyderabad):<br>
+  - Leading delivery of enterprise web applications and multilingual consumer portals.<br>
+  - Architected polyglot microservices in Node.js, Python (FastAPI/Django), and Laravel.<br>
+  - Containerized services with Docker & Nginx, accelerating releases by <strong>40%</strong>.<br>
+  - Automated CI/CD (Jenkins, GitHub Actions, GitLab CI), reducing deployment failures by <strong>70%</strong>.<br>
+  - Optimized database schemas & Redis caching, achieving <strong>20–30% latency gains</strong> on payment pipelines.<br><br>
+• <strong>Freelance Solutions Architect</strong> (Jan 2020 – Sep 2022 | Remote):<br>
+  - Shipped 15+ production systems across real-time communications, AI LMS, and e-commerce.<br>
+  - Automated deployments across AWS (ECS, RDS, S3), Azure, and Cloudflare Pages.<br><br>
+• <strong>Full-Stack Developer Intern at IBM India</strong> (Sep 2021 – Feb 2022 | Remote):<br>
+  - Modernized enterprise internal tooling with Node.js, Angular, and MongoDB, cutting QA overhead by <strong>50%</strong>.<br><br>
+Explore Sunil's interactive career timeline at <a href="/work"><strong>Work Experience &rarr;</strong></a> or <a href="/tools/appointment"><strong>Book a 1:1 Architecture Consultation &rarr;</strong></a>`;
+        }
+        // 2. Technical Skills & Architecture Stack
+        else if (/skill|stack|tech|framework|language|node|python|react|docker|kubernetes|aws|ai agent|rag|vector|database/.test(q)) {
+          reply = `<strong>Sunil's Technical Architecture Stack:</strong><br><br>
+• <strong>AI &amp; Autonomous Agents:</strong> LangGraph, CrewAI, AutoGen, RAG pipelines, pgvector, Pinecone, Qdrant, OpenAI GPT-4o, Claude 3.5 Sonnet, Gemini APIs, Groq Fast LPU, Structured JSON Schemas.<br>
+• <strong>Backend &amp; Microservices:</strong> Node.js (Express, NestJS), Python (FastAPI, Django), PHP (Laravel), TypeScript, RESTful APIs, GraphQL, WebSockets, Redis Pub/Sub, Kafka.<br>
+• <strong>Frontend &amp; UI:</strong> React 19, Next.js (App Router), Astro 5, Angular, TailwindCSS v4, TypeScript, Zustand, Redux Toolkit, 100/100 Core Web Vitals.<br>
+• <strong>Databases &amp; Caching:</strong> PostgreSQL &amp; pgvector, Redis (Redlock distributed locks), MySQL, MongoDB, Debezium CDC streaming.<br>
+• <strong>Cloud, DevOps &amp; Security:</strong> AWS (ECS, Lambda, S3, RDS), Azure, Cloudflare Workers/Pages, Docker, Kubernetes, Nginx, CI/CD, Zero-Trust Security, Passkeys/WebAuthn.<br><br>
+View the comprehensive architectural breakdown on <a href="/tech-stack"><strong>Tech Stack &rarr;</strong></a>`;
+        }
+        // 3. Featured Projects
+        else if (/project|portfolio|pulse|lms|booking|e-commerce|built|work done|apps/.test(q)) {
+          reply = `<strong>Sunil's Flagship Production Projects:</strong><br><br>
+• <a href="/projects/pulse-chat"><strong>Pulse Chat &rarr;</strong></a>: Real-time customer communication platform with WebSockets, AI auto-triage, and shared inboxes (Node.js, React, Redis, PostgreSQL, OpenAI API).<br>
+• <a href="/projects/ai-enabled-lms"><strong>AI-Enabled LMS &rarr;</strong></a>: Adaptive learning platform with live video streams, AI flashcards, and Vertex AI knowledge extraction (Next.js, FastAPI, PostgreSQL).<br>
+• <a href="/projects/e-commerce-platform"><strong>E-Commerce Platform &rarr;</strong></a>: High-volume checkout engine with multi-gateway payments (Stripe, Razorpay, PhonePe) and webhook idempotency (Laravel, React, MySQL, Redis).<br>
+• <a href="/projects/real-time-appointment-booking"><strong>Appointment Booking &rarr;</strong></a>: Zero-conflict scheduling engine preventing double-bookings via Redis distributed locks (Node.js, TypeScript, PostgreSQL, Redis).<br><br>
+Browse all case studies and live demos at <a href="/projects"><strong>Featured Projects &rarr;</strong></a>`;
+        }
+        // 4. Developer Utilities (20 Tools)
+        else if (/tool|utility|curl|json|chmod|timestamp|converter|encoder|decoder|regex|formatter|calculator|shadow|contrast|uuid|base64|jwt|cron/.test(q)) {
+          reply = `Sunil has engineered a complete suite of <strong>20 zero-telemetry, 100% client-side developer utilities</strong>:<br><br>
+• <a href="/tools/curl-converter"><strong>cURL Converter &rarr;</strong></a>: Convert cURL into Fetch, Axios, Python Requests, Node.js, and Go.<br>
+• <a href="/tools/json-formatter"><strong>JSON Formatter &amp; Validator &rarr;</strong></a>: Syntax validation, key sorting, and minification.<br>
+• <a href="/tools/timestamp-converter"><strong>Unix Timestamp Converter &rarr;</strong></a>: Live-ticking epoch clocks and date conversions.<br>
+• <a href="/tools/chmod-calculator"><strong>Linux Chmod Calculator &rarr;</strong></a>: Visual POSIX permissions matrix (755, 644).<br>
+• <a href="/tools/html-entity-encoder"><strong>HTML Entity Encoder &rarr;</strong></a>: XSS escaping and entity conversion.<br>
+• Plus 15 more tools: JWT Decoder, Regex Tester, SQL Formatter, Diff Viewer, UUID Generator, Box Shadow Builder, and more.<br><br>
+Explore the full suite at <a href="/tools"><strong>20 Developer Utilities &rarr;</strong></a>`;
+        }
+        // 5. Contact, Hiring & 1:1 Consultation
+        else if (/contact|hire|email|phone|call|book|consult|rate|price|cost|freelance|reach|talk|collaborate/.test(q)) {
+          reply = `<strong>Get in Touch with Sunil Khobragade:</strong><br><br>
+• <strong>Email:</strong> <a href="mailto:sunilkhobragade@proton.me">sunilkhobragade@proton.me</a><br>
 • <strong>Phone:</strong> <a href="tel:+917498950562">+91 74989 50562</a><br>
-• <strong>1:1 Consultation:</strong> <a href="/tools/appointment">Book on Google Calendar &rarr;</a><br>
-• <strong>Project Estimator:</strong> <a href="/tools/estimator">Estimate Project Cost &rarr;</a>`;
-        } else if (q.includes('education') || q.includes('degree') || q.includes('certif') || q.includes('college')) {
-          reply = `• <strong>M.Sc. Information Security</strong> (2025–Present) | IGNOU<br>
-• <strong>PG Diploma Information Security</strong> (2024–2025) | IGNOU<br>
-• <strong>Adv. Diploma IT &amp; Cloud</strong> (2019–2022) | NSTI Hyderabad (IBM)<br>
-• <strong>B.Com</strong> (2019–2022) | YCMOU`;
-        } else {
-          reply = `I am specifically designed to answer questions about <strong>Sunil Khobragade</strong> and his portfolio.<br><br>
-Feel free to ask about Sunil's <a href="/projects">Projects</a>, <a href="/tech-stack">Tech Stack</a>, <a href="/work">Work Experience</a>, or <a href="/tools/appointment">Hiring / 1:1 Consultation</a>!`;
+• <strong>Schedule a 1:1 Call:</strong> <a href="/tools/appointment"><strong>Book on Google Calendar &rarr;</strong></a><br>
+• <strong>Project Scope &amp; Budget:</strong> <a href="/tools/estimator"><strong>Interactive Project Estimator &rarr;</strong></a><br>
+• <strong>LinkedIn:</strong> <a href="https://linkedin.com/in/sunilkhobragade" target="_blank" rel="noopener noreferrer">linkedin.com/in/sunilkhobragade &rarr;</a><br>
+• <strong>GitHub:</strong> <a href="https://github.com/naman-mahi" target="_blank" rel="noopener noreferrer">github.com/naman-mahi &rarr;</a><br><br>
+Sunil is currently open to high-impact engineering roles, AI consulting, and freelance solutions architecture.`;
+        }
+        // 6. Education & Certifications
+        else if (/edu|degree|certif|college|ignou|nsti|master|diploma|b\.?com|academic/.test(q)) {
+          reply = `<strong>Sunil's Academic Background &amp; Certifications:</strong><br><br>
+• <strong>M.Sc. in Information Security</strong> (2025–Present) | IGNOU, Hyderabad (Cryptography &amp; Cloud Security)<br>
+• <strong>Post Graduate Diploma in Information Security (PGDIS)</strong> (2024–2025) | IGNOU (OWASP Top 10, Security Auditing)<br>
+• <strong>Advanced Diploma in IT, Networking &amp; Cloud Computing</strong> (2019–2022) | NSTI Hyderabad (IBM Industry-Aligned)<br>
+• <strong>Bachelor of Commerce (B.Com)</strong> (2019–2022) | YCMOU<br>
+• <strong>Google Cloud Gen AI Academy APAC Edition</strong>: Generative AI, Vertex AI, Foundation Models`;
+        }
+        // 7. Overview / Profile Introduction
+        else {
+          reply = `I am <strong>SK Agent</strong>, the AI representative for <strong>Sunil Khobragade</strong> (Senior Full-Stack Developer &amp; AI Solutions Architect).<br><br>
+Sunil has <strong>6+ years of experience</strong> architecting autonomous AI agents, distributed microservices, and modern web platforms.<br><br>
+How can I assist you today?<br>
+• Learn about Sunil's <a href="/work"><strong>Work Experience &rarr;</strong></a><br>
+• Discover his <a href="/projects"><strong>Flagship Projects &rarr;</strong></a><br>
+• Inspect his <a href="/tech-stack"><strong>Tech Stack &amp; Architecture &rarr;</strong></a><br>
+• Try his <a href="/tools"><strong>20 Free Developer Tools &rarr;</strong></a><br>
+• <a href="/tools/appointment"><strong>Book a 1:1 Architecture Consultation &rarr;</strong></a> or email <a href="mailto:sunilkhobragade@proton.me">sunilkhobragade@proton.me</a>`;
         }
 
         messages.push({ role: 'assistant', content: reply });

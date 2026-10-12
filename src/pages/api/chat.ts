@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { CHATBOT_SYSTEM_PROMPT } from '../../data/chatbotKnowledge';
 
 export const GET: APIRoute = async () => {
   return new Response(JSON.stringify({ status: 'active', assistant: 'Sunil Khobragade AI' }), {
@@ -18,7 +19,36 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   try {
-    const { messages } = await request.json();
+    const rawText = await request.text();
+    let clientMessages: Array<{ role: string; content: string }> = [];
+
+    if (rawText && rawText.trim().length > 0) {
+      try {
+        const body = JSON.parse(rawText);
+        if (Array.isArray(body.messages)) {
+          clientMessages = body.messages;
+        }
+      } catch (parseErr) {
+        console.warn('JSON parsing error in /api/chat:', parseErr);
+      }
+    }
+
+    // Filter and sanitize messages from client
+    const sanitizedMessages = clientMessages
+      .filter((m) => m && typeof m.content === 'string' && (m.role === 'user' || m.role === 'assistant'))
+      .map((m) => ({
+        role: m.role,
+        content: m.content.slice(0, 4000), // Protect against payload bloat
+      }));
+
+    // Ensure system prompt with full knowledge base is at index 0
+    const conversation = [
+      {
+        role: 'system',
+        content: CHATBOT_SYSTEM_PROMPT,
+      },
+      ...sanitizedMessages,
+    ];
 
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -28,21 +58,24 @@ export const POST: APIRoute = async ({ request }) => {
       },
       body: JSON.stringify({
         model,
-        messages: [
-          ...messages,
-          {
-            role: 'system',
-            content: "You are exclusively the AI assistant for Sunil Khobragade and his portfolio. You must ONLY answer questions directly related to Sunil Khobragade, his technical skills, work experience, projects, education, and hiring availability. If the user asks general, off-topic, or unrelated questions, politely decline and guide them back to Sunil's portfolio. Answer completely what was asked—neither too short nor too long."
-          }
-        ],
-        temperature: 0.35,
-        max_tokens: 450,
+        messages: conversation,
+        temperature: 0.4,
+        max_tokens: 2200,
         stream: true,
       }),
     });
 
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error('Groq API Error:', response.status, errText);
+      return new Response(JSON.stringify({ error: 'AI provider error', details: errText }), {
+        status: response.status,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     return new Response(response.body, {
-      status: response.status,
+      status: 200,
       headers: {
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
@@ -50,7 +83,8 @@ export const POST: APIRoute = async ({ request }) => {
       },
     });
   } catch (error: any) {
-    return new Response(JSON.stringify({ error: error?.message || 'Server error' }), {
+    console.error('API /api/chat exception:', error);
+    return new Response(JSON.stringify({ error: error?.message || 'Internal Server Error' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
