@@ -59,8 +59,8 @@ export const POST: APIRoute = async ({ request }) => {
       body: JSON.stringify({
         model,
         messages: conversation,
-        temperature: 0.4,
-        max_tokens: 2200,
+        temperature: 0.2,
+        max_tokens: 1200,
         stream: true,
       }),
     });

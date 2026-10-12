@@ -1797,8 +1797,18 @@ const knowledgeData = JSON.stringify(SUNIL_KNOWLEDGE_BASE);
         const q = (query || "").toLowerCase().trim();
         let reply = "";
 
-        // 1. Work Experience & Career History (Handles: experience, eperience, experiance, exp, career, work, etc.)
-        if (/exper|eper|expe|career|intencode|work|background|history|job|role|years|resume|cv/.test(q)) {
+        // 1. Technical Skills & Architecture Stack (Check first to avoid false positives on 'worked with', 'skills')
+        if (/skill|skil|stack|technolog|framework|language|node|python|react|docker|kubernetes|aws|ai agent|rag|vector|database/.test(q)) {
+          reply = `<strong>Sunil's Technical Skills &amp; Stack:</strong><br><br>
+• <strong>AI &amp; Autonomous Agents:</strong> LangGraph, CrewAI, AutoGen, RAG pipelines, pgvector, Pinecone, Qdrant, OpenAI GPT-4o, Claude 3.5 Sonnet, Gemini APIs, Groq Fast LPU, Structured JSON Schemas.<br>
+• <strong>Backend &amp; Microservices:</strong> Node.js (Express, NestJS), Python (FastAPI, Django), PHP (Laravel), TypeScript, RESTful APIs, GraphQL, WebSockets, Redis Pub/Sub, Kafka.<br>
+• <strong>Frontend &amp; UI:</strong> React 19, Next.js (App Router), Astro 5, Angular, TailwindCSS v4, TypeScript, Zustand, Redux Toolkit, Core Web Vitals 100/100.<br>
+• <strong>Databases &amp; Caching:</strong> PostgreSQL &amp; pgvector, Redis (Redlock distributed locks), MySQL, MongoDB, Debezium CDC streaming.<br>
+• <strong>Cloud, DevOps &amp; Security:</strong> AWS (ECS, Lambda, S3, RDS), Azure, Cloudflare Workers/Pages, Docker, Kubernetes, Nginx, CI/CD, Zero-Trust Security, Passkeys/WebAuthn.<br><br>
+Explore his full architectural toolkit at <a href="/tech-stack"><strong>Tech Stack &rarr;</strong></a>`;
+        }
+        // 2. Work Experience & Career History (Handles: experience, eperience, experiance, career, intencode, history, etc.)
+        else if (/exper|eper|expe|career|intencode|history|background|job\b|roles?\b|resume|cv\b|\bwork experience\b|\bwork history\b|\bwork\b/.test(q)) {
           reply = `<strong>Sunil Khobragade</strong> brings <strong>6+ years of production experience</strong> building distributed systems, autonomous AI agents, and high-performance cloud platforms.<br><br>
 <strong>Core Career Milestones:</strong><br>
 • <strong>Full-Stack Developer at Intencode India</strong> (Oct 2022 – Present | Hyderabad):<br>
@@ -1813,16 +1823,6 @@ const knowledgeData = JSON.stringify(SUNIL_KNOWLEDGE_BASE);
 • <strong>Full-Stack Developer Intern at IBM India</strong> (Sep 2021 – Feb 2022 | Remote):<br>
   - Modernized enterprise internal tooling with Node.js, Angular, and MongoDB, cutting QA overhead by <strong>50%</strong>.<br><br>
 Explore Sunil's interactive career timeline at <a href="/work"><strong>Work Experience &rarr;</strong></a> or <a href="/tools/appointment"><strong>Book a 1:1 Architecture Consultation &rarr;</strong></a>`;
-        }
-        // 2. Technical Skills & Architecture Stack
-        else if (/skill|stack|tech|framework|language|node|python|react|docker|kubernetes|aws|ai agent|rag|vector|database/.test(q)) {
-          reply = `<strong>Sunil's Technical Architecture Stack:</strong><br><br>
-• <strong>AI &amp; Autonomous Agents:</strong> LangGraph, CrewAI, AutoGen, RAG pipelines, pgvector, Pinecone, Qdrant, OpenAI GPT-4o, Claude 3.5 Sonnet, Gemini APIs, Groq Fast LPU, Structured JSON Schemas.<br>
-• <strong>Backend &amp; Microservices:</strong> Node.js (Express, NestJS), Python (FastAPI, Django), PHP (Laravel), TypeScript, RESTful APIs, GraphQL, WebSockets, Redis Pub/Sub, Kafka.<br>
-• <strong>Frontend &amp; UI:</strong> React 19, Next.js (App Router), Astro 5, Angular, TailwindCSS v4, TypeScript, Zustand, Redux Toolkit, 100/100 Core Web Vitals.<br>
-• <strong>Databases &amp; Caching:</strong> PostgreSQL &amp; pgvector, Redis (Redlock distributed locks), MySQL, MongoDB, Debezium CDC streaming.<br>
-• <strong>Cloud, DevOps &amp; Security:</strong> AWS (ECS, Lambda, S3, RDS), Azure, Cloudflare Workers/Pages, Docker, Kubernetes, Nginx, CI/CD, Zero-Trust Security, Passkeys/WebAuthn.<br><br>
-View the comprehensive architectural breakdown on <a href="/tech-stack"><strong>Tech Stack &rarr;</strong></a>`;
         }
         // 3. Featured Projects
         else if (/project|portfolio|pulse|lms|booking|e-commerce|built|work done|apps/.test(q)) {

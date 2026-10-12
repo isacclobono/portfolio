@@ -20,6 +20,31 @@ interface Release {
 
 const releases: Release[] = [
   {
+    version: "v2.10.1",
+    date: "October 2026",
+    badge: "AI Agent Conversational Precision",
+    badgeType: "perf",
+    summary: "Re-engineered SK Agent conversational intelligence with strict single-topic scope enforcement, ChatGPT-grade response precision without unasked resume dumping, seamless typo handling, and upgraded offline fallback engine.",
+    sections: [
+      {
+        type: "Changed",
+        items: [
+          "Enforced strict conversational scoping in SK Agent (/api/chat): Answers ONLY the specific question asked (e.g. skills, experience, projects, tools) without dumping unasked resume sections or massive multi-page tables.",
+          "Targeted response brevity: Calibrated assistant outputs to a focused 120–250 words with crisp bullet points and one relevant portfolio link.",
+          "Enhanced typo resilience: Built intent-level parsing handling common misspellings (e.g. 'eperience', 'experiance', 'skils', 'projecs') gracefully without commentary.",
+          "Overhauled offline knowledge engine in Chatbot.astro: Prioritized skill and architecture pattern matching over general keywords, returning focused domain summaries."
+        ]
+      },
+      {
+        type: "Architecture",
+        items: [
+          "Wired CHATBOT_SYSTEM_PROMPT directly into serverless streaming pipeline with calibrated temperature (0.2) and token limits (1200).",
+          "Bumped application release version to v2.10.1 in package.json."
+        ]
+      }
+    ]
+  },
+  {
     version: "v2.10.0",
     date: "October 2026",
     badge: "Developer Tool Suite Expansion",

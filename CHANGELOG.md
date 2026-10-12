@@ -3,6 +3,20 @@
 All notable changes to the SK Builds portfolio platform are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.1] - 2026-10-12
+
+### Changed
+- **Conversational Scoping & Anti-Resume-Dumping**: Re-engineered SK Agent system prompt and conversational constraints so that queries answer ONLY the requested topic (e.g., skills, experience, projects, education) with ChatGPT-like precision rather than dumping the entire resume.
+- **Calibrated Response Brevity**: Tuned response length to a focused 120–250 words with categorized bullet points and a single contextual link to prevent message wall-of-text fatigue.
+- **Intent-Level Typo Resilience**: Built phonetic and typo-resilient prompt handling for misspellings (e.g. `eperience`, `skils`, `projecs`) without prompting or commentary.
+- **Offline Fallback Engine Modernization**: Upgraded keyword prioritization in `Chatbot.astro` so technical skills and framework queries take precedence over broad job/work matchers.
+
+### Architecture
+- **Inference Optimization**: Calibrated Groq LPU temperature to `0.2` and token limits to `1200` for deterministic, focused generation.
+- **Version Bump**: Bumped application release version to `2.10.1` in `package.json`.
+
+---
+
 ## [2.10.0] - 2026-10-12
 
 ### Added
