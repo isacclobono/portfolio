@@ -937,11 +937,20 @@ const calendlyApiToken = SITE.CALENDLY_API_TOKEN;
       if (syncStatus) syncStatus.textContent = 'Syncing...';
 
       try {
-        const start = new Date(viewYear, viewMonth, 1);
-        const end = new Date(viewYear, viewMonth + 1, 7);
+        const now = new Date();
+        let startDate = new Date(viewYear, viewMonth, 1);
+        if (startDate <= now) {
+          // Calendly API strictly requires start_time to be in the future
+          startDate = new Date(now.getTime() + 5 * 60 * 1000);
+        }
 
-        const startTime = start.toISOString();
-        const endTime = end.toISOString();
+        // Calendly API limit: start_time and end_time cannot span more than 31 days per request
+        const endOfMonth = new Date(viewYear, viewMonth + 1, 0, 23, 59, 59);
+        const maxRange = new Date(startDate.getTime() + 29 * 24 * 60 * 60 * 1000);
+        const endDate = endOfMonth < maxRange ? endOfMonth : maxRange;
+
+        const startTime = startDate.toISOString();
+        const endTime = endDate.toISOString();
 
         const url = `https://api.calendly.com/event_type_available_times?event_type=${encodeURIComponent(EVENT_TYPE_URI)}&start_time=${encodeURIComponent(startTime)}&end_time=${encodeURIComponent(endTime)}`;
 
@@ -953,12 +962,18 @@ const calendlyApiToken = SITE.CALENDLY_API_TOKEN;
         });
 
         if (res.ok) {
-          const data = await res.json();
+          const rawText = await res.text();
+          let data = {};
+          if (rawText && rawText.trim().length > 0) {
+            try { data = JSON.parse(rawText); } catch(e) { console.warn('Availability parse error:', e); }
+          }
           const collection = data.collection || [];
 
+          slotsCacheByDate.clear();
           collection.forEach(slot => {
             if (slot.status === 'available') {
-              const dateKey = slot.start_time.split('T')[0];
+              const localDate = new Date(slot.start_time);
+              const dateKey = formatDateKey(localDate);
               if (!slotsCacheByDate.has(dateKey)) {
                 slotsCacheByDate.set(dateKey, []);
               }
@@ -968,12 +983,24 @@ const calendlyApiToken = SITE.CALENDLY_API_TOKEN;
             }
           });
 
+          // If current selectedDate has no slots, auto-advance to earliest day with slots
+          const currentKey = formatDateKey(selectedDate);
+          if (!slotsCacheByDate.has(currentKey) || slotsCacheByDate.get(currentKey).length === 0) {
+            const availableKeys = Array.from(slotsCacheByDate.keys()).sort();
+            if (availableKeys.length > 0) {
+              const [y, m, d] = availableKeys[0].split('-').map(Number);
+              selectedDate = new Date(y, m - 1, d);
+              selectedSlotTime = '';
+            }
+          }
+
           if (syncStatus) syncStatus.textContent = 'Live API';
         } else {
+          console.warn('Calendly availability response error status:', res.status);
           if (syncStatus) syncStatus.textContent = 'Ready';
         }
       } catch (err) {
-        console.warn('Calendly availability notice:', err);
+        console.warn('Calendly availability network notice:', err);
         if (syncStatus) syncStatus.textContent = 'Ready';
       }
 
@@ -1012,6 +1039,7 @@ const calendlyApiToken = SITE.CALENDLY_API_TOKEN;
         const hasLiveSlots = slotsCacheByDate.has(dateKey) && slotsCacheByDate.get(dateKey).length > 0;
         if (hasLiveSlots) {
           btn.classList.add('has-slots');
+          btn.setAttribute('title', `${slotsCacheByDate.get(dateKey).length} slots available`);
         }
 
         const isPast = cellDate < currentDateOnly;
@@ -1047,24 +1075,18 @@ const calendlyApiToken = SITE.CALENDLY_API_TOKEN;
       slotsDayDisplay.textContent = `${dayName}, ${monthNames[selectedDate.getMonth()]} ${dayNum}`;
 
       const dateKey = formatDateKey(selectedDate);
-      let slots = slotsCacheByDate.get(dateKey) || [];
-
-      // Fallback hours if live API cache has not filled for this exact date
-      if (slots.length === 0) {
-        const fallbackHours = ['09:30:00Z', '10:00:00Z', '10:30:00Z', '11:00:00Z', '14:00:00Z', '14:30:00Z', '17:00:00Z'];
-        slots = fallbackHours.map(h => ({
-          start_time: `${dateKey}T${h}`
-        }));
-      }
+      const slots = slotsCacheByDate.get(dateKey) || [];
 
       slotsPillGrid.innerHTML = '';
 
       if (slots.length === 0) {
-        slotsPillGrid.innerHTML = '<div class="slots-loading-msg">No slots available for this date. Please select another day.</div>';
+        slotsPillGrid.innerHTML = '<div class="slots-loading-msg">No slots available on this day. Please select a date marked with a green dot above.</div>';
+        if (slotBannerDisplay) slotBannerDisplay.textContent = 'Please choose a date with available slots';
+        selectedSlotTime = '';
         return;
       }
 
-      if (!selectedSlotTime) {
+      if (!selectedSlotTime || !slots.some(s => s.start_time === selectedSlotTime)) {
         selectedSlotTime = slots[0].start_time;
       }
 
@@ -1100,8 +1122,12 @@ const calendlyApiToken = SITE.CALENDLY_API_TOKEN;
         day: 'numeric'
       });
 
-      const timeStr = selectedSlotTime ? formatIsoTime(selectedSlotTime, is24h) : '10:00 AM';
-      slotBannerDisplay.textContent = `${dateStr} at ${timeStr}`;
+      const timeStr = selectedSlotTime ? formatIsoTime(selectedSlotTime, is24h) : '';
+      if (timeStr) {
+        slotBannerDisplay.textContent = `${dateStr} at ${timeStr}`;
+      } else {
+        slotBannerDisplay.textContent = 'Please select a slot';
+      }
     }
 
     // 2. POST /invitees (Fully Programmatic Booking via API with Zero Calendly UI)
@@ -1177,9 +1203,17 @@ const calendlyApiToken = SITE.CALENDLY_API_TOKEN;
           body: JSON.stringify(payload)
         });
 
-        const data = await res.json();
+        const rawText = await res.text();
+        let data = null;
+        if (rawText && rawText.trim().length > 0) {
+          try {
+            data = JSON.parse(rawText);
+          } catch (e) {
+            console.warn('Response body was not JSON:', rawText);
+          }
+        }
 
-        if (res.status === 201 && data.resource) {
+        if (res.status === 201 && data && data.resource) {
           // Booking successful! Transition to in-page success state
           const resource = data.resource;
 
@@ -1193,7 +1227,8 @@ const calendlyApiToken = SITE.CALENDLY_API_TOKEN;
                 day: 'numeric',
                 year: 'numeric',
                 hour: '2-digit',
-                minute: '2-digit'
+                minute: '2-digit',
+                timeZoneName: 'short'
               });
             }
             if (confirmedAttendeeVal) {
@@ -1208,9 +1243,32 @@ const calendlyApiToken = SITE.CALENDLY_API_TOKEN;
 
             successPanel.style.display = 'flex';
           }
+          // Refresh availability in the background
+          fetchCalendlyAvailability();
         } else {
-          // Display error returned by API
-          const msg = data.message || (data.details && data.details[0] && data.details[0].message) || 'Unable to book this slot. It may have already been reserved. Please choose another time.';
+          // Error Handling Cheatsheet from Calendly Scheduling API Documentation
+          let msg = 'Unable to complete booking. Please choose another time slot.';
+
+          if (res.status === 429) {
+            msg = 'Calendly API rate limit reached (Trial tier allows 5 bookings/24hr). Please upgrade your Calendly account or book directly at: https://calendly.com/x-kksunil/30min';
+          } else if (res.status === 400) {
+            if (data && data.message) msg = data.message;
+            if (data && Array.isArray(data.details) && data.details.length > 0) {
+              msg = data.details.map(d => d.message || d.parameter).join('; ');
+            }
+          } else if (res.status === 401) {
+            msg = 'Unauthorized Calendly API token. Please verify token permissions.';
+          } else if (res.status === 403) {
+            msg = 'Forbidden: Calendly account subscription required to book via API.';
+          } else if (res.status === 404) {
+            msg = 'Event type or time slot not found. Refreshing live availability...';
+            fetchCalendlyAvailability();
+          } else if (res.status >= 500) {
+            msg = 'Calendly servers are temporarily busy. Please retry in a moment.';
+          } else if (data && data.message) {
+            msg = data.message;
+          }
+
           if (formError) {
             formError.textContent = msg;
             formError.style.display = 'block';
@@ -1219,7 +1277,7 @@ const calendlyApiToken = SITE.CALENDLY_API_TOKEN;
       } catch (err) {
         console.error('Booking API call error:', err);
         if (formError) {
-          formError.textContent = 'Connection error. Please try selecting another slot or check your internet connection.';
+          formError.textContent = `Connection notice: ${err.message || 'Unable to connect to Calendly API.'}`;
           formError.style.display = 'block';
         }
       } finally {
