@@ -20,6 +20,30 @@ interface Release {
 
 const releases: Release[] = [
   {
+    version: "v2.10.5",
+    date: "October 2026",
+    badge: "Unified Tall Error Page Architecture",
+    badgeType: "launch",
+    summary: "Re-engineered all error routes (/404, /500, /401, /403, /503) with a tall, beautifully centered, card-free reusable layout (src/layouts/ErrorLayout.astro) featuring monumental watermark codes, clean status badges, and lightweight inline navigation.",
+    sections: [
+      {
+        type: "Changed",
+        items: [
+          "Unified Reusable Error Architecture: Created src/layouts/ErrorLayout.astro providing a tall, spacious, vertically centered error viewport (min-height: 80vh) shared across all 5 HTTP error routes.",
+          "Card Clutter Elimination: Stripped all pseudo-terminal cards and 6-card destination grids in favor of clean typography, prominent action buttons, and lightweight inline links (Projects, Experience, Tools, Blog, Status, Contact).",
+          "Codebase Cleanup: Removed over 1,000 lines of duplicated markup and styling across error pages."
+        ]
+      },
+      {
+        type: "Architecture",
+        items: [
+          "Bumped application release version to v2.10.5 in package.json.",
+          "Synchronized full changelog ledger across CHANGELOG.md and /changelog."
+        ]
+      }
+    ]
+  },
+  {
     version: "v2.10.4",
     date: "October 2026",
     badge: "Compact Footer Telemetry & Resume CTA",

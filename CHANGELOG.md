@@ -3,6 +3,19 @@
 All notable changes to the SK Builds portfolio platform are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.5] - 2026-10-12
+
+### Changed
+- **Unified Reusable Error Layout (`src/layouts/ErrorLayout.astro`)**: Re-engineered error pages into an expansive, tall, and centered layout (`min-height: 80vh`), replacing bloated pseudo-terminal diagnostic cards and 6-card destination grids with monumental status watermarks, clean HTTP badges, and lightweight inline navigation.
+- **Card Clutter Elimination**: Removed all nested card grids from `/404`, `/500`, `/401`, `/403`, and `/503`, shifting to clean typography and inline destination links (`Projects • Experience • Tools • Blog • Status • Contact`).
+- **Codebase Deduplication**: Unified all 5 error routes onto `ErrorLayout.astro`, eliminating over 1,000 lines of redundant HTML and CSS boilerplate.
+
+### Architecture
+- **Version Bump**: Bumped release version to `2.10.5` in `package.json`.
+- **Documentation**: Synchronized changelog records in `CHANGELOG.md` and `src/pages/changelog.astro`.
+
+---
+
 ## [2.10.4] - 2026-10-12
 
 ### Changed
