@@ -3,6 +3,17 @@
 All notable changes to the SK Builds portfolio platform are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.1] - 2026-10-12
+
+### Changed
+- **Footer UI Modernization**: Removed all bullet dot (`•`) separators across all 5 footer sections (`Navigation`, `Developer Tools`, `Publications`, `Platform`, `Connect`).
+- **Interactive Link Arrows**: Added subtle directional arrow icons (`↗`) to all footer links with micro-animated hover states (`translate(1.5px, -1.5px)`) and cyan accent highlights.
+- **Header Search Cleanup**: Hidden redundant header search button on desktop and laptop viewports (`> 640px`) to declutter the top navigation bar while keeping the floating Command Palette dock (`Ctrl+K`) as the primary fast-access shortcut.
+
+### Architecture
+- Bumped application release version to `2.9.1` in `package.json`.
+- Updated release history and component documentation.
+
 ---
 
 ## [2.9.0] - 2026-10-12
