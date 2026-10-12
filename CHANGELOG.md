@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [2.9.1] - 2026-10-12
 
 ### Changed
+- **Engineering Publications Masterclass Overhaul**: Completely rewrote and expanded all 19 blog publications in `src/content/blog/` into deep, authoritative, production-grade architectural writeups with ASCII topology diagrams, real-world benchmarks, and robust TypeScript/Python/SQL implementations.
+- **Dynamic Reading Times**: Updated `src/pages/blog/[slug].astro` to calculate reading time dynamically from markdown body word count (averaging 220 wpm).
 - **Footer UI Modernization**: Removed all bullet dot (`•`) separators across all 5 footer sections (`Navigation`, `Developer Tools`, `Publications`, `Platform`, `Connect`).
 - **Interactive Link Arrows**: Added subtle directional arrow icons (`↗`) to all footer links with micro-animated hover states (`translate(1.5px, -1.5px)`) and cyan accent highlights.
 - **Header Search Cleanup**: Hidden redundant header search button on desktop and laptop viewports (`> 640px`) to declutter the top navigation bar while keeping the floating Command Palette dock (`Ctrl+K`) as the primary fast-access shortcut.
