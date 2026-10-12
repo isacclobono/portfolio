@@ -1,0 +1,503 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Button from '../../components/Button.astro';
+---
+
+<Layout 
+  title="cURL to Fetch, Axios & Python Code Converter | SK Builds" 
+  description="Convert raw curl commands into JavaScript Fetch, Axios, Python Requests, Node.js HTTPS, and Go HTTP client code with 1-click copy." 
+  currentPath="/tools/curl-converter"
+>
+  <Breadcrumb items={[
+    { label: 'Tools', href: '/tools' },
+    { label: 'cURL Converter' }
+  ]} />
+
+  <Button href="/tools" variant="back" size="sm">
+    Back to tools
+  </Button>
+
+  <div style="margin: 1.5rem 0 2rem;">
+    <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.025em;">
+      cURL to Code Converter
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+      Convert cURL commands from Chrome DevTools, Postman, or API documentation into clean JavaScript Fetch, Axios, Python Requests, and Go code. 100% private in-browser parsing.
+    </p>
+  </div>
+
+  <div class="tool-card">
+    <!-- Input Section -->
+    <div class="input-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+        <label for="curl-input" style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">
+          Paste cURL Command:
+        </label>
+        <div style="display: flex; gap: 0.5rem;">
+          <button type="button" id="load-sample-curl" class="btn-micro">Sample GET</button>
+          <button type="button" id="load-sample-post" class="btn-micro">Sample POST</button>
+          <button type="button" id="clear-curl" class="btn-micro">Clear</button>
+        </div>
+      </div>
+      <textarea 
+        id="curl-input" 
+        rows="6" 
+        class="code-textarea" 
+        placeholder="curl -X POST https://api.example.com/v1/users \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer my_api_token' \
+  -d '{\&quot;name\&quot;: \&quot;Alex\&quot;, \&quot;role\&quot;: \&quot;admin\&quot;}'"
+        spellcheck="false"
+      ></textarea>
+    </div>
+
+    <!-- Output Section with Language Tabs -->
+    <div class="output-section">
+      <div class="tabs-header">
+        <div class="lang-tabs" id="lang-tabs">
+          <button type="button" class="tab-btn active" data-lang="fetch">JavaScript (Fetch)</button>
+          <button type="button" class="tab-btn" data-lang="axios">Axios</button>
+          <button type="button" class="tab-btn" data-lang="python">Python (Requests)</button>
+          <button type="button" class="tab-btn" data-lang="node">Node.js (https)</button>
+          <button type="button" class="tab-btn" data-lang="go">Go (net/http)</button>
+        </div>
+        <button type="button" id="copy-code-btn" class="btn-copy">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span id="copy-btn-text">Copy Code</span>
+        </button>
+      </div>
+
+      <div class="code-preview-wrap">
+        <pre><code id="code-output" class="code-display">// Converted code will appear here...</code></pre>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .tool-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg, 12px);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .code-textarea {
+    width: 100%;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md, 8px);
+    color: var(--text-primary);
+    font-family: var(--font-mono, monospace);
+    font-size: 0.825rem;
+    line-height: 1.5;
+    padding: 0.85rem;
+    box-sizing: border-box;
+    resize: vertical;
+    outline: none;
+    transition: border-color var(--transition-fast);
+  }
+
+  .code-textarea:focus {
+    border-color: var(--accent-blue, #38bdf8);
+  }
+
+  .btn-micro {
+    background: var(--bg-pill, rgba(255, 255, 255, 0.06));
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 0.25rem 0.55rem;
+    font-size: 0.725rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm, 6px);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-micro:hover {
+    color: var(--text-primary);
+    border-color: var(--border-card-hover);
+    background-color: var(--bg-card-hover);
+  }
+
+  .tabs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 0.65rem;
+    margin-bottom: 0.85rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .lang-tabs {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.35rem 0.65rem;
+    border-radius: var(--radius-sm, 6px);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .tab-btn:hover {
+    color: var(--text-primary);
+    background: var(--bg-pill);
+  }
+
+  .tab-btn.active {
+    color: var(--text-primary);
+    background: var(--bg-pill, rgba(255, 255, 255, 0.1));
+    border: 1px solid var(--border-subtle);
+  }
+
+  .btn-copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: var(--bg-pill);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-md, 8px);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-copy:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--accent-blue, #38bdf8);
+  }
+
+  .code-preview-wrap {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md, 8px);
+    padding: 1rem;
+    overflow-x: auto;
+    max-height: 460px;
+  }
+
+  .code-display {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.825rem;
+    color: var(--text-primary);
+    white-space: pre;
+    margin: 0;
+  }
+</style>
+
+<script>
+  interface ParsedCurl {
+    url: string;
+    method: string;
+    headers: Record<string, string>;
+    body: string | null;
+  }
+
+  function parseCurl(curlText: string): ParsedCurl | null {
+    if (!curlText || !curlText.trim()) return null;
+
+    let clean = curlText
+      .replace(/\\\r?\n/g, ' ')
+      .replace(/\\\n/g, ' ')
+      .trim();
+
+    if (!clean.startsWith('curl')) return null;
+
+    let method = 'GET';
+    const headers: Record<string, string> = {};
+    let body: string | null = null;
+    let url = '';
+
+    // Tokenize accounting for single and double quotes
+    const regex = /[^\s"']+|"([^"]*)"|'([^']*)'/g;
+    const tokens: string[] = [];
+    let match;
+
+    while ((match = regex.exec(clean)) !== null) {
+      if (match[1] !== undefined) {
+        tokens.push(match[1]);
+      } else if (match[2] !== undefined) {
+        tokens.push(match[2]);
+      } else {
+        tokens.push(match[0]);
+      }
+    }
+
+    for (let i = 1; i < tokens.length; i++) {
+      const token = tokens[i];
+
+      if (token === '-X' || token === '--request') {
+        method = (tokens[++i] || 'GET').toUpperCase();
+      } else if (token === '-H' || token === '--header') {
+        const headerStr = tokens[++i] || '';
+        const colonIdx = headerStr.indexOf(':');
+        if (colonIdx > -1) {
+          const key = headerStr.slice(0, colonIdx).trim();
+          const val = headerStr.slice(colonIdx + 1).trim();
+          headers[key] = val;
+        }
+      } else if (token === '-d' || token === '--data' || token === '--data-raw' || token === '--data-binary') {
+        body = tokens[++i] || '';
+        if (method === 'GET') method = 'POST';
+      } else if (token === '-u' || token === '--user') {
+        const auth = tokens[++i] || '';
+        headers['Authorization'] = 'Basic ' + btoa(auth);
+      } else if (!token.startsWith('-') && !url) {
+        url = token;
+      }
+    }
+
+    if (!url) url = 'https://api.example.com/v1/resource';
+
+    return { url, method, headers, body };
+  }
+
+  function generateFetch(parsed: ParsedCurl): string {
+    const opts: Record<string, any> = { method: parsed.method };
+    if (Object.keys(parsed.headers).length > 0) opts.headers = parsed.headers;
+    if (parsed.body) {
+      try {
+        opts.body = JSON.parse(parsed.body);
+      } catch {
+        opts.body = parsed.body;
+      }
+    }
+
+    let code = `const url = "${parsed.url}";\n`;
+    code += `const options = {\n`;
+    code += `  method: "${parsed.method}",\n`;
+    
+    if (Object.keys(parsed.headers).length > 0) {
+      code += `  headers: {\n`;
+      for (const [k, v] of Object.entries(parsed.headers)) {
+        code += `    "${k}": "${v}",\n`;
+      }
+      code += `  },\n`;
+    }
+
+    if (parsed.body) {
+      code += `  body: JSON.stringify(${parsed.body}),\n`;
+    }
+
+    code += `};\n\n`;
+    code += `try {\n`;
+    code += `  const response = await fetch(url, options);\n`;
+    code += `  const data = await response.json();\n`;
+    code += `  console.log(data);\n`;
+    code += `} catch (error) {\n`;
+    code += `  console.error("Fetch error:", error);\n`;
+    code += `}`;
+
+    return code;
+  }
+
+  function generateAxios(parsed: ParsedCurl): string {
+    let code = `import axios from "axios";\n\n`;
+    code += `const config = {\n`;
+    code += `  method: "${parsed.method.toLowerCase()}",\n`;
+    code += `  url: "${parsed.url}",\n`;
+    
+    if (Object.keys(parsed.headers).length > 0) {
+      code += `  headers: {\n`;
+      for (const [k, v] of Object.entries(parsed.headers)) {
+        code += `    "${k}": "${v}",\n`;
+      }
+      code += `  },\n`;
+    }
+
+    if (parsed.body) {
+      code += `  data: ${parsed.body},\n`;
+    }
+
+    code += `};\n\n`;
+    code += `try {\n`;
+    code += `  const response = await axios(config);\n`;
+    code += `  console.log(response.data);\n`;
+    code += `} catch (error) {\n`;
+    code += `  console.error("Axios error:", error.response?.data || error.message);\n`;
+    code += `}`;
+
+    return code;
+  }
+
+  function generatePython(parsed: ParsedCurl): string {
+    let code = `import requests\nimport json\n\n`;
+    code += `url = "${parsed.url}"\n\n`;
+
+    if (Object.keys(parsed.headers).length > 0) {
+      code += `headers = {\n`;
+      for (const [k, v] of Object.entries(parsed.headers)) {
+        code += `    "${k}": "${v}",\n`;
+      }
+      code += `}\n\n`;
+    } else {
+      code += `headers = {}\n\n`;
+    }
+
+    if (parsed.body) {
+      code += `payload = ${parsed.body}\n\n`;
+      code += `response = requests.${parsed.method.toLowerCase()}(url, headers=headers, json=payload)\n`;
+    } else {
+      code += `response = requests.${parsed.method.toLowerCase()}(url, headers=headers)\n`;
+    }
+
+    code += `print(response.status_code)\n`;
+    code += `print(response.json())`;
+
+    return code;
+  }
+
+  function generateNode(parsed: ParsedCurl): string {
+    const urlObj = new URL(parsed.url);
+    let code = `import https from "node:https";\n\n`;
+    code += `const options = {\n`;
+    code += `  hostname: "${urlObj.hostname}",\n`;
+    code += `  port: ${urlObj.port || 443},\n`;
+    code += `  path: "${urlObj.pathname}${urlObj.search}",\n`;
+    code += `  method: "${parsed.method}",\n`;
+    code += `  headers: {\n`;
+    for (const [k, v] of Object.entries(parsed.headers)) {
+      code += `    "${k}": "${v}",\n`;
+    }
+    code += `  }\n`;
+    code += `};\n\n`;
+    code += `const req = https.request(options, (res) => {\n`;
+    code += `  let data = "";\n`;
+    code += `  res.on("data", (chunk) => { data += chunk; });\n`;
+    code += `  res.on("end", () => {\n`;
+    code += `    console.log(JSON.parse(data));\n`;
+    code += `  });\n`;
+    code += `});\n\n`;
+    code += `req.on("error", (e) => console.error(e));\n`;
+    if (parsed.body) {
+      code += `req.write(JSON.stringify(${parsed.body}));\n`;
+    }
+    code += `req.end();`;
+    return code;
+  }
+
+  function generateGo(parsed: ParsedCurl): string {
+    let code = `package main\n\nimport (\n\t"fmt"\n\t"io"\n\t"net/http"\n`;
+    if (parsed.body) code += `\t"strings"\n`;
+    code += `)\n\nfunc main() {\n`;
+    code += `\turl := "${parsed.url}"\n`;
+
+    if (parsed.body) {
+      code += `\tpayload := strings.NewReader(\`${parsed.body}\`)\n`;
+      code += `\treq, err := http.NewRequest("${parsed.method}", url, payload)\n`;
+    } else {
+      code += `\treq, err := http.NewRequest("${parsed.method}", url, nil)\n`;
+    }
+
+    code += `\tif err != nil {\n\t\tpanic(err)\n\t}\n\n`;
+
+    for (const [k, v] of Object.entries(parsed.headers)) {
+      code += `\treq.Header.Add("${k}", "${v}")\n`;
+    }
+
+    code += `\n\tres, err := http.DefaultClient.Do(req)\n`;
+    code += `\tif err != nil {\n\t\tpanic(err)\n\t}\n`;
+    code += `\tdefer res.Body.Close()\n\n`;
+    code += `\tbody, _ := io.ReadAll(res.Body)\n`;
+    code += `\tfmt.Println(string(body))\n`;
+    code += `}`;
+    return code;
+  }
+
+  function initCurlConverter() {
+    const input = document.getElementById('curl-input') as HTMLTextAreaElement;
+    const output = document.getElementById('code-output');
+    const tabs = document.querySelectorAll('#lang-tabs .tab-btn');
+    const copyBtn = document.getElementById('copy-code-btn');
+    const copyBtnText = document.getElementById('copy-btn-text');
+    const sampleGetBtn = document.getElementById('load-sample-get');
+    const samplePostBtn = document.getElementById('load-sample-post');
+    const clearBtn = document.getElementById('clear-curl');
+
+    let currentLang = 'fetch';
+
+    function updateCode() {
+      if (!input || !output) return;
+      const parsed = parseCurl(input.value);
+
+      if (!parsed) {
+        output.textContent = '// Enter a valid cURL command above to see converted code.';
+        return;
+      }
+
+      let generated = '';
+      switch (currentLang) {
+        case 'fetch': generated = generateFetch(parsed); break;
+        case 'axios': generated = generateAxios(parsed); break;
+        case 'python': generated = generatePython(parsed); break;
+        case 'node': generated = generateNode(parsed); break;
+        case 'go': generated = generateGo(parsed); break;
+      }
+
+      output.textContent = generated;
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentLang = tab.getAttribute('data-lang') || 'fetch';
+        updateCode();
+      });
+    });
+
+    input?.addEventListener('input', updateCode);
+
+    sampleGetBtn?.addEventListener('click', () => {
+      input.value = `curl -X GET "https://api.github.com/users/naman-mahi/repos?sort=updated" \\\n  -H "Accept: application/vnd.github.v3+json" \\\n  -H "User-Agent: SK-Builds-Tools"`;
+      updateCode();
+    });
+
+    samplePostBtn?.addEventListener('click', () => {
+      input.value = `curl -X POST "https://api.example.com/v1/orders" \\\n  -H "Content-Type: application/json" \\\n  -H "Authorization: Bearer sec_tok_998124" \\\n  -d '{"customerId": "usr_991", "amount": 149.50, "currency": "USD"}'`;
+      updateCode();
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      input.value = '';
+      updateCode();
+    });
+
+    copyBtn?.addEventListener('click', () => {
+      if (!output?.textContent) return;
+      navigator.clipboard.writeText(output.textContent).then(() => {
+        if (copyBtnText) copyBtnText.textContent = 'Copied!';
+        setTimeout(() => {
+          if (copyBtnText) copyBtnText.textContent = 'Copy Code';
+        }, 2000);
+      });
+    });
+
+    // Run initial sample
+    if (samplePostBtn && input && !input.value) {
+      samplePostBtn.click();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', initCurlConverter);
+</script>

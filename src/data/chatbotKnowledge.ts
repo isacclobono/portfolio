@@ -116,6 +116,31 @@ export const SUNIL_KNOWLEDGE_BASE = {
       name: "Cron Schedule Expression Generator",
       url: "/tools/cron-generator",
       description: "Visual cron builder and human-readable schedule translator."
+    },
+    {
+      name: "cURL to Code Converter",
+      url: "/tools/curl-converter",
+      description: "Convert cURL shell commands into JavaScript Fetch, Axios, Python Requests, Node.js, and Go code."
+    },
+    {
+      name: "JSON Formatter & Validator",
+      url: "/tools/json-formatter",
+      description: "Beautify, validate syntax, sort keys alphabetically, and minify JSON with real-time error detection."
+    },
+    {
+      name: "Unix Timestamp & Epoch Converter",
+      url: "/tools/timestamp-converter",
+      description: "Live-ticking Unix timestamp clock with bidirectional conversions between epoch seconds/ms and ISO 8601/UTC/Local dates."
+    },
+    {
+      name: "Linux Chmod Permissions Calculator",
+      url: "/tools/chmod-calculator",
+      description: "Visual POSIX permission calculator synchronizing octal (755, 644), symbolic notation, and terminal commands."
+    },
+    {
+      name: "HTML Entity Encoder & Decoder",
+      url: "/tools/html-entity-encoder",
+      description: "Encode and decode HTML entities, escape XSS vulnerabilities, and strip HTML tags safely client-side."
     }
   ]
 };

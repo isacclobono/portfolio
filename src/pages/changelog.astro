@@ -20,6 +20,32 @@ interface Release {
 
 const releases: Release[] = [
   {
+    version: "v2.10.0",
+    date: "October 2026",
+    badge: "Developer Tool Suite Expansion",
+    badgeType: "launch",
+    summary: "Expanded developer utility toolsuite from 15 to 20 client-side production tools with zero server telemetry: cURL to Code Converter, JSON Formatter & Validator, Unix Epoch Timestamp Converter, Linux Chmod Calculator, and HTML Entity Encoder/Decoder.",
+    sections: [
+      {
+        type: "Added",
+        items: [
+          "cURL Converter Tool (/tools/curl-converter): Instant bidirectional parsing from raw cURL shell commands into production-ready client snippets across JavaScript Fetch, Axios, Python Requests, Node.js HTTP/https, and Go net/http with 1-click clipboard copy.",
+          "JSON Formatter & Validator Tool (/tools/json-formatter): Client-side structured JSON beautifier with configurable 2/4-space indentation, minification, alphabetical key sorting, line-by-line syntax error diagnostics, and byte-savings metrics.",
+          "Unix Timestamp Converter Tool (/tools/timestamp-converter): High-precision epoch converter featuring live-ticking second and millisecond clocks, ISO 8601/UTC/Local/Relative date parsing, and quick epoch reference presets.",
+          "Linux Chmod Calculator Tool (/tools/chmod-calculator): Interactive POSIX permission matrix for Owner, Group, and Others with real-time numeric (e.g., 755, 644) and symbolic (rwxr-xr-x) synchronization, CLI command generator, and unsafe 777 permission alerts.",
+          "HTML Entity Encoder/Decoder Tool (/tools/html-entity-encoder): Comprehensive web sanitizer converting between raw strings, named entities, decimal codes, and hex notations, complete with XSS injection protection modes and HTML tag stripper."
+        ]
+      },
+      {
+        type: "Architecture",
+        items: [
+          "Expanded developer tools catalog, command palette global search index, and sitemap.xml to 20 verified client-side utilities.",
+          "Bumped application semantic version to v2.10.0 in package.json."
+        ]
+      }
+    ]
+  },
+  {
     version: "v2.9.1",
     date: "October 2026",
     badge: "Publication Overhaul & UI Polish",

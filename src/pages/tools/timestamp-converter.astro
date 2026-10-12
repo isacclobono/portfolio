@@ -1,0 +1,496 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Button from '../../components/Button.astro';
+---
+
+<Layout 
+  title="Unix Epoch Timestamp & Date Converter | SK Builds" 
+  description="Convert Unix timestamps in seconds, milliseconds, and microseconds to human-readable UTC, ISO 8601, and local time with live ticker." 
+  currentPath="/tools/timestamp-converter"
+>
+  <Breadcrumb items={[
+    { label: 'Tools', href: '/tools' },
+    { label: 'Timestamp Converter' }
+  ]} />
+
+  <Button href="/tools" variant="back" size="sm">
+    Back to tools
+  </Button>
+
+  <div style="margin: 1.5rem 0 2rem;">
+    <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.025em;">
+      Unix Epoch Timestamp Converter
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+      Convert Unix timestamps to human-readable datetime formats and vice versa. Inspect timezones, relative time, and leap seconds. 100% client-side precision.
+    </p>
+  </div>
+
+  <!-- Live Current Epoch Ticker -->
+  <div class="current-epoch-card">
+    <div class="ticker-left">
+      <span class="ticker-indicator"></span>
+      <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">Current Unix Epoch:</span>
+      <span id="live-epoch-sec" class="live-epoch-val">0000000000</span>
+      <span class="live-epoch-ms-badge">(<span id="live-epoch-ms">0</span> ms)</span>
+    </div>
+    <div style="display: flex; gap: 0.5rem;">
+      <button type="button" id="btn-copy-live-epoch" class="btn-micro">Copy Epoch</button>
+      <button type="button" id="btn-toggle-ticker" class="btn-micro">Pause</button>
+    </div>
+  </div>
+
+  <div class="tool-grid">
+    <!-- Panel 1: Timestamp to Date -->
+    <div class="tool-panel">
+      <h2 class="panel-heading">Timestamp &rarr; Human Date</h2>
+      <div class="form-group">
+        <label for="input-timestamp" class="form-label">Unix Timestamp (Seconds, Milliseconds, or Microseconds):</label>
+        <div style="display: flex; gap: 0.5rem;">
+          <input type="text" id="input-timestamp" class="text-input" placeholder="e.g. 1776000000" />
+          <button type="button" id="btn-convert-ts" class="btn-primary-action">Convert</button>
+        </div>
+      </div>
+
+      <div class="quick-jump-bar">
+        <button type="button" class="btn-jump" data-offset="0">Now</button>
+        <button type="button" class="btn-jump" data-offset="3600">+1 Hour</button>
+        <button type="button" class="btn-jump" data-offset="86400">+1 Day</button>
+        <button type="button" class="btn-jump" data-offset="604800">+1 Week</button>
+        <button type="button" class="btn-jump" data-offset="2592000">+30 Days</button>
+      </div>
+
+      <div class="results-table">
+        <div class="result-row">
+          <span class="res-label">Format:</span>
+          <span id="res-unit" class="res-value">Seconds (10 digits)</span>
+        </div>
+        <div class="result-row">
+          <span class="res-label">UTC Time:</span>
+          <span id="res-utc" class="res-value">-</span>
+        </div>
+        <div class="result-row">
+          <span class="res-label">ISO 8601:</span>
+          <span id="res-iso" class="res-value">-</span>
+        </div>
+        <div class="result-row">
+          <span class="res-label">Local Time:</span>
+          <span id="res-local" class="res-value">-</span>
+        </div>
+        <div class="result-row">
+          <span class="res-label">Relative Time:</span>
+          <span id="res-relative" class="res-value">-</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 2: Date to Timestamp -->
+    <div class="tool-panel">
+      <h2 class="panel-heading">Human Date &rarr; Timestamp</h2>
+      <div class="form-group">
+        <label for="input-datetime" class="form-label">Pick Date &amp; Time (Local):</label>
+        <input type="datetime-local" id="input-datetime" class="text-input" />
+      </div>
+
+      <div class="form-group" style="margin-top: 0.75rem;">
+        <label for="input-iso-text" class="form-label">Or paste ISO 8601 / Date String:</label>
+        <div style="display: flex; gap: 0.5rem;">
+          <input type="text" id="input-iso-text" class="text-input" placeholder="2026-10-12T04:20:00Z" />
+          <button type="button" id="btn-convert-date" class="btn-primary-action">Convert</button>
+        </div>
+      </div>
+
+      <div class="results-table" style="margin-top: 1.25rem;">
+        <div class="result-row">
+          <span class="res-label">Epoch (Seconds):</span>
+          <span id="res-epoch-sec" class="res-value">-</span>
+        </div>
+        <div class="result-row">
+          <span class="res-label">Epoch (Milliseconds):</span>
+          <span id="res-epoch-ms" class="res-value">-</span>
+        </div>
+        <div class="result-row">
+          <span class="res-label">RFC 2822:</span>
+          <span id="res-rfc" class="res-value">-</span>
+        </div>
+        <div class="result-row">
+          <span class="res-label">Day of Year:</span>
+          <span id="res-day-of-year" class="res-value">-</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .current-epoch-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg, 12px);
+    padding: 1rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .ticker-left {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+  }
+
+  .ticker-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #10b981;
+    box-shadow: 0 0 8px #10b981;
+    animation: pulseTicker 1.5s infinite;
+  }
+
+  @keyframes pulseTicker {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+
+  .live-epoch-val {
+    font-family: var(--font-mono, monospace);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .live-epoch-ms-badge {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .btn-micro {
+    background: var(--bg-pill, rgba(255, 255, 255, 0.06));
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    padding: 0.3rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm, 6px);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-micro:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-card-hover);
+  }
+
+  .tool-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .tool-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .tool-panel {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg, 12px);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .panel-heading {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1.2rem;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 0.5rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .form-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .text-input {
+    width: 100%;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-family: var(--font-mono, monospace);
+    font-size: 0.825rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: var(--radius-md, 8px);
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color var(--transition-fast);
+  }
+
+  .text-input:focus {
+    border-color: var(--accent-blue, #38bdf8);
+  }
+
+  .btn-primary-action {
+    background-color: var(--accent-blue, #38bdf8);
+    color: #0f172a;
+    border: none;
+    padding: 0.55rem 0.95rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: var(--radius-md, 8px);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-primary-action:hover {
+    background-color: #0284c7;
+    color: #fff;
+  }
+
+  .quick-jump-bar {
+    display: flex;
+    gap: 0.35rem;
+    margin: 0.85rem 0 1.2rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-jump {
+    background: var(--bg-pill, rgba(255, 255, 255, 0.05));
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm, 6px);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-jump:hover {
+    color: var(--text-primary);
+    border-color: var(--accent-blue, #38bdf8);
+  }
+
+  .results-table {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md, 8px);
+    padding: 0.85rem;
+    margin-top: auto;
+  }
+
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .res-label {
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  .res-value {
+    color: var(--text-primary);
+    font-family: var(--font-mono, monospace);
+    word-break: break-all;
+    text-align: right;
+  }
+</style>
+
+<script>
+  function initTimestampConverter() {
+    let tickerActive = true;
+    const liveSec = document.getElementById('live-epoch-sec');
+    const liveMs = document.getElementById('live-epoch-ms');
+    const btnToggleTicker = document.getElementById('btn-toggle-ticker');
+    const btnCopyLive = document.getElementById('btn-copy-live-epoch');
+
+    // Panel 1 elements
+    const inputTs = document.getElementById('input-timestamp') as HTMLInputElement;
+    const btnConvertTs = document.getElementById('btn-convert-ts');
+    const resUnit = document.getElementById('res-unit');
+    const resUtc = document.getElementById('res-utc');
+    const resIso = document.getElementById('res-iso');
+    const resLocal = document.getElementById('res-local');
+    const resRelative = document.getElementById('res-relative');
+    const jumpButtons = document.querySelectorAll('.btn-jump');
+
+    // Panel 2 elements
+    const inputDatetime = document.getElementById('input-datetime') as HTMLInputElement;
+    const inputIsoText = document.getElementById('input-iso-text') as HTMLInputElement;
+    const btnConvertDate = document.getElementById('btn-convert-date');
+    const resEpochSec = document.getElementById('res-epoch-sec');
+    const resEpochMs = document.getElementById('res-epoch-ms');
+    const resRfc = document.getElementById('res-rfc');
+    const resDayOfYear = document.getElementById('res-day-of-year');
+
+    // Live Ticker Interval
+    setInterval(() => {
+      if (!tickerActive) return;
+      const now = Date.now();
+      if (liveSec) liveSec.textContent = Math.floor(now / 1000).toString();
+      if (liveMs) liveMs.textContent = now.toString();
+    }, 100);
+
+    btnToggleTicker?.addEventListener('click', () => {
+      tickerActive = !tickerActive;
+      btnToggleTicker.textContent = tickerActive ? 'Pause' : 'Resume';
+    });
+
+    btnCopyLive?.addEventListener('click', () => {
+      if (!liveSec?.textContent) return;
+      navigator.clipboard.writeText(liveSec.textContent).then(() => {
+        btnCopyLive.textContent = 'Copied!';
+        setTimeout(() => { btnCopyLive.textContent = 'Copy Epoch'; }, 2000);
+      });
+    });
+
+    function getRelativeTime(d: Date): string {
+      const now = Date.now();
+      const diffMs = d.getTime() - now;
+      const diffSec = Math.round(diffMs / 1000);
+      const diffMin = Math.round(diffSec / 60);
+      const diffHours = Math.round(diffMin / 60);
+      const diffDays = Math.round(diffHours / 24);
+
+      if (Math.abs(diffSec) < 45) return 'Just now';
+      if (diffSec < 0) {
+        if (Math.abs(diffSec) < 90) return '1 minute ago';
+        if (Math.abs(diffMin) < 45) return `${Math.abs(diffMin)} minutes ago`;
+        if (Math.abs(diffHours) < 24) return `${Math.abs(diffHours)} hours ago`;
+        return `${Math.abs(diffDays)} days ago`;
+      } else {
+        if (diffSec < 90) return 'In 1 minute';
+        if (diffMin < 45) return `In ${diffMin} minutes`;
+        if (diffHours < 24) return `In ${diffHours} hours`;
+        return `In ${diffDays} days`;
+      }
+    }
+
+    function convertTimestampToDate(rawVal: string) {
+      const trimmed = rawVal.trim();
+      if (!trimmed || isNaN(Number(trimmed))) {
+        if (resUtc) resUtc.textContent = 'Invalid timestamp';
+        return;
+      }
+
+      let num = Number(trimmed);
+      let dateObj: Date;
+
+      if (trimmed.length <= 11) {
+        // Seconds
+        dateObj = new Date(num * 1000);
+        if (resUnit) resUnit.textContent = 'Seconds (10 digits)';
+      } else if (trimmed.length <= 14) {
+        // Milliseconds
+        dateObj = new Date(num);
+        if (resUnit) resUnit.textContent = 'Milliseconds (13 digits)';
+      } else {
+        // Microseconds (16 digits)
+        dateObj = new Date(Math.floor(num / 1000));
+        if (resUnit) resUnit.textContent = 'Microseconds (16 digits)';
+      }
+
+      if (isNaN(dateObj.getTime())) {
+        if (resUtc) resUtc.textContent = 'Out of range';
+        return;
+      }
+
+      if (resUtc) resUtc.textContent = dateObj.toUTCString();
+      if (resIso) resIso.textContent = dateObj.toISOString();
+      if (resLocal) resLocal.textContent = dateObj.toLocaleString();
+      if (resRelative) resRelative.textContent = getRelativeTime(dateObj);
+    }
+
+    btnConvertTs?.addEventListener('click', () => {
+      if (inputTs) convertTimestampToDate(inputTs.value);
+    });
+
+    inputTs?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') convertTimestampToDate(inputTs.value);
+    });
+
+    jumpButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const offset = Number(btn.getAttribute('data-offset') || '0');
+        const nowSec = Math.floor(Date.now() / 1000) + offset;
+        if (inputTs) {
+          inputTs.value = nowSec.toString();
+          convertTimestampToDate(inputTs.value);
+        }
+      });
+    });
+
+    function convertDateToTimestamp(d: Date) {
+      if (isNaN(d.getTime())) return;
+
+      const sec = Math.floor(d.getTime() / 1000);
+      const ms = d.getTime();
+
+      if (resEpochSec) resEpochSec.textContent = sec.toString();
+      if (resEpochMs) resEpochMs.textContent = ms.toString();
+      if (resRfc) resRfc.textContent = d.toUTCString();
+
+      // Day of year calculation
+      const startOfYear = new Date(d.getFullYear(), 0, 0);
+      const diff = d.getTime() - startOfYear.getTime();
+      const oneDay = 1000 * 60 * 60 * 24;
+      const day = Math.floor(diff / oneDay);
+      if (resDayOfYear) resDayOfYear.textContent = `${day} of ${d.getFullYear()}`;
+    }
+
+    inputDatetime?.addEventListener('change', () => {
+      if (!inputDatetime.value) return;
+      const d = new Date(inputDatetime.value);
+      convertDateToTimestamp(d);
+      if (inputIsoText) inputIsoText.value = d.toISOString();
+    });
+
+    btnConvertDate?.addEventListener('click', () => {
+      if (!inputIsoText?.value) return;
+      const d = new Date(inputIsoText.value);
+      convertDateToTimestamp(d);
+    });
+
+    // Initialize with current time
+    const initialNow = Math.floor(Date.now() / 1000).toString();
+    if (inputTs) {
+      inputTs.value = initialNow;
+      convertTimestampToDate(initialNow);
+    }
+
+    // Set default datetime-local to current
+    const nowIso = new Date().toISOString().slice(0, 16);
+    if (inputDatetime) {
+      inputDatetime.value = nowIso;
+      convertDateToTimestamp(new Date());
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', initTimestampConverter);
+</script>

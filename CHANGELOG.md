@@ -3,6 +3,23 @@
 All notable changes to the SK Builds portfolio platform are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.0] - 2026-10-12
+
+### Added
+- **5 New Essential Developer Utilities** (Suite expanded from 15 to 20 tools):
+  - **cURL Converter (`/tools/curl-converter`)**: Bidirectional parser generating client-side requests across JavaScript `fetch`, Axios, Python `requests`, Node.js `http`/`https`, and Go `net/http` from raw cURL commands with one-click clipboard copying.
+  - **JSON Formatter & Validator (`/tools/json-formatter`)**: Real-time syntax validation, customizable indentation (2 spaces, 4 spaces, tabs), alphabetical key sorting, minification, and byte-savings computation.
+  - **Unix Epoch Timestamp Converter (`/tools/timestamp-converter`)**: Live-ticking epoch clocks in seconds and milliseconds with two-way parsing between Unix timestamps and ISO 8601/UTC/Local/Relative human dates.
+  - **Linux Permissions Chmod Calculator (`/tools/chmod-calculator`)**: Interactive POSIX permission matrix (Owner, Group, Others) with synchronized octal (e.g. `755`, `644`) and symbolic (`-rwxr-xr-x`) values, terminal command builder (`chmod`, `chown`), and security warning indicators.
+  - **HTML Entity Encoder & Decoder (`/tools/html-entity-encoder`)**: Full-featured sanitizer converting between plain text, named HTML entities, decimal codes, and hexadecimal values with dedicated XSS protection mode and HTML tag removal.
+
+### Architecture
+- **Catalog & Sitemap Synchronization**: Added all 5 utilities to developer tools catalog (`/tools`), footer navigation, XML sitemap (`/sitemap.xml`), and the Global Command Palette (`Ctrl+K`).
+- **Zero Server Telemetry**: Maintained 100% client-side privacy across all utilities with zero remote telemetry or server round-trips.
+- **Version Bump**: Bumped package version to `2.10.0`.
+
+---
+
 ## [2.9.1] - 2026-10-12
 
 ### Changed

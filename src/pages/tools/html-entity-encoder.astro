@@ -1,0 +1,347 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Button from '../../components/Button.astro';
+---
+
+<Layout 
+  title="HTML Entity Encoder, Decoder & Sanitizer | SK Builds" 
+  description="Encode and decode HTML entities, escape XSS characters, convert to decimal and hex entities, and strip HTML tags safely client-side." 
+  currentPath="/tools/html-entity-encoder"
+>
+  <Breadcrumb items={[
+    { label: 'Tools', href: '/tools' },
+    { label: 'HTML Entity Encoder' }
+  ]} />
+
+  <Button href="/tools" variant="back" size="sm">
+    Back to tools
+  </Button>
+
+  <div style="margin: 1.5rem 0 2rem;">
+    <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.025em;">
+      HTML Entity Encoder &amp; Decoder
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+      Safely escape and unescape HTML characters for XSS defense, API payloads, and email templates. Convert between named entities, decimal, and hexadecimal codes.
+    </p>
+  </div>
+
+  <div class="tool-card">
+    <!-- Mode Tabs & Controls -->
+    <div class="toolbar-wrap">
+      <div class="mode-tabs" id="mode-tabs">
+        <button type="button" class="tab-btn active" data-mode="encode">Encode HTML</button>
+        <button type="button" class="tab-btn" data-mode="decode">Decode Entities</button>
+        <button type="button" class="tab-btn" data-mode="strip">Strip All Tags</button>
+      </div>
+
+      <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+        <label for="format-select" style="font-size: 0.775rem; font-weight: 600; color: var(--text-muted);">Format:</label>
+        <select id="format-select" class="tool-select">
+          <option value="named">Named Entities (&amp;lt;)</option>
+          <option value="decimal">Decimal (&amp;#60;)</option>
+          <option value="hex">Hexadecimal (&amp;#x3c;)</option>
+        </select>
+        <button type="button" id="btn-sample-html" class="btn-tool-action">Sample</button>
+        <button type="button" id="btn-clear-html" class="btn-tool-action">Clear</button>
+      </div>
+    </div>
+
+    <!-- Dual Panes: Input & Output -->
+    <div class="dual-panes-grid">
+      <div class="pane-column">
+        <div class="pane-header">
+          <label for="html-input" class="pane-label">Input Text / Code:</label>
+          <span id="input-stats" class="pane-meta">0 chars</span>
+        </div>
+        <textarea 
+          id="html-input" 
+          class="pane-textarea" 
+          rows="12" 
+          placeholder="Paste text or HTML markup here... (e.g. <div class=&quot;card&quot;>Hello & welcome!</div>)"
+          spellcheck="false"
+        ></textarea>
+      </div>
+
+      <div class="pane-column">
+        <div class="pane-header">
+          <label class="pane-label">Converted Output:</label>
+          <button type="button" id="btn-copy-output" class="btn-copy-pill">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span id="copy-status-text">Copy Output</span>
+          </button>
+        </div>
+        <textarea 
+          id="html-output" 
+          class="pane-textarea" 
+          rows="12" 
+          readonly 
+          placeholder="Processed result will appear here..."
+          spellcheck="false"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .tool-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg, 12px);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .toolbar-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 0.85rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .mode-tabs {
+    display: flex;
+    gap: 0.35rem;
+  }
+
+  .tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.35rem 0.65rem;
+    border-radius: var(--radius-sm, 6px);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .tab-btn:hover {
+    color: var(--text-primary);
+    background: var(--bg-pill);
+  }
+
+  .tab-btn.active {
+    color: var(--text-primary);
+    background: var(--bg-pill, rgba(255, 255, 255, 0.1));
+    border: 1px solid var(--border-subtle);
+  }
+
+  .tool-select {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    border-radius: var(--radius-sm, 6px);
+    padding: 0.3rem 0.55rem;
+    font-size: 0.775rem;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .btn-tool-action {
+    background: var(--bg-pill, rgba(255, 255, 255, 0.05));
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.3rem 0.65rem;
+    border-radius: var(--radius-sm, 6px);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-tool-action:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--accent-blue, #38bdf8);
+  }
+
+  .dual-panes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .dual-panes-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .pane-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pane-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .pane-meta {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono, monospace);
+  }
+
+  .pane-textarea {
+    width: 100%;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md, 8px);
+    color: var(--text-primary);
+    font-family: var(--font-mono, monospace);
+    font-size: 0.825rem;
+    line-height: 1.5;
+    padding: 0.85rem;
+    box-sizing: border-box;
+    resize: vertical;
+    outline: none;
+    transition: border-color var(--transition-fast);
+  }
+
+  .pane-textarea:focus {
+    border-color: var(--accent-blue, #38bdf8);
+  }
+
+  .btn-copy-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: var(--bg-pill, rgba(255, 255, 255, 0.08));
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-size: 0.725rem;
+    font-weight: 600;
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-sm, 6px);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-copy-pill:hover {
+    border-color: var(--accent-blue, #38bdf8);
+  }
+</style>
+
+<script>
+  function initHtmlEntityEncoder() {
+    const input = document.getElementById('html-input') as HTMLTextAreaElement;
+    const output = document.getElementById('html-output') as HTMLTextAreaElement;
+    const modeTabs = document.querySelectorAll('#mode-tabs .tab-btn');
+    const formatSelect = document.getElementById('format-select') as HTMLSelectElement;
+    const btnSample = document.getElementById('btn-sample-html');
+    const btnClear = document.getElementById('btn-clear-html');
+    const btnCopy = document.getElementById('btn-copy-output');
+    const copyText = document.getElementById('copy-status-text');
+    const inputStats = document.getElementById('input-stats');
+
+    let currentMode = 'encode';
+
+    function encodeHtml(str: string, format: string): string {
+      if (format === 'named') {
+        return str.replace(/[&<>"']/g, (match) => {
+          switch (match) {
+            case '&': return '&amp;';
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '"': return '&quot;';
+            case "'": return '&#39;';
+            default: return match;
+          }
+        });
+      } else if (format === 'decimal') {
+        return str.replace(/[&<>"']/g, (match) => `&#${match.charCodeAt(0)};`);
+      } else if (format === 'hex') {
+        return str.replace(/[&<>"']/g, (match) => `&#x${match.charCodeAt(0).toString(16)};`);
+      }
+      return str;
+    }
+
+    function decodeHtml(str: string): string {
+      const doc = new DOMParser().parseFromString(str, 'text/html');
+      return doc.documentElement.textContent || '';
+    }
+
+    function stripTags(str: string): string {
+      return str.replace(/<[^>]*>/g, '');
+    }
+
+    function processText() {
+      if (!input || !output) return;
+      const text = input.value;
+      if (inputStats) inputStats.textContent = `${text.length} chars`;
+
+      if (!text) {
+        output.value = '';
+        return;
+      }
+
+      const format = formatSelect?.value || 'named';
+
+      if (currentMode === 'encode') {
+        output.value = encodeHtml(text, format);
+      } else if (currentMode === 'decode') {
+        output.value = decodeHtml(text);
+      } else if (currentMode === 'strip') {
+        output.value = stripTags(text);
+      }
+    }
+
+    modeTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        modeTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentMode = tab.getAttribute('data-mode') || 'encode';
+        processText();
+      });
+    });
+
+    formatSelect?.addEventListener('change', processText);
+    input?.addEventListener('input', processText);
+
+    btnSample?.addEventListener('click', () => {
+      input.value = `<div class="alert-box" id="sec-101">\n  <h3>Warning: & special chars!</h3>\n  <p>Test with "quotes", 'apostrophes' & <script>alert('XSS')</script></p>\n</div>`;
+      processText();
+    });
+
+    btnClear?.addEventListener('click', () => {
+      input.value = '';
+      output.value = '';
+      if (inputStats) inputStats.textContent = '0 chars';
+    });
+
+    btnCopy?.addEventListener('click', () => {
+      if (!output?.value) return;
+      navigator.clipboard.writeText(output.value).then(() => {
+        if (copyText) copyText.textContent = 'Copied!';
+        setTimeout(() => {
+          if (copyText) copyText.textContent = 'Copy Output';
+        }, 2000);
+      });
+    });
+
+    if (input && !input.value) {
+      btnSample?.click();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', initHtmlEntityEncoder);
+</script>

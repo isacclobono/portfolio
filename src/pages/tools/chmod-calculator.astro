@@ -1,0 +1,474 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Button from '../../components/Button.astro';
+---
+
+<Layout 
+  title="Linux Chmod Permissions & Octal Calculator | SK Builds" 
+  description="Interactive Linux file permission calculator between octal notation (755, 644) and symbolic notation (rwxr-xr-x) with chmod command builder." 
+  currentPath="/tools/chmod-calculator"
+>
+  <Breadcrumb items={[
+    { label: 'Tools', href: '/tools' },
+    { label: 'Chmod Calculator' }
+  ]} />
+
+  <Button href="/tools" variant="back" size="sm">
+    Back to tools
+  </Button>
+
+  <div style="margin: 1.5rem 0 2rem;">
+    <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.025em;">
+      Linux Chmod Permissions Calculator
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+      Calculate POSIX file and directory permissions between octal values, symbolic representations, and terminal commands. Includes common Linux security presets.
+    </p>
+  </div>
+
+  <div class="tool-card">
+    <!-- Presets Bar -->
+    <div class="presets-row">
+      <span class="presets-label">Common Presets:</span>
+      <div class="presets-group">
+        <button type="button" class="btn-preset" data-octal="644">644 (Standard File)</button>
+        <button type="button" class="btn-preset" data-octal="755">755 (Web / Executable)</button>
+        <button type="button" class="btn-preset" data-octal="600">600 (SSH Key / Secret)</button>
+        <button type="button" class="btn-preset" data-octal="700">700 (Private Dir)</button>
+        <button type="button" class="btn-preset" data-octal="777">777 (Full Access)</button>
+        <button type="button" class="btn-preset" data-octal="400">400 (Read Only)</button>
+      </div>
+    </div>
+
+    <!-- Interactive Permissions Matrix -->
+    <div class="matrix-container">
+      <div class="matrix-column">
+        <div class="column-header">
+          <span class="user-tier">Owner (User)</span>
+          <span id="tier-val-owner" class="tier-digit">7</span>
+        </div>
+        <label class="perm-checkbox-item">
+          <input type="checkbox" id="owner-r" data-scope="owner" data-val="4" checked />
+          <span>Read (4 / r)</span>
+        </label>
+        <label class="perm-checkbox-item">
+          <input type="checkbox" id="owner-w" data-scope="owner" data-val="2" checked />
+          <span>Write (2 / w)</span>
+        </label>
+        <label class="perm-checkbox-item">
+          <input type="checkbox" id="owner-x" data-scope="owner" data-val="1" checked />
+          <span>Execute (1 / x)</span>
+        </label>
+      </div>
+
+      <div class="matrix-column">
+        <div class="column-header">
+          <span class="user-tier">Group</span>
+          <span id="tier-val-group" class="tier-digit">5</span>
+        </div>
+        <label class="perm-checkbox-item">
+          <input type="checkbox" id="group-r" data-scope="group" data-val="4" checked />
+          <span>Read (4 / r)</span>
+        </label>
+        <label class="perm-checkbox-item">
+          <input type="checkbox" id="group-w" data-scope="group" data-val="2" />
+          <span>Write (2 / w)</span>
+        </label>
+        <label class="perm-checkbox-item">
+          <input type="checkbox" id="group-x" data-scope="group" data-val="1" checked />
+          <span>Execute (1 / x)</span>
+        </label>
+      </div>
+
+      <div class="matrix-column">
+        <div class="column-header">
+          <span class="user-tier">Others (Public)</span>
+          <span id="tier-val-others" class="tier-digit">5</span>
+        </div>
+        <label class="perm-checkbox-item">
+          <input type="checkbox" id="others-r" data-scope="others" data-val="4" checked />
+          <span>Read (4 / r)</span>
+        </label>
+        <label class="perm-checkbox-item">
+          <input type="checkbox" id="others-w" data-scope="others" data-val="2" />
+          <span>Write (2 / w)</span>
+        </label>
+        <label class="perm-checkbox-item">
+          <input type="checkbox" id="others-x" data-scope="others" data-val="1" checked />
+          <span>Execute (1 / x)</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Summary Display Tiles -->
+    <div class="summary-tiles-row">
+      <div class="summary-tile">
+        <span class="summary-tile-label">Octal Notation:</span>
+        <input type="text" id="octal-input" class="octal-big-input" value="755" maxlength="4" />
+      </div>
+      <div class="summary-tile">
+        <span class="summary-tile-label">Symbolic Notation:</span>
+        <input type="text" id="symbolic-input" class="symbolic-big-input" value="-rwxr-xr-x" />
+      </div>
+    </div>
+
+    <!-- Security Warning Banner (conditional for 777) -->
+    <div id="security-warning" class="security-alert-box" style="display: none;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+        <line x1="12" y1="9" x2="12" y2="13"></line>
+        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+      </svg>
+      <span><strong>Caution (777 Permissions):</strong> Grants full write &amp; execute access to all users on the server. Never use in production web servers or container images.</span>
+    </div>
+
+    <!-- Terminal Command Generator -->
+    <div class="command-box">
+      <div class="command-header">
+        <span style="font-size: 0.825rem; font-weight: 600; color: var(--text-primary);">Terminal Command Builder:</span>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <label style="font-size: 0.775rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 0.25rem; cursor: pointer;">
+            <input type="checkbox" id="recursive-toggle" /> Recursive (-R)
+          </label>
+          <button type="button" id="btn-copy-command" class="btn-copy-cmd">Copy Command</button>
+        </div>
+      </div>
+      <div class="command-line">
+        <span class="prompt-sym">$</span>
+        <code id="terminal-command-out">chmod 755 /path/to/target</code>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .tool-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg, 12px);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .presets-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 1rem;
+  }
+
+  .presets-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .presets-group {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-preset {
+    background: var(--bg-pill, rgba(255, 255, 255, 0.05));
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.3rem 0.6rem;
+    border-radius: var(--radius-sm, 6px);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-preset:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--accent-blue, #38bdf8);
+  }
+
+  .matrix-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    .matrix-container {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .matrix-column {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md, 8px);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .column-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 0.5rem;
+  }
+
+  .user-tier {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .tier-digit {
+    font-family: var(--font-mono, monospace);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--accent-blue, #38bdf8);
+  }
+
+  .perm-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.825rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .perm-checkbox-item input {
+    cursor: pointer;
+    accent-color: var(--accent-blue, #38bdf8);
+  }
+
+  .summary-tiles-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    .summary-tiles-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .summary-tile {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md, 8px);
+    padding: 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .summary-tile-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .octal-big-input, .symbolic-big-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: var(--font-mono, monospace);
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+
+  .security-alert-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    background-color: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    color: #f59e0b;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md, 8px);
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+
+  .command-box {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md, 8px);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .command-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .btn-copy-cmd {
+    background: var(--bg-pill, rgba(255, 255, 255, 0.08));
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-sm, 6px);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-copy-cmd:hover {
+    border-color: var(--accent-blue, #38bdf8);
+  }
+
+  .command-line {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    background: rgba(0, 0, 0, 0.25);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm, 6px);
+  }
+
+  .prompt-sym {
+    color: #10b981;
+    user-select: none;
+  }
+</style>
+
+<script>
+  function initChmodCalculator() {
+    const checkboxes = document.querySelectorAll('.perm-checkbox-item input') as NodeListOf<HTMLInputElement>;
+    const octalInput = document.getElementById('octal-input') as HTMLInputElement;
+    const symbolicInput = document.getElementById('symbolic-input') as HTMLInputElement;
+    const tierOwner = document.getElementById('tier-val-owner');
+    const tierGroup = document.getElementById('tier-val-group');
+    const tierOthers = document.getElementById('tier-val-others');
+    const securityWarning = document.getElementById('security-warning');
+    const commandOut = document.getElementById('terminal-command-out');
+    const recursiveToggle = document.getElementById('recursive-toggle') as HTMLInputElement;
+    const btnCopyCmd = document.getElementById('btn-copy-command');
+    const presetBtns = document.querySelectorAll('.btn-preset');
+
+    function calculateFromCheckboxes() {
+      let owner = 0;
+      let group = 0;
+      let others = 0;
+
+      checkboxes.forEach((cb) => {
+        const val = parseInt(cb.getAttribute('data-val') || '0', 10);
+        const scope = cb.getAttribute('data-scope');
+        if (cb.checked) {
+          if (scope === 'owner') owner += val;
+          if (scope === 'group') group += val;
+          if (scope === 'others') others += val;
+        }
+      });
+
+      const octalStr = `${owner}${group}${others}`;
+      if (tierOwner) tierOwner.textContent = owner.toString();
+      if (tierGroup) tierGroup.textContent = group.toString();
+      if (tierOthers) tierOthers.textContent = others.toString();
+
+      if (octalInput) octalInput.value = octalStr;
+
+      // Compute symbolic
+      const oR = (owner & 4) ? 'r' : '-';
+      const oW = (owner & 2) ? 'w' : '-';
+      const oX = (owner & 1) ? 'x' : '-';
+
+      const gR = (group & 4) ? 'r' : '-';
+      const gW = (group & 2) ? 'w' : '-';
+      const gX = (group & 1) ? 'x' : '-';
+
+      const uR = (others & 4) ? 'r' : '-';
+      const uW = (others & 2) ? 'w' : '-';
+      const uX = (others & 1) ? 'x' : '-';
+
+      const symStr = `-${oR}${oW}${oX}${gR}${gW}${gX}${uR}${uW}${uX}`;
+      if (symbolicInput) symbolicInput.value = symStr;
+
+      updateCommand(octalStr);
+
+      if (securityWarning) {
+        securityWarning.style.display = octalStr === '777' ? 'flex' : 'none';
+      }
+    }
+
+    function applyOctal(octalStr: string) {
+      const clean = octalStr.trim();
+      if (clean.length < 3) return;
+      const digits = clean.slice(-3);
+      const owner = parseInt(digits[0], 10) || 0;
+      const group = parseInt(digits[1], 10) || 0;
+      const others = parseInt(digits[2], 10) || 0;
+
+      (document.getElementById('owner-r') as HTMLInputElement).checked = Boolean(owner & 4);
+      (document.getElementById('owner-w') as HTMLInputElement).checked = Boolean(owner & 2);
+      (document.getElementById('owner-x') as HTMLInputElement).checked = Boolean(owner & 1);
+
+      (document.getElementById('group-r') as HTMLInputElement).checked = Boolean(group & 4);
+      (document.getElementById('group-w') as HTMLInputElement).checked = Boolean(group & 2);
+      (document.getElementById('group-x') as HTMLInputElement).checked = Boolean(group & 1);
+
+      (document.getElementById('others-r') as HTMLInputElement).checked = Boolean(others & 4);
+      (document.getElementById('others-w') as HTMLInputElement).checked = Boolean(others & 2);
+      (document.getElementById('others-x') as HTMLInputElement).checked = Boolean(others & 1);
+
+      calculateFromCheckboxes();
+    }
+
+    function updateCommand(octalStr: string) {
+      if (!commandOut) return;
+      const rec = recursiveToggle?.checked ? '-R ' : '';
+      commandOut.textContent = `chmod ${rec}${octalStr} /path/to/target`;
+    }
+
+    checkboxes.forEach((cb) => {
+      cb.addEventListener('change', calculateFromCheckboxes);
+    });
+
+    octalInput?.addEventListener('input', () => {
+      applyOctal(octalInput.value);
+    });
+
+    recursiveToggle?.addEventListener('change', () => {
+      updateCommand(octalInput.value || '755');
+    });
+
+    presetBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const octal = btn.getAttribute('data-octal') || '755';
+        applyOctal(octal);
+      });
+    });
+
+    btnCopyCmd?.addEventListener('click', () => {
+      if (!commandOut?.textContent) return;
+      navigator.clipboard.writeText(commandOut.textContent).then(() => {
+        btnCopyCmd.textContent = 'Copied!';
+        setTimeout(() => { btnCopyCmd.textContent = 'Copy Command'; }, 2000);
+      });
+    });
+
+    calculateFromCheckboxes();
+  }
+
+  document.addEventListener('DOMContentLoaded', initChmodCalculator);
+</script>

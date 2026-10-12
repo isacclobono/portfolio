@@ -44,9 +44,14 @@ const routes = [
   { path: '/blog/passkeys-and-webauthn-implementation-clean-architecture', changefreq: 'monthly', priority: '0.8' },
   { path: '/blog/kubernetes-canary-deployments-with-istio-and-prometheus', changefreq: 'monthly', priority: '0.8' },
 
-  // Full Suite of 15 Developer Utility Tools
+  // Full Suite of 20 Developer Utility Tools
   { path: '/tools/estimator', changefreq: 'weekly', priority: '0.85' },
   { path: '/tools/appointment', changefreq: 'weekly', priority: '0.85' },
+  { path: '/tools/curl-converter', changefreq: 'weekly', priority: '0.85' },
+  { path: '/tools/json-formatter', changefreq: 'weekly', priority: '0.85' },
+  { path: '/tools/timestamp-converter', changefreq: 'weekly', priority: '0.85' },
+  { path: '/tools/chmod-calculator', changefreq: 'weekly', priority: '0.85' },
+  { path: '/tools/html-entity-encoder', changefreq: 'weekly', priority: '0.85' },
   { path: '/tools/json-to-ts', changefreq: 'weekly', priority: '0.85' },
   { path: '/tools/regex-tester', changefreq: 'weekly', priority: '0.85' },
   { path: '/tools/base64-encoder', changefreq: 'weekly', priority: '0.85' },
