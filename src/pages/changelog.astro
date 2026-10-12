@@ -20,6 +20,56 @@ interface Release {
 
 const releases: Release[] = [
   {
+    version: "v2.10.4",
+    date: "October 2026",
+    badge: "Compact Footer Telemetry & Resume CTA",
+    badgeType: "perf",
+    summary: "Streamlined footer visitor telemetry from a multi-card grid into an ultra-compact, small-font single-line status bar (IP, Date, Visits, Latency) and updated the resume download action copy to 'Download Resume' with standard styling.",
+    sections: [
+      {
+        type: "Changed",
+        items: [
+          "Compact One-Liner Telemetry: Replaced 4-card telemetry console with an inline, small-monospace status bar displaying live IP address, ticking local date/clock, visit count, and round-trip ping without taking up vertical viewport height.",
+          "Resume Download CTA: Updated footer resume action copy to 'Download Resume' with title-case typography and uppercase PDF badge, linking to /SUNIL_KHOBRAGADE_RESUME.pdf."
+        ]
+      },
+      {
+        type: "Architecture",
+        items: [
+          "Bumped application release version to v2.10.4 in package.json.",
+          "Synchronized full changelog ledger across CHANGELOG.md and /changelog."
+        ]
+      }
+    ]
+  },
+  {
+    version: "v2.10.3",
+    date: "October 2026",
+    badge: "Footer Resume & Client Telemetry",
+    badgeType: "launch",
+    summary: "Engineered small-letters 'download my resume' action button linking directly to Sunil's official PDF resume alongside a real-time visitor telemetry console featuring public IP address detection, ticking local clock, lifetime visit counter, and network ping latency diagnostics.",
+    sections: [
+      {
+        type: "Added",
+        items: [
+          "Footer Resume Download Action: Added compact, lowercase 'download my resume' action pill in the footer bio strip linking to /SUNIL_KHOBRAGADE_RESUME.pdf with dedicated download attribute, PDF format tag, and hover micro-animations.",
+          "Live Public IP Address Resolver: Implemented client-side IP detection utilizing free, zero-log HTTPS resolver (api64.ipify.org) with ipapi.co failover.",
+          "Ticking Local Date & Clock: Real-time clock synchronizing with visitor's system timezone and local date formatting.",
+          "Lifetime Visited Counter: Session-guarded counter tracking cumulative visits per browser using secure localStorage and sessionStorage.",
+          "Network Latency & Timezone Telemetry: Dynamic round-trip ping timing and IANA client timezone detection."
+        ]
+      },
+      {
+        type: "Architecture",
+        items: [
+          "Synced SUNIL_KHOBRAGADE_RESUME.pdf to public/ directory for instant static browser downloads.",
+          "Updated CHATBOT_SYSTEM_PROMPT with direct resume download capabilities.",
+          "Bumped application release version to v2.10.3 in package.json."
+        ]
+      }
+    ]
+  },
+  {
     version: "v2.10.2",
     date: "October 2026",
     badge: "Anti-Pollution & Laser-Scoping Guardrails",

@@ -77,11 +77,31 @@ const socialLinks = [
     </div>
   </div>
 
-  <!-- Tagline & About Me Block -->
-  <div class="footer-bio-block" style="display: flex !important; flex-direction: column !important; gap: 0.4rem !important; width: 100% !important;">
-    <p class="footer-tagline" style="font-size: 0.85rem !important; font-weight: 600 !important; color: var(--text-primary) !important; margin: 0 !important; line-height: 1.45 !important;">
-      Senior Full-Stack Developer, AI Architect &amp; Cloud Specialist
-    </p>
+  <!-- Tagline & About Me Block with Download Resume Button -->
+  <div class="footer-bio-block" style="display: flex !important; flex-direction: column !important; gap: 0.6rem !important; width: 100% !important;">
+    <div class="footer-tagline-wrap">
+      <p class="footer-tagline" style="font-size: 0.85rem !important; font-weight: 600 !important; color: var(--text-primary) !important; margin: 0 !important; line-height: 1.45 !important;">
+        Senior Full-Stack Developer, AI Architect &amp; Cloud Specialist
+      </p>
+
+      <!-- Download Resume button -->
+      <a 
+        href="/SUNIL_KHOBRAGADE_RESUME.pdf" 
+        download="SUNIL_KHOBRAGADE_RESUME.pdf" 
+        class="footer-resume-download-btn" 
+        id="footer-resume-download-btn"
+        title="Download Sunil Khobragade's Official Resume (PDF, 28 KB)"
+      >
+        <svg class="resume-download-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span class="resume-text">Download Resume</span>
+        <span class="resume-format-tag">PDF</span>
+      </a>
+    </div>
+
     <p class="footer-about-text" style="font-size: 0.815rem !important; color: var(--text-secondary) !important; margin: 0 !important; line-height: 1.5 !important;">
       Building fast, high-concurrency web platforms, autonomous AI agents, RAG retrieval pipelines, microservices, and distributed cloud infrastructure with Node.js, Python, TypeScript, React, Next.js, and Astro.
     </p>
@@ -186,7 +206,141 @@ const socialLinks = [
       ))}
     </nav>
   </div>
+
+  <div class="footer-divider-line" style="width: 100% !important; height: 1px !important; background: var(--border-subtle) !important; opacity: 0.6 !important; margin: 0.5rem 0 0.15rem 0 !important;"></div>
+
+  <!-- Live Client Telemetry & Visitor Status (Simple One-Liner in Small Fonts) -->
+  <div class="footer-telemetry-oneliner" aria-label="Visitor Telemetry and Status">
+    <span class="telemetry-live-dot" aria-hidden="true" title="Live Telemetry"></span>
+    <span class="telemetry-item">
+      <span class="telemetry-lbl">IP:</span>
+      <span class="telemetry-val" id="sk-telemetry-ip">detecting...</span>
+    </span>
+    <span class="telemetry-sep">&bull;</span>
+    <span class="telemetry-item">
+      <span class="telemetry-lbl">Date:</span>
+      <span class="telemetry-val" id="sk-telemetry-datetime">syncing...</span>
+    </span>
+    <span class="telemetry-sep">&bull;</span>
+    <span class="telemetry-item">
+      <span class="telemetry-lbl">Visits:</span>
+      <span class="telemetry-val" id="sk-telemetry-visits">#1</span>
+    </span>
+    <span class="telemetry-sep">&bull;</span>
+    <span class="telemetry-item">
+      <span class="telemetry-lbl">Ping:</span>
+      <span class="telemetry-val" id="sk-telemetry-ping">measuring...</span>
+    </span>
+  </div>
 </footer>
+
+<script is:inline>
+  (function () {
+    let clockInterval = null;
+
+    function initFooterTelemetry() {
+      // 1. Visited Count Handler
+      const visitsEl = document.getElementById('sk-telemetry-visits');
+      if (visitsEl) {
+        try {
+          const STORAGE_KEY = 'sk_portfolio_visits';
+          const SESSION_KEY = 'sk_session_active';
+          let count = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
+          
+          if (!sessionStorage.getItem(SESSION_KEY)) {
+            count += 1;
+            localStorage.setItem(STORAGE_KEY, count.toString());
+            sessionStorage.setItem(SESSION_KEY, '1');
+          }
+          
+          visitsEl.textContent = `#${count}`;
+          visitsEl.title = `Total visits from this browser: ${count}`;
+        } catch (e) {
+          visitsEl.textContent = '#1';
+        }
+      }
+
+      // 2. Live Date & Time with Ticking Clock
+      const dateEl = document.getElementById('sk-telemetry-datetime');
+      function updateLiveClock() {
+        if (!dateEl) return;
+        const now = new Date();
+        const dateStr = now.toLocaleDateString(undefined, {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        });
+        const timeStr = now.toLocaleTimeString(undefined, {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true
+        });
+        dateEl.textContent = `${dateStr} • ${timeStr}`;
+      }
+
+      if (clockInterval) clearInterval(clockInterval);
+      updateLiveClock();
+      clockInterval = setInterval(updateLiveClock, 1000);
+
+      // 3. User IP Address & Live Ping via free ipify API with fallback
+      const ipEl = document.getElementById('sk-telemetry-ip');
+      const pingEl = document.getElementById('sk-telemetry-ping');
+      
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+      const tzShort = tz.includes('/') ? tz.split('/')[1].replace('_', ' ') : tz;
+      if (pingEl) {
+        pingEl.textContent = `measuring... (${tzShort})`;
+      }
+
+      const startTime = performance.now();
+      
+      fetch('https://api64.ipify.org?format=json', { cache: 'no-store' })
+        .then(res => {
+          if (!res.ok) throw new Error('ipify non-200');
+          return res.json();
+        })
+        .then(data => {
+          const latency = Math.round(performance.now() - startTime);
+          if (ipEl && data && data.ip) {
+            ipEl.textContent = data.ip;
+            ipEl.title = `Detected Public IP: ${data.ip}`;
+          }
+          if (pingEl) {
+            pingEl.textContent = `${latency}ms (${tzShort})`;
+            pingEl.title = `Round-trip Latency: ${latency}ms | Timezone: ${tz}`;
+          }
+        })
+        .catch(() => {
+          // Fallback free resolver
+          fetch('https://ipapi.co/json/', { cache: 'no-store' })
+            .then(r => r.json())
+            .then(d => {
+              const latency = Math.round(performance.now() - startTime);
+              if (ipEl && d && d.ip) {
+                ipEl.textContent = d.ip;
+              }
+              if (pingEl) {
+                pingEl.textContent = `${latency}ms (${tzShort})`;
+              }
+            })
+            .catch(() => {
+              if (ipEl) ipEl.textContent = 'Active (Private IP)';
+              if (pingEl) pingEl.textContent = `Connected (${tzShort})`;
+            });
+        });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initFooterTelemetry);
+    } else {
+      initFooterTelemetry();
+    }
+
+    document.addEventListener('astro:after-swap', initFooterTelemetry);
+    document.addEventListener('astro:page-load', initFooterTelemetry);
+  })();
+</script>
 
 <style>
   .footer-nav-list {
@@ -242,6 +396,130 @@ const socialLinks = [
     opacity: 0.85;
   }
 
+  /* Resume Download Button */
+  .footer-tagline-wrap {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: wrap !important;
+    gap: 0.65rem 1rem !important;
+    width: 100% !important;
+  }
+
+  .footer-resume-download-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.45rem !important;
+    font-size: 0.76rem !important;
+    font-weight: 500 !important;
+    color: var(--text-secondary) !important;
+    text-decoration: none !important;
+    padding: 0.28rem 0.65rem !important;
+    border-radius: 9999px !important;
+    background: var(--bg-subtle, rgba(255, 255, 255, 0.04)) !important;
+    border: 1px solid var(--border-subtle) !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+    flex-shrink: 0 !important;
+  }
+
+  .footer-resume-download-btn:hover {
+    color: var(--text-primary) !important;
+    border-color: var(--accent-cyan, #06b6d4) !important;
+    background: rgba(6, 182, 212, 0.08) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.15) !important;
+    text-decoration: none !important;
+  }
+
+  .resume-download-icon {
+    color: var(--accent-cyan, #06b6d4);
+    transition: transform 0.2s ease;
+  }
+
+  .footer-resume-download-btn:hover .resume-download-icon {
+    transform: translateY(1.5px);
+  }
+
+  .resume-text {
+    font-size: 0.76rem !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.01em !important;
+  }
+
+  .resume-format-tag {
+    font-size: 0.6rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    padding: 0.1rem 0.32rem !important;
+    border-radius: 4px !important;
+    background: rgba(6, 182, 212, 0.15) !important;
+    color: var(--accent-cyan, #06b6d4) !important;
+    font-family: var(--font-mono, monospace) !important;
+    letter-spacing: 0.04em !important;
+    line-height: 1 !important;
+  }
+
+  /* One-Liner Visitor Telemetry */
+  .footer-telemetry-oneliner {
+    display: inline-flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 0.35rem 0.65rem !important;
+    font-size: 0.72rem !important;
+    font-family: var(--font-mono, 'JetBrains Mono', monospace) !important;
+    color: var(--text-muted) !important;
+    line-height: 1.4 !important;
+    padding: 0.35rem 0.65rem !important;
+    border-radius: 6px !important;
+    background: var(--bg-subtle, rgba(255, 255, 255, 0.02)) !important;
+    border: 1px solid var(--border-subtle) !important;
+    width: fit-content !important;
+    max-width: 100% !important;
+    margin-top: 0.35rem !important;
+  }
+
+  .telemetry-item {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.22rem !important;
+    white-space: nowrap !important;
+  }
+
+  .telemetry-lbl {
+    color: var(--text-muted) !important;
+    font-weight: 500 !important;
+    opacity: 0.8 !important;
+  }
+
+  .telemetry-val {
+    color: var(--text-primary) !important;
+    font-weight: 600 !important;
+  }
+
+  .telemetry-sep {
+    color: var(--border-subtle) !important;
+    opacity: 0.8 !important;
+    user-select: none !important;
+  }
+
+  .telemetry-live-dot {
+    width: 6px !important;
+    height: 6px !important;
+    border-radius: 50% !important;
+    background: #10b981 !important;
+    box-shadow: 0 0 6px #10b981 !important;
+    animation: skPulse 2s infinite ease-in-out !important;
+    display: inline-block !important;
+    flex-shrink: 0 !important;
+  }
+
+  @keyframes skPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.45; transform: scale(0.85); }
+  }
+
   @media (max-width: 580px) {
     .footer-primary-row {
       flex-direction: row !important;
@@ -254,6 +532,16 @@ const socialLinks = [
 
     .footer-nav-list {
       gap: 0.4rem 0.8rem !important;
+    }
+
+    .footer-tagline-wrap {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+    }
+    
+    .footer-telemetry-oneliner {
+      font-size: 0.68rem !important;
+      gap: 0.25rem 0.45rem !important;
     }
   }
 </style>

@@ -3,6 +3,36 @@
 All notable changes to the SK Builds portfolio platform are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.4] - 2026-10-12
+
+### Changed
+- **Footer Telemetry Simplification**: Converted the visitor telemetry display from a multi-card block into a lightweight, clean, one-liner status bar styled with small monospace typography (`IP`, `Date`, `Visits`, `Ping`), eliminating bulky cards for a cleaner aesthetic.
+- **Resume Button Styling Refinement**: Updated footer resume button copy to `"Download Resume"` with standard capitalization and uppercase `"PDF"` badge.
+
+### Architecture
+- **Version Bump**: Bumped release version to `2.10.4` in `package.json`.
+- **Documentation**: Updated release records across `CHANGELOG.md` and `/changelog`.
+
+---
+
+## [2.10.3] - 2026-10-12
+
+### Added
+- **Footer Resume Download Button**: Added direct small-letters `"download my resume"` action button (`/SUNIL_KHOBRAGADE_RESUME.pdf`) with PDF format badge, download vector icon, and hover micro-animations in the footer bio strip.
+- **Live Visitor & Client Telemetry Console**: Engineered real-time client diagnostics console in the footer featuring:
+  - **Public IP Address Detection**: High-speed, zero-log IP detection using public `api64.ipify.org` HTTPS resolver with `ipapi.co` secondary failover.
+  - **Live Local Date & Clock**: Real-time ticking system clock synchronizing with visitor's locale and timezone.
+  - **Lifetime Visited Counter**: Session-guarded visitor counter tracking lifetime browser visits via `localStorage` and `sessionStorage`.
+  - **Network Latency Ping & Timezone**: Live round-trip network ping measurement (`ms`) alongside client IANA timezone display.
+  - **Security Telemetry**: Explicit HTTPS & TLS 1.3 encryption indicator with live pulsing status indicator.
+
+### Architecture
+- **Static Asset Synchronization**: Copied `SUNIL_KHOBRAGADE_RESUME.pdf` to `public/` directory for direct browser downloads.
+- **AI Agent Resume Awareness**: Updated `CHATBOT_SYSTEM_PROMPT` to provide direct resume download links when requested.
+- **Version Bump**: Bumped release version to `2.10.3` in `package.json`.
+
+---
+
 ## [2.10.2] - 2026-10-12
 
 ### Changed
