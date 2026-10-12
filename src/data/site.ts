@@ -6,7 +6,7 @@ export const SITE = {
   URL: "https://sunilkhobragade.pages.dev",
   ROLE: "Senior Full-Stack Developer, AI Architect & Cloud Specialist",
   LOCATION: "Hyderabad, India",
-  EMAIL: "sunilkhobragade@proton.me",
+  EMAIL: "x.kksunil@gmail.com",
   GITHUB: "https://github.com/naman-mahi",
   LINKEDIN: "https://linkedin.com/in/sunilkhobragade",
   TWITTER: "https://twitter.com/sunilkhobragade",
@@ -38,8 +38,8 @@ export const SITE = {
 export const SOCIALS = [
   {
     NAME: "Email",
-    HREF: "mailto:sunilkhobragade@proton.me",
-    LABEL: "sunilkhobragade@proton.me"
+    HREF: "mailto:x.kksunil@gmail.com",
+    LABEL: "x.kksunil@gmail.com"
   },
   {
     NAME: "GitHub",

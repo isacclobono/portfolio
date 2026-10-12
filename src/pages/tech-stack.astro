@@ -758,18 +758,18 @@ const architecturePrinciples = [
     width: 100%;
   }
 
-  /* Single-Line Full-Width Card */
+  /* Single-Line Full-Width Transparent Row */
   .tech-row-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-card);
-    border-radius: 0.65rem;
-    padding: 0.9rem 1.15rem;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0.85rem 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
     text-decoration: none !important;
-    transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+    transition: opacity 0.15s ease;
   }
 
   .tech-row-card.is-hidden {
@@ -777,9 +777,9 @@ const architecturePrinciples = [
   }
 
   .tech-row-card:hover {
-    border-color: #3b82f6;
-    background: var(--bg-card-hover, var(--bg-card));
-    transform: translateY(-1px);
+    border: none !important;
+    background: transparent !important;
+    transform: none !important;
   }
 
   .tech-row-card:hover .tech-link-icon {

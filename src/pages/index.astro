@@ -96,7 +96,10 @@ const workEntries = (await getCollection('work'))
 
   <!-- Technical Skills Section -->
   <section style="margin-bottom: 3rem;">
-    <h2>Technical Skills</h2>
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.25rem;">
+      <h2>Technical Skills</h2>
+      <a href="/tech-stack" class="see-all-link">Explore full stack &rarr;</a>
+    </div>
     <div class="skills-grid">
       {TECHNICAL_SKILLS.map((cat) => (
         <div class="skill-card">
@@ -117,7 +120,7 @@ const workEntries = (await getCollection('work'))
       <h2>Recent Projects</h2>
       <a href="/projects" class="see-all-link">See all projects &rarr;</a>
     </div>
-    <div>
+    <div class="projects-list" style="margin-top: 0;">
       {projects.map((project) => (
         <Card 
           href={`/projects/${project.id}`}
@@ -171,7 +174,7 @@ const workEntries = (await getCollection('work'))
       <h2>Recent Blog Posts</h2>
       <a href="/blog" class="see-all-link">See all posts &rarr;</a>
     </div>
-    <div>
+    <div class="projects-list" style="margin-top: 0;">
       {blogs.map((b) => (
         <Card 
           href={`/blog/${b.id}`}

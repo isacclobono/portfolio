@@ -20,6 +20,86 @@ interface Release {
 
 const releases: Release[] = [
   {
+    version: "v2.10.8",
+    date: "October 2026",
+    badge: "Dedicated Download Center & Skills Modernization",
+    badgeType: "launch",
+    summary: "Engineered a dedicated official Download Center (/download) with direct resume PDF download, vCard contact export, and LLMs context ingestion, alongside a modernized 2-column responsive layout for Technical Skills on the landing page.",
+    sections: [
+      {
+        type: "Added",
+        items: [
+          "Dedicated Download Center (/download): Full official resource hub with direct resume PDF download, in-browser preview, vCard .vcf contact card, and machine-readable llms.txt integration.",
+          "Route Redirection: Implemented /downloads redirect alias to ensure seamless navigation.",
+          "Footer Navigation: Integrated direct Downloads links across primary footer navigation hubs."
+        ]
+      },
+      {
+        type: "Changed",
+        items: [
+          "Technical Skills Modernization: Re-architected landing page Technical Skills into a balanced 2-column grid with curated micro-badge pills (.skill-pill), category bullet indicators, and direct link to the full /tech-stack directory.",
+          "Visual Polish: Enhanced readability of 43 core technical competencies with tactile hover lighting and clean monospace chips."
+        ]
+      },
+      {
+        type: "Architecture",
+        items: [
+          "Bumped application release version to v2.10.8 in package.json.",
+          "Updated sitemap.xml.ts and synchronized release history across CHANGELOG.md and /changelog."
+        ]
+      }
+    ]
+  },
+  {
+    version: "v2.10.7",
+    date: "October 2026",
+    badge: "Fully Transparent & Borderless Architecture",
+    badgeType: "launch",
+    summary: "Refined all cards across the platform to be 100% transparent at all times (including on hover), removed all border dividers, and streamlined landing page sections including Technical Skills and Bento Highlights into a borderless, pure typographic layout.",
+    sections: [
+      {
+        type: "Changed",
+        items: [
+          "Fully Transparent Backgrounds: Stripped all background colors and hover background tints across all cards (.card-link, .post-card, .tech-row-card), keeping them fully transparent at all times.",
+          "Border-Free Presentation: Removed bottom borders and container divider lines for a cleaner, modern pure-text listing layout.",
+          "Landing Page Technical Skills & Highlights: Converted Technical Skills (.skill-card, .skill-pill) and Bento Highlights (.bento-stat-card) into border-free, fully transparent cards with clean dot-separated monospace metadata.",
+          "Subtle Focus Hover: Ensured hover interaction is strictly typographic (title accent color and smooth arrow translation) without jarring background boxes."
+        ]
+      },
+      {
+        type: "Architecture",
+        items: [
+          "Bumped application release version to v2.10.7 in package.json.",
+          "Synchronized changelog entries across CHANGELOG.md and /changelog."
+        ]
+      }
+    ]
+  },
+  {
+    version: "v2.10.6",
+    date: "October 2026",
+    badge: "Card-Free Simple Projects View",
+    badgeType: "launch",
+    summary: "Replaced heavy boxed cards with a minimalist, card-free simple list view across the projects directory, home page, and developer tools with subtle hairline dividers, inline typography, and dot-separated technology metadata.",
+    sections: [
+      {
+        type: "Changed",
+        items: [
+          "Card-Free Simple List View: Eliminated heavy boxed cards, dark backgrounds, and thick border containers for projects and tools in favor of clean, flat list rows with subtle hairline dividers.",
+          "Minimalist Metadata: Replaced chunky tag button pills with subtle, dot-separated monospace text items (Node.js • React • WebSockets • Redis).",
+          "Smooth Row Hover: Interactive hover effects highlighting project titles and smoothly nudging the indicator arrow with zero jumpy transforms."
+        ]
+      },
+      {
+        type: "Architecture",
+        items: [
+          "Bumped application release version to v2.10.6 in package.json.",
+          "Synchronized full changelog ledger across CHANGELOG.md and /changelog."
+        ]
+      }
+    ]
+  },
+  {
     version: "v2.10.5",
     date: "October 2026",
     badge: "Unified Tall Error Page Architecture",

@@ -3,6 +3,50 @@
 All notable changes to the SK Builds portfolio platform are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.8] - 2026-10-12
+
+### Added
+- **Dedicated Download Center (`/download`)**: Created an official download center featuring:
+  - Direct download and in-browser preview for Sunil Khobragade's verified Curriculum Vitae / Resume (`/SUNIL_KHOBRAGADE_RESUME.pdf`).
+  - Electronic Business Card (`/sunil-khobragade.vcf`) for 1-click contact import into iOS, Android, and Outlook.
+  - Standardized `llms.txt` context ingestion file, RSS article syndication feed, and sitemap resources.
+  - Added route aliases and sitemap registration (`/download` and `/downloads`).
+
+### Changed
+- **Technical Skills Section Modernization**: Redesigned the landing page **Technical Skills** into a curated, balanced 2-column responsive layout (`grid-template-columns: repeat(2, 1fr)`). Replaced plain text wrapping with distinct micro-badge pills (`.skill-pill`) featuring subtle accent indicators, glass tint, hover states, and an explicit `"Explore full stack →"` navigation link to `/tech-stack`.
+
+### Architecture
+- **Version Bump**: Bumped release version to `2.10.8` in `package.json`.
+- **Documentation**: Synchronized changelog entries across `CHANGELOG.md` and `src/pages/changelog.astro`.
+
+---
+
+## [2.10.7] - 2026-10-12
+
+### Changed
+- **Fully Transparent Card Backgrounds**: Removed all card backgrounds and hover background tints across all listing views (`.card-link`, `.post-card`, `.tech-row-card`), ensuring 100% transparency at all times (both default and on hover).
+- **Border-Free List Views**: Removed bottom border dividers (`border-bottom`) and container top borders across all project, article, and tech stack listings, achieving a seamless, pure typography aesthetic with smooth title hover highlights and subtle arrow nudges.
+- **Landing Page Technical Skills & Highlights**: Converted the **Technical Skills** grid (`.skill-card`, `.skill-pill`) and engineering highlights (`.bento-stat-card`) on the landing page into a fully transparent, border-free editorial layout with elegant dot-separated monospace metadata pills.
+
+### Architecture
+- **Version Bump**: Bumped release version to `2.10.7` in `package.json`.
+- **Documentation**: Synchronized release log in `CHANGELOG.md` and `src/pages/changelog.astro`.
+
+---
+
+## [2.10.6] - 2026-10-12
+
+### Changed
+- **Card-Free Simple Projects List View**: Replaced heavy boxed cards (`.card-link`) with an ultra-clean, minimalist list view. Removed dark card backgrounds, bulky container borders, and chunky pill buttons in favor of hairline dividers (`border-bottom`), editorial spacing, and subtle hover interactions.
+- **Minimalist Inline Technology Tags**: Converted bulky tag badges into lightweight, dot-separated monospace metadata (`Node.js • React • WebSockets • Redis`), reducing visual clutter while preserving key technical stack insights.
+- **Universal Simple List Consistency**: Applied the card-free divider pattern across the Projects index (`/projects`), Homepage Recent Projects, Homepage Recent Blog Posts, and Tools directory (`/tools`).
+
+### Architecture
+- **Version Bump**: Bumped release version to `2.10.6` in `package.json`.
+- **Documentation**: Synchronized changelog entries across `CHANGELOG.md` and `src/pages/changelog.astro`.
+
+---
+
 ## [2.10.5] - 2026-10-12
 
 ### Changed

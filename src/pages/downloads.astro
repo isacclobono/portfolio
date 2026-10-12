@@ -1,0 +1,14 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<meta http-equiv="refresh" content="0;url=/download" />
+<script is:inline>
+  window.location.replace('/download');
+</script>
+
+<Layout title="Redirecting to Download Center | Sunil Khobragade" currentPath="/downloads" noindex={true}>
+  <div style="max-width: 600px; margin: 4rem auto; text-align: center; padding: 2rem;">
+    <p style="color: var(--text-secondary);">Redirecting to <a href="/download" style="color: var(--accent-blue); font-weight: 600;">/download</a>...</p>
+  </div>
+</Layout>

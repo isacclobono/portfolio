@@ -12,6 +12,7 @@ const routes = [
   { path: '/tech-stack', changefreq: 'weekly', priority: '0.8' },
   { path: '/education', changefreq: 'monthly', priority: '0.7' },
   { path: '/changelog', changefreq: 'weekly', priority: '0.75' },
+  { path: '/download', changefreq: 'weekly', priority: '0.85' },
   { path: '/status', changefreq: 'hourly', priority: '0.7' },
   { path: '/uses', changefreq: 'monthly', priority: '0.6' },
   { path: '/privacy', changefreq: 'monthly', priority: '0.5' },

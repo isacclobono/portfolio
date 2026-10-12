@@ -8,7 +8,7 @@ export const SUNIL_KNOWLEDGE_BASE = {
     experienceYears: "6+ years",
     location: "Hyderabad, India",
     phone: "+91 74989 50562",
-    email: "sunilkhobragade@proton.me",
+    email: "x.kksunil@gmail.com",
     github: "https://github.com/naman-mahi",
     githubUsername: "naman-mahi",
     linkedin: "https://linkedin.com/in/sunilkhobragade",

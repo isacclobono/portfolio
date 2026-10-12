@@ -237,22 +237,22 @@ const blogCategories = [
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    background: var(--bg-card);
-    border: 1px solid var(--border-card);
-    border-radius: 0.75rem;
-    padding: 1.15rem 1.35rem;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 1.1rem 0;
     text-decoration: none !important;
-    transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+    transition: opacity 0.15s ease;
   }
 
   .post-card:hover {
-    border-color: #3b82f6;
-    background: var(--bg-card-hover, var(--bg-card));
-    transform: translateY(-1px);
+    border: none !important;
+    background: transparent !important;
+    transform: none !important;
   }
 
   .post-card:hover .post-arrow-box {
-    transform: translateX(3px);
+    transform: translateX(4px);
     color: #3b82f6;
   }
 

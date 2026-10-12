@@ -1,0 +1,13 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Khobragade;Sunil;;;
+FN:Sunil Khobragade
+ORG:SK Builds
+TITLE:Senior Full-Stack Developer, AI Architect & Cloud Specialist
+EMAIL;TYPE=INTERNET,PREF:x.kksunil@gmail.com
+URL;TYPE=PREF:https://sunilkhobragade.pages.dev
+X-SOCIALPROFILE;TYPE=github:https://github.com/naman-mahi
+X-SOCIALPROFILE;TYPE=linkedin:https://linkedin.com/in/sunilkhobragade
+ADR;TYPE=HOME:;;Hyderabad;;Telangana;;India
+NOTE:Senior Full-Stack Developer & AI Solutions Architect with 6+ years of experience in distributed systems, autonomous AI agents, microservices, and cloud-native platforms.
+END:VCARD

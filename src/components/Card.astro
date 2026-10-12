@@ -21,17 +21,21 @@ const {
   metric, 
   demoUrl, 
   repoUrl,
-  target = "_blank",
-  rel = "noopener noreferrer"
+  target,
+  rel
 } = Astro.props;
+
+const isExternal = href.startsWith('http://') || href.startsWith('https://');
+const linkTarget = target !== undefined ? target : (isExternal ? '_blank' : undefined);
+const linkRel = rel !== undefined ? rel : (isExternal ? 'noopener noreferrer' : undefined);
 ---
 
-<a href={href} class="card-link group" target={target} rel={rel}>
+<a href={href} class="card-link group" target={linkTarget} rel={linkRel}>
   <div class="card-content">
-    <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+    <div class="card-header-row">
       <div class="card-title">{title}</div>
       {metric && (
-        <span style="font-family: var(--font-mono); font-size: 0.725rem; font-weight: 600; color: #22c55e; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.25); padding: 1px 6px; border-radius: 4px;">
+        <span class="card-metric-badge">
           {metric}
         </span>
       )}
@@ -41,7 +45,7 @@ const {
 
     {tags && tags.length > 0 && (
       <div class="card-tags-list">
-        {tags.slice(0, 4).map((tag) => (
+        {tags.slice(0, 5).map((tag) => (
           <span class="card-tag-pill">{tag}</span>
         ))}
       </div>
@@ -49,9 +53,10 @@ const {
   </div>
 
   <div class="card-arrow" aria-hidden="true">
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="m9 18 6-6-6-6"/>
     </svg>
   </div>
 </a>
+
 

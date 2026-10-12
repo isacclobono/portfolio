@@ -1,0 +1,380 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import { SITE } from '../data/site';
+
+const downloads = [
+  {
+    title: "Official Resume & Curriculum Vitae",
+    format: "PDF",
+    size: "28.8 KB",
+    version: "v2026.10",
+    description: "Complete senior engineering resume detailing 6+ years of full-stack engineering, autonomous AI agent architecture, microservices, and cloud deployments. ATS-compliant format.",
+    href: "/SUNIL_KHOBRAGADE_RESUME.pdf",
+    downloadName: "SUNIL_KHOBRAGADE_RESUME.pdf",
+    isPrimary: true,
+    badges: ["PDF Document", "ATS Friendly", "October 2026 Edition"]
+  },
+  {
+    title: "Machine-Readable Context (LLMs.txt)",
+    format: "TXT / Markdown",
+    size: "3.3 KB",
+    version: "v2.10",
+    description: "Standardized llms.txt context document engineered for seamless ingestion by ChatGPT, Claude, Gemini, Cursor, and Copilot.",
+    href: "/llms.txt",
+    downloadName: "llms.txt",
+    isPrimary: false,
+    badges: ["AI Context", "Zero Tracking", "Standard Format"]
+  },
+  {
+    title: "Electronic Contact vCard (.vcf)",
+    format: "VCF",
+    size: "0.6 KB",
+    version: "v3.0",
+    description: "1-click digital business card for instant import into Apple Contacts, Google Contacts, and Microsoft Outlook.",
+    href: "/sunil-khobragade.vcf",
+    downloadName: "Sunil_Khobragade.vcf",
+    isPrimary: false,
+    badges: ["vCard 3.0", "iOS / Android / Outlook"]
+  },
+  {
+    title: "Engineering Changelog Ledger",
+    format: "HTML / MD",
+    size: "Live Stream",
+    version: "v2.10.7",
+    description: "Full release history, architectural modifications, and semantic versioning records across all portfolio platform updates.",
+    href: "/changelog",
+    downloadName: "",
+    isPrimary: false,
+    badges: ["SemVer 2.0", "Audit Trail"]
+  },
+  {
+    title: "Technical Articles RSS Feed",
+    format: "XML",
+    size: "Feed Stream",
+    version: "RSS 2.0",
+    description: "Syndication feed for all technical deep-dives on distributed microservices, AI pipelines, PostgreSQL optimization, and zero-JS web design.",
+    href: "/rss.xml",
+    downloadName: "rss.xml",
+    isPrimary: false,
+    badges: ["RSS 2.0", "Feed Reader Compatible"]
+  }
+];
+---
+
+<Layout 
+  title="Downloads & Official Assets | Sunil Khobragade" 
+  description="Direct download center for Sunil Khobragade's verified engineering resume (PDF), electronic vCard, machine-readable LLMs.txt context, and RSS feeds."
+  currentPath="/download"
+>
+  <Breadcrumb items={[{ label: 'download' }]} />
+
+  <!-- Hero Header -->
+  <header style="margin-bottom: 2.25rem;">
+    <div style="display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-blue); margin-bottom: 0.5rem;">
+      <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background-color: var(--accent-blue);"></span>
+      Official Verification Center
+    </div>
+    <h1 style="font-size: 2.15rem; font-weight: 800; letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 0.6rem;">
+      Downloads &amp; Resources
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 0.975rem; line-height: 1.6; margin: 0; max-width: 620px;">
+      Direct access to verified curriculum vitae files, electronic contact credentials, AI machine-readable schemas, and developer syndication feeds for Sunil Khobragade.
+    </p>
+  </header>
+
+  <!-- Featured Primary Download: Resume -->
+  <section class="featured-download-box" style="margin-bottom: 3rem;">
+    <div class="download-featured-inner">
+      <div class="download-badge-row">
+        <span class="download-type-badge">Primary Asset</span>
+        <span class="download-pill-badge">PDF Format</span>
+        <span class="download-pill-badge">~29 KB</span>
+        <span class="download-pill-badge">Updated Oct 2026</span>
+      </div>
+
+      <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--text-primary); margin: 0.6rem 0 0.4rem; letter-spacing: -0.01em;">
+        Sunil Khobragade — Senior Full-Stack &amp; AI Engineer Resume
+      </h2>
+
+      <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin: 0 0 1.25rem;">
+        Comprehensive executive engineering CV detailing 6+ years of commercial production experience in distributed microservices, autonomous AI multi-agent systems, RAG retrieval pipelines, and enterprise cloud infrastructure. Designed for both technical recruiters and engineering leaders.
+      </p>
+
+      <div class="download-action-group">
+        <a 
+          href="/SUNIL_KHOBRAGADE_RESUME.pdf" 
+          download="SUNIL_KHOBRAGADE_RESUME.pdf" 
+          class="btn-download-primary"
+          id="primary-resume-download"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Download Resume (PDF)</span>
+        </a>
+
+        <a 
+          href="/SUNIL_KHOBRAGADE_RESUME.pdf" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn-download-secondary"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+          <span>Preview in Browser</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Secondary Download Assets List -->
+  <section style="margin-bottom: 3rem;">
+    <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--text-primary); letter-spacing: -0.01em;">
+      Developer Schemas &amp; Digital Credentials
+    </h3>
+
+    <div class="download-items-stream">
+      {downloads.slice(1).map((item) => (
+        <div class="download-stream-row">
+          <div class="download-stream-info">
+            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+              <span class="stream-title">{item.title}</span>
+              <span class="stream-format-badge">{item.format}</span>
+              <span class="stream-size-badge">{item.size}</span>
+            </div>
+            <p class="stream-description">{item.description}</p>
+          </div>
+
+          <div class="download-stream-action">
+            <a 
+              href={item.href} 
+              download={item.downloadName ? item.downloadName : undefined}
+              target={item.downloadName ? undefined : "_blank"}
+              rel="noopener noreferrer"
+              class="stream-action-link"
+            >
+              <span>Get Asset</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="m12 5 7 7-7 7"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Integrity & Compliance Note -->
+  <section class="download-integrity-note">
+    <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-green); flex-shrink: 0; margin-top: 0.15rem;">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      </svg>
+      <div>
+        <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.2rem;">
+          Verified Document Integrity &amp; Privacy Assurance
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.55; margin: 0;">
+          All downloadable assets hosted on this domain are free of watermarking locks, ads, or third-party tracking scripts. Direct downloads are served over encrypted HTTPS via Cloudflare edge CDN.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .featured-download-box {
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg, 12px);
+    padding: 1.6rem 1.8rem;
+    transition: border-color 0.15s ease;
+  }
+
+  [data-theme="light"] .featured-download-box {
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .download-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .download-type-badge {
+    font-size: 0.7rem;
+    font-family: var(--font-mono, monospace);
+    font-weight: 700;
+    color: var(--accent-blue);
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    padding: 1px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .download-pill-badge {
+    font-size: 0.7rem;
+    font-family: var(--font-mono, monospace);
+    font-weight: 500;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  [data-theme="light"] .download-pill-badge {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+
+  .download-action-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-download-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--text-primary);
+    color: var(--bg-primary) !important;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.55rem 1.15rem;
+    border-radius: 6px;
+    text-decoration: none !important;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  .btn-download-primary:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+  }
+
+  .btn-download-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: transparent;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-subtle);
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.55rem 1.1rem;
+    border-radius: 6px;
+    text-decoration: none !important;
+    transition: all 0.15s ease;
+  }
+
+  .btn-download-secondary:hover {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue) !important;
+  }
+
+  /* Secondary Stream List */
+  .download-items-stream {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .download-stream-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding: 0.9rem 0;
+    background: transparent;
+    border: none;
+    transition: opacity 0.15s ease;
+  }
+
+  .download-stream-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+  }
+
+  .stream-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .stream-format-badge {
+    font-size: 0.7rem;
+    font-family: var(--font-mono, monospace);
+    font-weight: 600;
+    color: var(--accent-blue);
+    background: rgba(56, 189, 248, 0.08);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+
+  .stream-size-badge {
+    font-size: 0.7rem;
+    font-family: var(--font-mono, monospace);
+    color: var(--text-muted);
+  }
+
+  .stream-description {
+    font-size: 0.835rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .download-stream-action {
+    flex-shrink: 0;
+  }
+
+  .stream-action-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-decoration: none !important;
+    transition: color 0.15s ease, transform 0.15s ease;
+  }
+
+  .stream-action-link:hover {
+    color: var(--accent-blue);
+  }
+
+  .stream-action-link:hover svg {
+    transform: translateX(3px);
+  }
+
+  .download-integrity-note {
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 1.15rem 1.35rem;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    .download-stream-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+  }
+</style>
