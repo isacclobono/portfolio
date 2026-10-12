@@ -747,14 +747,14 @@ Agenda & Discussion Notes:
 ${notes}
 
 Conference: Google Meet video call
-Host: skhobragade993@gmail.com
+Host: x.kksunil@gmail.com
 Portfolio: https://sk-builds.vercel.app`
       );
 
       // Google Calendar API Direct Event URL with exact start/end time, attendee emails, and Google Meet conferencing
       const addParam = clientEmail 
-        ? `skhobragade993@gmail.com&add=${encodeURIComponent(clientEmail)}`
-        : 'skhobragade993@gmail.com';
+        ? `x.kksunil@gmail.com&add=${encodeURIComponent(clientEmail)}`
+        : 'x.kksunil@gmail.com';
 
       const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${calTitle}&dates=${startUTCStr}/${endUTCStr}&details=${calDetails}&add=${addParam}&location=Google+Meet`;
       
@@ -817,12 +817,12 @@ Portfolio: https://sk-builds.vercel.app`
         `UID:${uid}`,
         `DTSTAMP:${toGCalUTC(new Date())}`,
         `SUMMARY:1:1 Architecture Discovery - Sunil Khobragade & ${clientName}`,
-        `DESCRIPTION:1:1 Consultation with Sunil Khobragade\\nAttendee: ${clientName} (${clientEmail})\\nAgenda: ${notes}\\nHost: skhobragade993@gmail.com`,
+        `DESCRIPTION:1:1 Consultation with Sunil Khobragade\\nAttendee: ${clientName} (${clientEmail})\\nAgenda: ${notes}\\nHost: x.kksunil@gmail.com`,
         `DTSTART:${startUTCStr}`,
         `DTEND:${endUTCStr}`,
         'LOCATION:Google Meet',
         'STATUS:CONFIRMED',
-        'ORGANIZER;CN=Sunil Khobragade:mailto:skhobragade993@gmail.com',
+        'ORGANIZER;CN=Sunil Khobragade:mailto:x.kksunil@gmail.com',
         clientEmail ? `ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;CN=${clientName}:mailto:${clientEmail}` : '',
         'END:VEVENT',
         'END:VCALENDAR'

@@ -31,7 +31,7 @@ export const GET: APIRoute = ({ site }) => {
 ## Availability & Contact
 
 - **Freelance Inquiries & Consulting**: Available for high-impact contract engineering, system architecture design, and full-stack development.
-- **Email**: sunilkhobragade@proton.me
+- **Email**: x.kksunil@gmail.com
 - **GitHub**: https://github.com/naman-mahi
 - **LinkedIn**: https://linkedin.com/in/sunilkhobragade
 `;

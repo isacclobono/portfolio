@@ -3,6 +3,20 @@
 All notable changes to the SK Builds portfolio platform are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.9] - 2026-10-12
+
+### Changed
+- **Official Contact Email Standardization**: Unified and updated Sunil Khobragade's primary contact email across the entire codebase to `x.kksunil@gmail.com`.
+  - Updated site configuration (`src/data/site.ts`), electronic vCard business card (`/sunil-khobragade.vcf`), and AI chatbot knowledge base (`src/data/chatbotKnowledge.ts`).
+  - Updated Global Search copy actions, AI assistant prompts, Appointment booking calendar templates, Project estimator proposals, and OpenGraph metadata.
+  - Replaced legacy addresses across legal notices (`/terms`, `/privacy`) and documentation.
+
+### Architecture
+- **Version Bump**: Bumped release version to `2.10.9` in `package.json`.
+- **Documentation**: Synchronized changelog entries across `CHANGELOG.md` and `src/pages/changelog.astro`.
+
+---
+
 ## [2.10.8] - 2026-10-12
 
 ### Added

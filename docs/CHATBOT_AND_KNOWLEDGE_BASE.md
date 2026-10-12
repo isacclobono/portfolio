@@ -50,7 +50,7 @@ All resume facts, project summaries, tech stack details, career history, educati
 👉 **[`src/data/chatbotKnowledge.ts`](file:///d:/DEVELOPMENT/sunil_khobragade_portfolio/src/data/chatbotKnowledge.ts)**
 
 ### What is stored inside:
-1. **`SUNIL_KNOWLEDGE_BASE`**: Structured JSON object holding profile details, contact phone (`+91 74989 50562`), email (`sunilkhobragade@proton.me`), links, work history at *Intencode India*, *Freelance*, and *IBM India*, education, and tools.
+1. **`SUNIL_KNOWLEDGE_BASE`**: Structured JSON object holding profile details, contact phone (`+91 74989 50562`), email (`x.kksunil@gmail.com`), links, work history at *Intencode India*, *Freelance*, and *IBM India*, education, and tools.
 2. **`CHATBOT_SYSTEM_PROMPT`**: The foundational prompt injected into the LLM context.
 
 ### How to Add New Skills or Projects:

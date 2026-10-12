@@ -45,7 +45,7 @@ The **SK Agent** chatbot communicates via a private backend server route (`/api/
 
 ## 2. 📅 Google Calendar & Google Meet Integration
 
-The **1:1 Consultation Booking Tool** (`/tools/appointment`) connects directly with Google Calendar to schedule video meetings with Sunil (`skhobragade993@gmail.com`).
+The **1:1 Consultation Booking Tool** (`/tools/appointment`) connects directly with Google Calendar to schedule video meetings with Sunil (`x.kksunil@gmail.com`).
 
 ### 🛡️ 100% Privacy & Zero-Exposed Keys
 **No API key or credentials are required or exposed to the client.** When visitors select a slot and click **"Confirm on Google Calendar"** or **"Download .ICS"**:
@@ -53,7 +53,7 @@ The **1:1 Consultation Booking Tool** (`/tools/appointment`) connects directly w
 * **Event Name**: `1:1 Architecture Discovery - Sunil Khobragade & [Client Name]`
 * **Start & End Time**: Calculated dynamically in UTC based on selected date & slot.
 * **Location**: Pre-configured with Google Meet conferencing.
-* **Attendees**: Automatically pre-fills `skhobragade993@gmail.com` and the client's email.
+* **Attendees**: Automatically pre-fills `x.kksunil@gmail.com` and the client's email.
 * **iCalendar Support**: Generates offline `.ics` files with valid RFC 5545 format for Apple Calendar, Outlook, and mobile devices.
 
 ---
