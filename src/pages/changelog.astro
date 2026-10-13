@@ -20,6 +20,44 @@ interface Release {
 
 const releases: Release[] = [
   {
+    version: "v2.10.15",
+    date: "October 2026",
+    badge: "Security Remediation & Cloudflare Edge Deployment",
+    badgeType: "launch",
+    summary: "Purged hardcoded Calendly PAT, hardened AI Chatbot against Markdown XSS, integrated native Cloudflare Pages Functions, and consolidated design system tokens in global.css.",
+    sections: [
+      {
+        type: "Security",
+        items: [
+          "Calendly Token Leak Purged: Eradicated hardcoded CALENDLY_API_TOKEN from client-facing scripts and data stores; created server proxy /api/calendly to protect credentials.",
+          "Chatbot Markdown XSS Hardening: Added rigorous HTML entity escaping and URL protocol checks in formatMarkdown() to block script injection and malicious URI schemes."
+        ]
+      },
+      {
+        type: "Added",
+        items: [
+          "Cloudflare Pages Functions: Built native serverless Edge functions (/api/chat and /api/calendly) supporting real-time SSE streaming for Groq LLM inference.",
+          "Edge Caching & Security Headers: Implemented public/_headers with strict HSTS, CSP, and asset cache rules alongside public/_routes.json for 0ms cold-start CDN caching."
+        ]
+      },
+      {
+        type: "Changed",
+        items: [
+          "Global Design Tokens: Replaced all scattered hex codes across components and tools with centralized CSS variables from global.css.",
+          "SEO & Schema Optimization: Removed dummy phone placeholder from SEO.astro, connected SITE.EMAIL, and configured @astrojs/sitemap with automated error route filtering.",
+          "Documentation Cleanup: Updated README.md and DEPLOYMENT.md with accurate repository links and detailed Cloudflare Pages deployment workflows."
+        ]
+      },
+      {
+        type: "Architecture",
+        items: [
+          "Bumped application release version to v2.10.15 in package.json.",
+          "Added automated type checking via astro check in package.json scripts."
+        ]
+      }
+    ]
+  },
+  {
     version: "v2.10.14",
     date: "October 2026",
     badge: "Card Transparency Audit & Glass Refinement",

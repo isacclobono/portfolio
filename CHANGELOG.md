@@ -3,6 +3,39 @@
 All notable changes to the SK Builds portfolio platform are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.15] - 2026-10-13
+
+### Security
+- **Calendly Token Exposure Remediation (`SEC-01`)**:
+  - Completely purged hardcoded `CALENDLY_API_TOKEN` Personal Access Token from `src/data/site.ts` and client script in `src/pages/tools/appointment.astro`.
+  - Architected a secure server-side proxy `/api/calendly` and Cloudflare Pages Edge Function to access `CALENDLY_API_TOKEN` strictly server-side.
+  - Verified 0 token occurrences in rendered HTML source code.
+- **Chatbot Markdown XSS Hardening (`SEC-02`)**:
+  - Upgraded `formatMarkdown()` in `src/components/Chatbot.astro` to HTML-escape all raw input strings before rendering Markdown, disarming `<script>`, `<iframe>`, `<img onerror>`, and `<svg onload>` injection vectors.
+  - Implemented protocol verification on Markdown links, disarming `javascript:`, `data:`, and `vbscript:` schemes.
+
+### Added
+- **Cloudflare Pages Edge Deployment Architecture (`ARC-01`)**:
+  - Engineered native Cloudflare Pages serverless functions (`functions/api/chat.ts`, `functions/api/calendly.ts`) with SSE streaming support for Groq LLM inference.
+  - Configured `public/_headers` with production-grade security headers (`HSTS`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, and immutable cache headers for `/_astro/*`).
+  - Added `public/_routes.json` to route `/api/*` to Cloudflare Workers while serving all 63 static pages directly from Cloudflare global CDN cache with 0ms cold starts.
+- **Automated Quality Engineering Gates (`ENG-01`)**:
+  - Installed `@astrojs/check` and `typescript` as `devDependencies`.
+  - Configured automated `"check": "astro check"` script in `package.json` for CI validation.
+
+### Changed
+- **Global CSS Design Token Consolidation**:
+  - Replaced hardcoded hex colors (`#3b82f6`, `#2563eb`, `#10b981`, `#06b6d4`, `#eab308`, `#a855f7`, `#38bdf8`, `#ef4444`) with centralized CSS variables from `src/styles/global.css`.
+  - Added reusable utility classes: `.text-brand-blue`, `.text-brand-cyan`, `.text-brand-green`, `.text-brand-emerald`, `.text-brand-amber`, `.text-brand-purple`, `.text-brand-red`, and `.card-transparent`.
+- **SEO Schema Optimization (`SEO-01` & `DEP-01`)**:
+  - Removed dummy telephone number `+91-0000000000` from `SEO.astro` schema; connected verified `SITE.EMAIL`.
+  - Wired `@astrojs/sitemap` integration in `astro.config.mjs` with automated route filtering, outputting clean `sitemap-index.xml`.
+- **Documentation & Repository Links (`DOC-01`)**:
+  - Corrected repository links across `README.md` and `DEPLOYMENT.md` to point to `naman-mahi/sunil_khobragade_portfolio`.
+  - Removed absolute Windows `file:///` paths in favor of clean relative links.
+
+---
+
 ## [2.10.14] - 2026-10-12
 
 ### Changed
