@@ -1891,3 +1891,24 @@ svg {
   }
 }
 
+/* ==========================================================================
+   REUSABLE BRAND & UTILITY COLOR CLASSES (Design System Tokens)
+   ========================================================================== */
+.text-brand-blue { color: var(--accent-blue) !important; }
+.text-brand-cyan { color: var(--accent-cyan) !important; }
+.text-brand-green { color: var(--accent-green) !important; }
+.text-brand-emerald { color: var(--color-emerald-500) !important; }
+.text-brand-amber { color: var(--accent-amber) !important; }
+.text-brand-purple { color: var(--accent-purple) !important; }
+.text-brand-red { color: var(--accent-red) !important; }
+.text-brand-muted { color: var(--text-muted) !important; }
+.text-brand-secondary { color: var(--text-secondary) !important; }
+.text-brand-primary { color: var(--text-primary) !important; }
+
+/* Reusable Transparent Card Utility */
+.card-transparent {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}

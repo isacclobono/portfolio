@@ -74,7 +74,7 @@ import Button from '../../components/Button.astro';
       <span id="active-flags-label" class="regex-flags-label">gim</span>
     </div>
 
-    <div id="regex-error-msg" style="display: none; color: #ef4444; font-size: 0.8rem; font-family: var(--font-mono);"></div>
+    <div id="regex-error-msg" style="display: none; color: var(--accent-red); font-size: 0.8rem; font-family: var(--font-mono);"></div>
 
     <!-- Test String Input -->
     <div>
@@ -386,7 +386,7 @@ import Button from '../../components/Button.astro';
           tableBody.innerHTML = matches.map((m, idx) => `
             <tr>
               <td style="color: var(--text-muted);">${idx + 1}</td>
-              <td style="color: #38bdf8; font-weight: 600;">${escapeHtml(m.text)}</td>
+              <td style="color: var(--accent-blue); font-weight: 600;">${escapeHtml(m.text)}</td>
               <td>${m.index}</td>
               <td>${m.length}</td>
             </tr>
@@ -403,7 +403,7 @@ import Button from '../../components/Button.astro';
           statsBadge.className = 'status-pill status-error';
         }
         highlightBox.textContent = testText;
-        tableBody.innerHTML = '<tr><td colspan="4" style="color: #ef4444; text-align: center;">Invalid regular expression syntax.</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="4" style="color: var(--accent-red); text-align: center;">Invalid regular expression syntax.</td></tr>';
       }
     }
 

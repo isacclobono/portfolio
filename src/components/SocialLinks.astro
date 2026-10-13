@@ -110,22 +110,22 @@ import { SITE } from '../data/site';
 
   /* Specific Interactive Icon Animations on Hover */
   .social-pill:hover .icon-github {
-    color: #ffffff;
+    color: var(--text-highlight);
     transform: rotate(-10deg) scale(1.2);
   }
 
   .social-pill:hover .icon-linkedin {
-    color: #38bdf8;
+    color: var(--accent-blue);
     transform: translateY(-1px) scale(1.2);
   }
 
   .social-pill:hover .icon-email {
-    color: #a855f7;
+    color: var(--accent-purple);
     transform: translateY(-2px) scale(1.2);
   }
 
   .social-pill:hover .icon-copy {
-    color: #22c55e;
+    color: var(--accent-green);
     transform: rotate(12deg) scale(1.2);
   }
 </style>
@@ -142,8 +142,8 @@ import { SITE } from '../data/site';
         await navigator.clipboard.writeText(email);
         const original = label.textContent;
         label.textContent = 'Copied!';
-        btn.style.borderColor = 'rgba(34, 197, 94, 0.6)';
-        btn.style.color = '#22c55e';
+        btn.style.borderColor = 'var(--color-green-badge-border)';
+        btn.style.color = 'var(--accent-green)';
         setTimeout(() => {
           label.textContent = original;
           btn.style.borderColor = '';

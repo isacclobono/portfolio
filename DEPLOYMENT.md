@@ -1,35 +1,24 @@
 # 🚀 1-Click Deployment Guide
 
-Deploy your Astro portfolio in seconds using **1-Click Web Buttons** or **1-Command Terminal Deployment**.
+Deploy your Astro portfolio in seconds using **Cloudflare Pages** or **Vercel**.
 
 ---
 
-## 🔘 1-Click Deploy Buttons (Web)
+## ⚡ Deploy to Cloudflare Pages (Recommended)
 
-Direct 1-Click Deploy buttons configured for your repository:
+### Method 1: Git Integration (Continuous Deployment)
+1. Push your repository to GitHub: `https://github.com/naman-mahi/sunil_khobragade_portfolio`
+2. Log into the [Cloudflare Dashboard](https://dash.cloudflare.com/) and go to **Workers & Pages > Create application > Pages > Connect to Git**.
+3. Select the repository and configure build settings:
+   - **Framework preset**: `Astro`
+   - **Build command**: `npm run build`
+   - **Build output directory**: `dist`
+4. In **Settings > Environment variables**, add your secrets:
+   - `GROQ_API_KEY`: Your Groq API key for the AI Assistant.
+   - `CALENDLY_API_TOKEN`: Optional Calendly token for live booking availability.
+5. Save and deploy!
 
-### ▲ Deploy to Vercel (1-Click)
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/isacclobono/portfolio)
-
-Click link directly: [Deploy to Vercel](https://vercel.com/new/clone?repository-url=https://github.com/isacclobono/portfolio)
-
----
-
-### ⚡ Deploy to Cloudflare Pages (1-Click)
-[![Deploy to Cloudflare Pages](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/isacclobono/portfolio)
-
-Click link directly: [Deploy to Cloudflare Pages](https://deploy.workers.cloudflare.com/?url=https://github.com/isacclobono/portfolio)
-
----
-
-## 💻 1-Command Terminal Deployment (Instant)
-
-### Option A: 1-Command Vercel Deploy
-```bash
-npx -y vercel --prod
-```
-
-### Option B: 1-Command Cloudflare Pages Deploy
+### Method 2: Terminal Deployment (Wrangler CLI)
 ```bash
 npm run build
 npx -y wrangler pages deploy dist --project-name=sunil-portfolio
@@ -37,10 +26,24 @@ npx -y wrangler pages deploy dist --project-name=sunil-portfolio
 
 ---
 
-## 🐙 Push Future Updates to GitHub
+## ▲ Deploy to Vercel
+
+### Method 1: 1-Click Button
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/naman-mahi/sunil_khobragade_portfolio)
+
+Direct link: [Deploy to Vercel](https://vercel.com/new/clone?repository-url=https://github.com/naman-mahi/sunil_khobragade_portfolio)
+
+### Method 2: Terminal Deployment
+```bash
+npx -y vercel --prod
+```
+
+---
+
+## 🐙 Push Updates to GitHub
 
 ```bash
 git add .
-git commit -m "update: latest improvements"
+git commit -m "update: latest portfolio improvements"
 git push origin main
 ```

@@ -381,16 +381,16 @@ const socialLinks = [
   .footer-nav-item:hover .footer-link-arrow {
     opacity: 1;
     transform: translate(1.5px, -1.5px);
-    color: var(--accent-blue, #38bdf8);
+    color: var(--accent-blue);
   }
 
   .status-indicator-dot {
     width: 6.5px !important;
     height: 6.5px !important;
     border-radius: 50% !important;
-    background: #10b981 !important;
+    background: var(--color-emerald-500) !important;
     display: inline-block !important;
-    box-shadow: 0 0 6px rgba(16, 185, 129, 0.6) !important;
+    box-shadow: 0 0 6px var(--color-emerald-badge-border) !important;
     flex-shrink: 0 !important;
   }
 
@@ -429,15 +429,15 @@ const socialLinks = [
 
   .footer-resume-download-btn:hover {
     color: var(--text-primary) !important;
-    border-color: var(--accent-cyan, #06b6d4) !important;
-    background: rgba(6, 182, 212, 0.08) !important;
+    border-color: var(--accent-cyan) !important;
+    background: var(--color-cyan-badge-bg) !important;
     transform: translateY(-1px) !important;
-    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.15) !important;
+    box-shadow: 0 4px 12px var(--color-cyan-badge-border) !important;
     text-decoration: none !important;
   }
 
   .resume-download-icon {
-    color: var(--accent-cyan, #06b6d4);
+    color: var(--accent-cyan);
     transition: transform 0.2s ease;
   }
 
@@ -457,8 +457,8 @@ const socialLinks = [
     text-transform: uppercase !important;
     padding: 0.1rem 0.32rem !important;
     border-radius: 4px !important;
-    background: rgba(6, 182, 212, 0.15) !important;
-    color: var(--accent-cyan, #06b6d4) !important;
+    background: var(--color-cyan-badge-bg) !important;
+    color: var(--accent-cyan) !important;
     font-family: var(--font-mono, monospace) !important;
     letter-spacing: 0.04em !important;
     line-height: 1 !important;
@@ -511,8 +511,8 @@ const socialLinks = [
     width: 6px !important;
     height: 6px !important;
     border-radius: 50% !important;
-    background: #10b981 !important;
-    box-shadow: 0 0 6px #10b981 !important;
+    background: var(--color-emerald-500) !important;
+    box-shadow: 0 0 6px var(--color-emerald-500) !important;
     animation: skPulse 2s infinite ease-in-out !important;
     display: inline-block !important;
     flex-shrink: 0 !important;

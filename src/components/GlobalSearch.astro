@@ -154,28 +154,28 @@
 
   .sk-floating-search-btn:hover {
     background: var(--bg-card-hover);
-    border-color: #3b82f6;
+    border-color: var(--color-blue-500);
     transform: scale(1.04) translateX(2px);
-    box-shadow: 0 14px 30px -4px rgba(59, 130, 246, 0.35), 0 0 0 1px #3b82f6;
+    box-shadow: 0 14px 30px -4px var(--color-blue-glow), 0 0 0 1px var(--color-blue-500);
   }
 
   .sk-search-icon-badge {
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: rgba(59, 130, 246, 0.12);
-    border: 1px solid rgba(59, 130, 246, 0.25);
+    background: var(--color-blue-badge-bg);
+    border: 1px solid var(--color-blue-badge-border);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #3b82f6;
+    color: var(--color-blue-500);
     flex-shrink: 0;
     transition: all 0.2s ease;
   }
 
   .sk-floating-search-btn:hover .sk-search-icon-badge {
-    background: #3b82f6;
-    color: #ffffff;
+    background: var(--color-blue-500);
+    color: var(--text-highlight);
   }
 
   .sk-search-pill-label {
@@ -267,7 +267,7 @@
   }
 
   .search-modal-icon {
-    color: #3b82f6;
+    color: var(--color-blue-500);
     flex-shrink: 0;
   }
 
@@ -351,9 +351,9 @@
   }
 
   .filter-tab.active {
-    background: rgba(59, 130, 246, 0.12);
-    border-color: rgba(59, 130, 246, 0.3);
-    color: #3b82f6;
+    background: var(--color-blue-badge-bg);
+    border-color: var(--color-blue-badge-border);
+    color: var(--color-blue-500);
   }
 
   /* Results List */
@@ -413,9 +413,9 @@
 
   .search-result-item:hover .search-item-icon,
   .search-result-item.is-selected .search-item-icon {
-    background: #3b82f6;
-    border-color: #3b82f6;
-    color: #ffffff;
+    background: var(--color-blue-500);
+    border-color: var(--color-blue-500);
+    color: var(--text-highlight);
   }
 
   .search-item-info {
@@ -469,7 +469,7 @@
   .search-result-item:hover .search-item-enter,
   .search-result-item.is-selected .search-item-enter {
     opacity: 1;
-    color: #3b82f6;
+    color: var(--color-blue-500);
   }
 
   /* Empty State */
@@ -502,8 +502,8 @@
 
   .search-empty-ai-btn {
     margin-top: 0.75rem;
-    background: #2563eb;
-    color: #ffffff;
+    background: var(--color-blue-600);
+    color: var(--text-highlight);
     border: none;
     border-radius: 8px;
     padding: 0.45rem 0.9rem;
@@ -517,7 +517,7 @@
   }
 
   .search-empty-ai-btn:hover {
-    background: #1d4ed8;
+    background: var(--color-blue-700);
   }
 
   /* Modal Footer */

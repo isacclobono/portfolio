@@ -1635,29 +1635,24 @@ const knowledgeData = JSON.stringify(SUNIL_KNOWLEDGE_BASE);
         messagesBox.scrollTop = messagesBox.scrollHeight;
       }
 
-      // Robust Clean Markdown Formatter
+      // Robust, XSS-Safe Markdown Formatter
       function formatMarkdown(text) {
         if (!text) return '';
 
-        // 1. Sanitize already generated HTML <a> tags
-        let clean = text.replace(/<a\s+(?:[^>]*?\s+)?href="([^"]*)"[^>]*>(.*?)<\/a>/gi, '[$2]($1)');
+        // 1. First escape all raw HTML to prevent injection of <script>, <iframe>, <img onerror>, etc.
+        let clean = escapeHtml(text);
 
-        // 2. Escape dangerous scripts
-        clean = clean
-          .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-          .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '');
-
-        // 3. Headers
-        clean = clean.replace(/^#{1,6}\s*(.+)$/gm, '<strong>$1</strong>');
-
-        // 4. Code Blocks
+        // 2. Code Blocks (preserve escaped content inside pre/code)
         clean = clean.replace(/```([a-zA-Z]*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
         clean = clean.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
 
-        // 5. Inline Code
+        // 3. Inline Code
         clean = clean.replace(/`([^`]+)`/g, '<code>$1</code>');
 
-        // 6. Markdown Tables
+        // 4. Headers
+        clean = clean.replace(/^#{1,6}\s*(.+)$/gm, '<strong>$1</strong>');
+
+        // 5. Markdown Tables
         clean = clean.replace(/((?:^|\n)\|[^\n]+\|(?:\r?\n\|[^\n]+\|)+)/g, (match) => {
           const lines = match.trim().split(/\r?\n/).map(l => l.trim()).filter(Boolean);
           if (lines.length < 2) return match;
@@ -1692,17 +1687,23 @@ const knowledgeData = JSON.stringify(SUNIL_KNOWLEDGE_BASE);
           return '\n' + html + '\n';
         });
 
-        // 7. Bold & Italic
+        // 6. Bold & Italic
         clean = clean.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
         clean = clean.replace(/\*(.*?)\*/g, '<em>$1</em>');
 
-        // 8. Markdown Links: [Text](URL)
-        clean = clean.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+        // 7. Markdown Links: [Text](URL) with protocol validation (blocks javascript:, data:, vbscript:)
+        clean = clean.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) => {
+          const trimmedUrl = url.trim();
+          if (/^(https?:\/\/|mailto:|\/)/i.test(trimmedUrl)) {
+            return `<a href="${trimmedUrl}" target="_blank" rel="noopener noreferrer">${linkText}</a>`;
+          }
+          return linkText; // Disarm unsafe URLs
+        });
 
-        // 9. Bullet points
+        // 8. Bullet points
         clean = clean.replace(/^[-*]\s+(.+)$/gm, '• $1');
 
-        // 10. Line breaks (preserve html tags cleanly)
+        // 9. Line breaks
         clean = clean.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
 
         return clean;

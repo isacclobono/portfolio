@@ -5,7 +5,6 @@ import Button from '../../components/Button.astro';
 import { SITE } from '../../data/site';
 
 const calendlyEventTypeUri = SITE.CALENDLY_EVENT_TYPE_URI;
-const calendlyApiToken = SITE.CALENDLY_API_TOKEN;
 ---
 
 <Layout 
@@ -863,10 +862,9 @@ const calendlyApiToken = SITE.CALENDLY_API_TOKEN;
   }
 </style>
 
-<script define:vars={{ calendlyEventTypeUri, calendlyApiToken }}>
+<script define:vars={{ calendlyEventTypeUri }}>
   function initProgrammaticCalendlyBooking() {
     const EVENT_TYPE_URI = calendlyEventTypeUri || 'https://api.calendly.com/event_types/c85fa066-9ed8-4031-9d3a-7eafb2a56c47';
-    const CALENDLY_TOKEN = calendlyApiToken || '';
 
     const today = new Date();
     let viewYear = today.getFullYear();
@@ -930,21 +928,17 @@ const calendlyApiToken = SITE.CALENDLY_API_TOKEN;
       return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
     }
 
-    // 1. GET /event_type_available_times (Live availability from Calendly REST API)
+    // 1. GET /api/calendly (Live availability proxy via secure server endpoint)
     async function fetchCalendlyAvailability() {
-      if (!CALENDLY_TOKEN) return;
-
       if (syncStatus) syncStatus.textContent = 'Syncing...';
 
       try {
         const now = new Date();
         let startDate = new Date(viewYear, viewMonth, 1);
         if (startDate <= now) {
-          // Calendly API strictly requires start_time to be in the future
           startDate = new Date(now.getTime() + 5 * 60 * 1000);
         }
 
-        // Calendly API limit: start_time and end_time cannot span more than 31 days per request
         const endOfMonth = new Date(viewYear, viewMonth + 1, 0, 23, 59, 59);
         const maxRange = new Date(startDate.getTime() + 29 * 24 * 60 * 60 * 1000);
         const endDate = endOfMonth < maxRange ? endOfMonth : maxRange;
@@ -952,11 +946,10 @@ const calendlyApiToken = SITE.CALENDLY_API_TOKEN;
         const startTime = startDate.toISOString();
         const endTime = endDate.toISOString();
 
-        const url = `https://api.calendly.com/event_type_available_times?event_type=${encodeURIComponent(EVENT_TYPE_URI)}&start_time=${encodeURIComponent(startTime)}&end_time=${encodeURIComponent(endTime)}`;
+        const url = `/api/calendly?action=available_times&event_type=${encodeURIComponent(EVENT_TYPE_URI)}&start_time=${encodeURIComponent(startTime)}&end_time=${encodeURIComponent(endTime)}`;
 
         const res = await fetch(url, {
           headers: {
-            'Authorization': `Bearer ${CALENDLY_TOKEN}`,
             'Content-Type': 'application/json'
           }
         });
@@ -1194,10 +1187,9 @@ const calendlyApiToken = SITE.CALENDLY_API_TOKEN;
           ];
         }
 
-        const res = await fetch('https://api.calendly.com/invitees', {
+        const res = await fetch('/api/calendly', {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${CALENDLY_TOKEN}`,
             'Content-Type': 'application/json'
           },
           body: JSON.stringify(payload)

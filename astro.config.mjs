@@ -43,7 +43,12 @@ function getSiteUrl() {
 export default defineConfig({
   site: getSiteUrl(),
   compressHTML: true,
-  integrations: [mdx()],
+  integrations: [
+    mdx(),
+    sitemap({
+      filter: (page) => !page.includes('/401') && !page.includes('/403') && !page.includes('/500') && !page.includes('/503')
+    })
+  ],
   vite: {
     plugins: [tailwindcss()],
     build: {

@@ -333,7 +333,7 @@ import Button from '../../components/Button.astro';
           statusEl.textContent = 'Invalid JSON';
           statusEl.className = 'status-pill status-error';
         }
-        outputEl.innerHTML = `<code style="color: #ef4444;">// Syntax Error in JSON:\n// ${err.message}</code>`;
+        outputEl.innerHTML = `<code style="color: var(--accent-red);">// Syntax Error in JSON:\n// ${err.message}</code>`;
       }
     }
 
